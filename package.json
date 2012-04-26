@@ -1,0 +1,24 @@
+{
+  "author": "maxbbn <qipbbn@gmail.com> (maxbbn.com)",
+  "name": "front-build",
+  "description": "build front project",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maxbbn/front-build.git"
+  },
+  "bin": {
+    "fb": "./bin/fb.js"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": "~0.6.7"
+  },
+  "dependencies": {
+    "optimist": "~0.3.1",
+    "asyncjs": "0.0.7"
+  },
+  "devDependencies": {}
+}
