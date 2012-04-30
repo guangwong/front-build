@@ -8,6 +8,17 @@ var fs = require('fs'),
 	FrontBuild = require('../lib/'),
 	getRoot = require('../lib/getRoot');
 
+
+function cb_all(err) {
+	if(err) {
+		console.log(err.message);
+		console.log('fail');
+		process.exit(1);
+		return;
+	}
+	console.log('success');
+	process.exit(0);
+}
 getRoot(function (err, root) {
 	process.chdir(cwd);
 	if (err) {
@@ -22,16 +33,13 @@ getRoot(function (err, root) {
 
 	switch(argv._[0]) {
 		case 'init':
-			FrontBuild.init(cwd, function(err, doc){
-				console.log('初始化完毕');
-				process.exit(0);
-			});
+			FrontBuild.init(cwd, cb_all);
 			break;
 		case 'add':
-			FrontBuild.add(argv, root);
+			FrontBuild.add(argv._[1], root, cb_all);
 			break;
 		case 'version':
-			FrontBuild.version(argv, root);
+			FrontBuild.version(argv._[1], root, cb_all);
 			break;
 	}
 });

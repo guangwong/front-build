@@ -2,14 +2,24 @@ var fs = require('fs'),
 	path = require('path'),
 	should = require('should'),
 	fb = require('../lib'),
-	async = require('asyncjs');
+	async = require('asyncjs'),
+	cwd = process.cwd();
 
 describe('front build init', function (){
 	var project = 'tmp_project_dir';
 
-	beforeEach(function (done){
+
+	before(function (done){
+
 		function setupdir(done) {
-			fs.mkdir(project, done);
+			fs.mkdir(project, function (err) {
+				if(err) {
+					return done(err);
+				}
+				process.chdir(project);
+				project = process.cwd();
+				done();
+			});
 		};
 
 		path.exists(project, function(exists) {
@@ -24,10 +34,14 @@ describe('front build init', function (){
 		});
 	});
 
+	after(function (done) {
+		process.chdir(cwd);
+		done();
+	});
+
 	describe('init', function () {
 		it('should creat a config file', function (done) {
 			//var projectdir = path.join(process.cwd(), project);
-			process.chdir(project);
 			fb.init('./', function(err){
 				if(err) return done(err);
 				fs.readFile('fb.json', function(err, data){
@@ -41,11 +55,12 @@ describe('front build init', function (){
 						});
 						
 					}catch(e){
+
 						return done(e);
 					}
 				});
 				
 			});
 		});
-	})
+	});
 });
