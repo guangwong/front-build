@@ -1,30 +1,23 @@
+(function () {
+    var S = KISSY,
+        debug = true;
 
-KISSY.add(function (S) {
-    Package = {
+    window.Package = {
         /**
          * Config of Package
          * @param {Object} config
          *  @param page
          *  @param version
-         *  @param timestamp
+         *  @param pub
          *  @param tag
          *  @param basepath
          */
         init: function (config) {
             var pkgs = [],
-                debug = true,
-                pagePath = S.substitute('{baspath}/{name}/{version}/', config),
+                pagePath = S.substitute('{basepath}{name}/{version}/', config),
                 packageConfig = {};
-                tag = config.tag || '',
-                charset = charset || 'gbk',
-                pagePathBuild = S.substitute('{baspath}/{name}/{timestamp}/', config);
-            if(config.charset) {
-                packageConfig.charset = config.charset;
-            }
-            if(config.charset) {
-                packageConfig.charset = config.charset;
-            }
-            
+                pagePathBuild = S.substitute('{baspath}/{name}/{pub}/', config);
+
             //base config
             S.each(['charset', 'tag'], function (key) {
                 if (config[key]) {
@@ -35,10 +28,10 @@ KISSY.add(function (S) {
             //common package
             pkgs.push(S.merge(packageConfig, {
                 name: 'common',
-                path: path
+                path: config.basepath
             }));
 
-            //page package
+            //page packages
             S.each(['core','utils', 'mods'], function (name) {
                 pkgs.push(S.merge(packageConfig, {
                     name: name,
@@ -50,8 +43,5 @@ KISSY.add(function (S) {
                 packages: pkgs
             });
         }
-    };
-
-    window.Package = Package;
-});
-
+    };    
+})()
