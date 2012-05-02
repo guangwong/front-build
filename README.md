@@ -1,1 +1,1 @@
-focus on font build
+基于配置的前端打包系统
