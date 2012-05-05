@@ -41,5 +41,13 @@ getRoot(function (err, root) {
 		case 'version':
 			FrontBuild.version(argv._[1], root, cb_all);
 			break;
+		case 'build':
+			argv = require('optimist')
+				.string('v')
+				.string('t')
+				.alias('t', 'timestamp')
+				.alias('v', 'ver')
+				.argv
+			FrontBuild.build(argv, root, cb_all);
 	}
 });
