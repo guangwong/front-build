@@ -46,7 +46,7 @@ getRoot(function (err, root) {
 				.string('v')
 				.string('t')
 				.alias('t', 'timestamp')
-				.alias('v', 'ver')
+				.alias('v', 'version')
 				.argv
 			FrontBuild.build(argv, root, cb_all);
 	}
