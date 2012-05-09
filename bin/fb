@@ -2,8 +2,6 @@
 var fs = require('fs'),
 	argv = require('optimist')
 		.demand(1)
-		.usage('$0 init \n$0 add {pagename}')
-		.string('_')
 		.argv,
 	cwd = process.cwd(),
 	FrontBuild = require('../lib/'),
@@ -14,7 +12,6 @@ function cb_all(err) {
 		console.log(err.message);
 		console.log('fail');
 		process.exit(1);
-		return;
 	}
 	console.log('success');
 	process.exit(0);
@@ -39,6 +36,10 @@ getRoot(function (err, root) {
 			FrontBuild.add(argv._[1], root, cb_all);
 			break;
 		case 'version':
+			argv = require('optimist')
+				.string('_')
+				.argv
+
 			FrontBuild.version(argv, root, cb_all);
 			break;
 		case 'build':
