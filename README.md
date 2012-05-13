@@ -1,8 +1,21 @@
 # Front-Build
-一个基于约定的前端打包工具, 能完成less 编译。kissy 脚本自动合并，压缩。
+- 约定高于配置
+- 面向前端
+
+
+## 目录
+### Root
+### Common
+### Page 目录
+### Version 目录
+#### core
+#### mods
+#### utils
+### Build 目录
+
 
 ## 安装
-    - 首先安装nodejs (and npm);
+    - 首先安装nodejs环境 (and npm);
     - npm install front-build
     - done!
 
@@ -11,14 +24,14 @@
 ## 用法
 
 ### fb init
-初始化一个项目文件夹
+初始化一个项目文件夹， 只有在Root目录里才能执行下面的命令
 
-### fb add [pagename]
+### fb add {pagename}
 创建一个Page
 
-### fb version [pagename]
+### fb version {versionNumber}
 在page文件夹里面执行
-创建一个version
+为当前Page 创建一个version
 
 ### fb build {pagename} -v {version} -t {timestame}
 打包{version} 目录 {timestamp} 目录
@@ -26,8 +39,7 @@
 会自动编译core 目录下面的less 文件到 打包目录的 core目录
 会自动打包core目录下的kissy1.2入口文件到core目录, 并生成一个-min.js压缩版
 
-如果你在当前的工作目录是 在 page 的一个版本里面， 你可以不用指定{pagename} 和 -v
-
 ````sh
 fb build -t {timestamp}
 ````
+## Bug
