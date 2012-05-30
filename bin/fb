@@ -34,6 +34,7 @@ getRoot(function (err, root) {
 		case 'add':
 			fb.add(argv._[1], root, cb_all);
 			break;
+		case 'ver':
 		case 'version':
 			argv = require('optimist')
 				.string('_')
