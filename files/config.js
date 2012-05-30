@@ -7,21 +7,22 @@
          * Config Kissy 1.2 packages
          * of a FrontBuild Page
          * @param {Object} config
-         *  @param page
+         *  @param pagename
          *  @param version
-         *  @param pub
-         *  @param tag
+         *  @param pub 目录时间
          *  @param basepath
+         *  @param charset
+         *  @param tag
          */
         config: function (config) {
             var pkgs = [],
                 packageConfig = {},
-                pagePath = S.substitute('{basepath}{name}/{version}/', config),
+                pagePath = S.substitute('{basepath}{page}/{version}/', config),
                 //开发或生产环境的开关
                 debug = KISSY.Config.debug,
-                pagePathBuild = S.substitute('{baspath}/{name}/{pub}/', config);
+                pagePathBuild = S.substitute('{baspath}/{page}/{pub}/', config);
 
-            //base config
+            //kissy config
             S.each(['charset', 'tag'], function (key) {
                 if (config[key]) {
                     packageConfig[key] = config[key];
