@@ -5,6 +5,7 @@ var argv = require('optimist')
 	.argv;
 var fb = require('../lib/');
 var getRoot = require('../lib/getRoot');
+var App = require('../lib/app')
 
 function cb_all(err) {
 	if(err) {
@@ -16,7 +17,7 @@ function cb_all(err) {
 	process.exit(0);
 }
 
-getRoot(function (err, root) {
+getRoot(function (err, app) {
 	if (err) {
 		console.log(err);
 		process.exit(1);
@@ -29,11 +30,13 @@ getRoot(function (err, root) {
 
 	switch(argv._[0]) {
 		case 'init':
-			fb.init(process.cwd(), cb_all);
+			App.init(process.cwd(), cb_all);
 			break;
+
 		case 'add':
-			fb.add(argv._[1], root, cb_all);
+			App.add(argv._[1], root, cb_all);
 			break;
+
 		case 'ver':
 		case 'version':
 			argv = require('optimist')
@@ -42,6 +45,7 @@ getRoot(function (err, root) {
 
 			fb.version(argv, root, cb_all);
 			break;
+
 		case 'build':
 			argv = require('optimist')
 				.string('v')
