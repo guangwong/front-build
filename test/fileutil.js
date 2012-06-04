@@ -61,3 +61,23 @@ describe('fileutil rmTree Test', function () {
         path.existsSync(root_name).should.be.false;
     });
 });
+
+
+describe('test icon_copy_tree', function(){
+    var src = path.resolve('files/test_iconvdir');
+    var dst = path.resolve('files/copy_of_test_iconvdir');
+
+    after(function(){
+        fu.rmTreeSync(dst);
+    });
+
+    it('should conver files from gbk to utf8', function () {
+        console.log('src', src, 'det', dst);
+        fu.iconvDir(src, 'gbk', dst, 'utf8');
+        var file1 = fs.readFileSync(path.resolve(dst, 'this_is_gbk'), 'utf8');
+        var file2 = fs.readFileSync(path.resolve(dst, 'sub1/this_is_gbk'), 'utf8');
+
+        file1.should.eql('中文 1\n');
+        file2.should.eql('中文 2\n');
+    });
+});
