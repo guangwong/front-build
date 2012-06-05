@@ -63,7 +63,7 @@ describe('fileutil rmTree Test', function () {
 });
 
 
-describe('test icon_copy_tree', function(){
+describe('test iconv_copy_tree', function(){
     var src = path.resolve('files/test_iconvdir');
     var dst = path.resolve('files/copy_of_test_iconvdir');
 
