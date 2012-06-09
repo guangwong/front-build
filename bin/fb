@@ -3,9 +3,11 @@ var argv = require('optimist')
 	.demand(1)
 	.string('timestamp')
     .string('version')
+    .string('_')
     .alias('t', 'timestamp')
     .alias('v', 'version')
-	.argv;]
+    .alias('d', 'debug')
+	.argv;
 
 var cwd = process.cwd();
 
@@ -13,8 +15,11 @@ var commands = require('../lib/commands');
 
 function done(err) {
 	if(err) {
-		//console.log(err.message);
-		console.log('fail');
+		if (argv.debug) {
+			throw err;
+		} else {
+			console.log('fail');
+		}
 		process.exit(1);
 	}
 	console.log('success!');
