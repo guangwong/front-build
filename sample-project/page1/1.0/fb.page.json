@@ -1,0 +1,8 @@
+{
+    "concat": {
+    	"core/concat.js": [
+    		"mods/mod1.js",
+    		"mods/mod2.js"
+     	]
+    }
+}
