@@ -31,6 +31,22 @@ describe('fileutil json test', function() {
         var o = fu.readJSONSync(json_file_name);
         o.should.eql(obj);
     });
+
+    it('should read json with async way', function (done){
+        var o = fu.readJSON(json_file_name, function (err, o) {
+            if (err) {
+                return done(err);
+            }
+            o.should.eql(obj);
+            done();
+        });
+    });
+    it('should throw an error if file is not-exist', function (done){
+        var o = fu.readJSON('no-json-file', function (err, o) {
+            err.should.ok;
+            done();
+        });
+    });
 });
 
 
@@ -62,9 +78,61 @@ describe('fileutil rmTree Test', function () {
     });
 });
 
+describe('fileutil copyTreeSync test', function(){
+    var src = path.resolve('files/test_tree');
+    var dst = path.resolve('files/copy_of_copyTreeSync');
+
+    after(function(){
+        fu.rmTreeSync(dst);
+    });
+
+    it('should copy all files from src to dst', function (done) {
+        try {
+            fu.copyDirSync(src, dst);
+        
+            //dir eql
+            var src_dir = fs.readdirSync(src);
+            var dst_dir = fs.readdirSync(dst);
+            src_dir.should.eql(dst_dir);
+
+            //sub dir eql
+            var src_sub2_dir = fs.readdirSync(path.join(src, 'sub2'));
+            var dst_sub2_dir = fs.readdirSync(path.join(dst, 'sub2'));
+            src_dir.should.eql(dst_dir);
+
+            //file eql
+            var src_file = fs.readFileSync(path.resolve(src, 'sub2/sub22/file221'), 'utf8');
+            var dst_file = fs.readFileSync(path.resolve(dst, 'sub2/sub22/file221'), 'utf8');
+            dst_file.should.eql(src_file);
+        } catch(e) {
+            done(e);
+            return;
+        }
+        done(null);
+    });
+});
+
+
+describe('test findInDir of fileutil', function(){
+
+    var src = path.resolve('files/test_tree');
+
+    it('should find all file match RegExp in directory', function (done) {
+        fu.findInDir(src, /.+\.js$/i, function(err, list){
+            if (err) {
+                return done(err);
+            }
+            list.length.should.eql(4);
+            list.indexOf('sub2/find.js').should.not.eql(-1);
+            done();
+        });
+
+    });
+});
+
 
 describe('test iconv_copy_tree', function(){
-    var src = path.resolve('files/test_iconvdir');
+    var src = path.resolve('files/test_tree');
     var dst = path.resolve('files/copy_of_test_iconvdir');
 
     after(function(){
@@ -72,7 +140,6 @@ describe('test iconv_copy_tree', function(){
     });
 
     it('should conver files from gbk to utf8', function () {
-        console.log('src', src, 'det', dst);
         fu.iconvDir(src, 'gbk', dst, 'utf8');
         var file1 = fs.readFileSync(path.resolve(dst, 'this_is_gbk'), 'utf8');
         var file2 = fs.readFileSync(path.resolve(dst, 'sub1/this_is_gbk'), 'utf8');

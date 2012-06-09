@@ -1,6 +1,5 @@
 (function () {
-    var S = KISSY,
-        debug = true;
+    var S = KISSY;
 
     window.FB = window.FB || {
         /**
