@@ -4,5 +4,10 @@
     		"mods/mod1.js",
     		"mods/mod2.js"
      	]
+    },
+    "uglifyjs": {
+    },
+    "plugins": {
     }
+
 }
