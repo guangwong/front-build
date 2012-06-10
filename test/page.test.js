@@ -1,4 +1,4 @@
-var Page = require('../lib/fb-page');
+var Page = require('../lib/page');
 var should = require('should');
 var path = require('path');
 var fs = require('fs');
@@ -11,7 +11,7 @@ describe('page build test', function(){
     var timestamp = '20120505';
     var thepage;
 
-    before(function(done) {
+    before(function (done) {
         thepage = new Page({
             rootDir: rootDir
         });
@@ -120,8 +120,6 @@ describe('page add version test', function(){
     });
 
     it('should build less', function(done) {
-        var count = 0;
-        var dir_count = 0;
         var buildLessFile = path.resolve(rootDir, timestamp, 'core/index.less.css');
 
         fs.readFile(buildLessFile, 'utf8', function(err, data) {
@@ -132,6 +130,51 @@ describe('page add version test', function(){
             done();
         });
         
+    });
+
+    it('should compress css to -min.css', function(done) {
+        var minLessCss = path.resolve(rootDir, timestamp, 'core/index.less-min.css');
+        var minIndexCss = path.resolve(rootDir, timestamp, 'core/index-min.css')
+
+        fs.readFile(minLessCss, 'utf8', function(err, data) {
+            if (err) {
+                return done(err);
+            }
+            data.should.include('#a.less');
+
+            fs.readFile(minIndexCss, 'utf8', function(err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.should.include('#a.css');
+                data.should.include('#b.css');
+                done();
+            });
+        });
+        
+    });
+
+    it('should compress js to -min.js', function(done) {
+        var minIndexJS = path.resolve(rootDir, timestamp, 'core/index-min.js');
+        var minConcatJS = path.resolve(rootDir, timestamp, 'core/concat-min.js');
+
+        fs.readFile(minIndexJS, 'utf8', function (err, data) {
+            if (err) {
+                return done(err);
+            }
+            data.should.include('mods:mod1');
+            data.should.include('mods:mod2');
+            data.should.include('mods:submod1');
+            fs.readFile(minConcatJS, function (err, data) {
+                if (err) {
+                    return done(err);
+                }
+                data.should.include('mods:mod1');
+                data.should.include('mods:mod2');
+                data.should.include('mods:submod1');
+                done();
+            })
+        });
     });
 
 });

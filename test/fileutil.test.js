@@ -4,7 +4,7 @@ var fs = require('fs'),
     fu = require('../lib/fileutil'),
     cwd = process.cwd();
 
-describe('fileutil json test', function() {
+describe('fileutil writeJSONSync and readJSON readJSONSync test', function() {
     var obj = {
         xx : [1,2,3],
         yy : {
@@ -41,6 +41,64 @@ describe('fileutil json test', function() {
             done();
         });
     });
+    it('should throw an error if file is not-exist', function (done){
+        var o = fu.readJSON('no-json-file', function (err, o) {
+            err.should.ok;
+            done();
+        });
+    });
+});
+
+describe('fileutil writeJSON and readJSON readJSONSync test', function() {
+    var obj = {
+        xx : [1,2,3],
+        yy : {
+            xx: Math.random()
+        },
+        zz : 12345
+    };
+
+
+    var json_file_name = 'test_json_file';
+
+    before(function(done){
+        fs.stat(json_file_name, function (err, stat) {
+            if (err) {
+                fu.writeJSON(json_file_name, obj, done);
+                return;
+            }
+
+            if (stat.isFile()) {
+                fs.unlink(json_file_name, function (err) {
+                    if (err) {
+                        return done(err);
+                    }
+                    fu.writeJSON(json_file_name, obj, done);
+                })
+            }
+        });
+        
+    });
+
+    after(function(done){
+        fs.unlink(json_file_name, done);
+    });
+
+    it('should read the json writed to the file', function () {
+        var o = fu.readJSONSync(json_file_name);
+        o.should.eql(obj);
+    });
+
+    it('should read json with async way', function (done){
+        var o = fu.readJSON(json_file_name, function (err, o) {
+            if (err) {
+                return done(err);
+            }
+            o.should.eql(obj);
+            done();
+        });
+    });
+    
     it('should throw an error if file is not-exist', function (done){
         var o = fu.readJSON('no-json-file', function (err, o) {
             err.should.ok;
