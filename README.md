@@ -42,24 +42,50 @@
     └ fb.json                   // 应用的配置
 ````
 
-## fb 如何构建你的代码
+## FB如何构建你的代码
 
-## page
-### 特点
--  基于时间戳目录
--  从入口文件（core 目录）开始
+### page
 
-##@ fb使用以下步骤构建
-  1. 创建临时目录 src (page.srcDir) build (page.destDir).
+#### 特点
+- 基于时间戳目录
+- 从入口文件（core 目录）开始
+- 支持编码设置
+
+#### fb使用以下步骤构建
+  1. 创建目录 临时src (page.srcDir); 临时build (page.destDir); timestame目录
   2. 将版本目录里面的文件，转成utf8编码， 并全部拷贝到 src 目录
-  3. 
+  3. 使用内置插件系统
+    3.1. module-compiler: KISSY的模块打包， 从src/core/xx.js -> build/core/xx.js
+    3.2. css-combo: css打包， 从src/core/xx.css -> build/core/xx.css
+    3.3. lesscss:  打包， 从 src/core/xx.less -> build/core/xx.less.css
+    3.4. concat: 根据配置合并文件
+    3.5. uglifyjs: build/core/xx.js -> build/core/xx-min.js
+    3.6. cssmin: build/core/xx.css -> build/core/xx-min.css
+  4. 将build下的所有文件转码到outpuCharse，并复制到timestamp目录
+  5。在timestamp 目录下生成 包含打包信息的 build.json.
 
 
-## common
 
-## utils
+### common
+
+  1. 创建目录: 临时src (common.srcDir); 临时build (common.destDir);
+  2. 将common目录里面源码文件，转成utf8编码， 并全部拷贝到 src 目录
+  3. 使用内置插件系统
+    3.1. module-compiler: KISSY的模块打包压缩， 从src/xx.index.js -> build/xx.index-minjs
+    3.2. lesscss:  打包， 从 src/xx.less -> build/core/xx.less.css
+    3.3. uglifyjs: build/xx.js -> build/xx-min.js
+    3.4. cssmin: build/xx.css -> build/xx-min.css
+  4. 将最终压缩文件 build/xx-min.yy 文件从 utf-8 转码到 outpuCharse，并复制回 common
+  5。在timestamp 目录下生成 包含打包信息的 build.json.
+
+TODO
+
+### utils
+
+TODO
 
 ## 安装
+
     - 首先安装nodejs环境 (and npm);
     - npm install front-build
     - done!
@@ -111,8 +137,6 @@ sample:
 ````sh
 fb build about@1.0 -t 20120601
 ````
-
-我们是如何打包的[链接]；
 
 构建所有页面
 
