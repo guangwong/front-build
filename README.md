@@ -151,6 +151,7 @@ fb build all -t 20121221
 
 ````sh
 fb build pagea@1.0 pageb@2.0 pagec@1.0 -t 20121221
+````
 
 common 目录构建
 
