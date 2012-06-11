@@ -18,6 +18,11 @@ function done(err) {
 		if (argv.debug) {
 			throw err;
 		} else {
+			if (typeof err === 'string') {
+				console.log('Error: %s', err);
+			} else if (err.message) {
+				console.log('Error: %s', err.message);
+			}
 			console.log('fail');
 		}
 		process.exit(1);
