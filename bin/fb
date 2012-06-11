@@ -1,74 +1,67 @@
 #!/usr/bin/env node
-var fs = require('fs');
 var argv = require('optimist')
 	.demand(1)
+	.string('timestamp')
+    .string('version')
+    .string('_')
+    .alias('t', 'timestamp')
+    .alias('v', 'version')
+    .alias('d', 'debug')
 	.argv;
-var fb = require('../lib/');
-var getRoot = require('../lib/getRoot');
 
-function cb_all(err) {
+var cwd = process.cwd();
+
+var commands = require('../lib/commands');
+
+function done(err) {
 	if(err) {
-		console.log(err.message);
-		console.log('fail');
+		if (argv.debug) {
+			throw err;
+		} else {
+			if (typeof err === 'string') {
+				console.log('Error: %s', err);
+			} else if (err.message) {
+				console.log('Error: %s', err.message);
+			}
+			console.log('fail');
+		}
 		process.exit(1);
 	}
-	console.log('success');
+	console.log('success!');
 	process.exit(0);
 }
 
-getRoot(function (err, root) {
-	if (err) {
-		console.log(err);
-		process.exit(1);
-	}
 
-	if (argv._[0] === 'init' && root) {
-		console.log('已经是一个工作目录了');
-		process.exit(2);
-	}
 
-	switch(argv._[0]) {
-		case 'init':
-			fb.init(process.cwd(), cb_all);
-			break;
-		case 'add':
-			fb.add(argv._[1], root, cb_all);
-			break;
-		case 'ver':
-		case 'version':
-			argv = require('optimist')
-				.string('_')
-				.argv
 
-			fb.version(argv, root, cb_all);
-			break;
-		case 'build':
-			argv = require('optimist')
-				.string('v')
-				.string('t')
-				.alias('t', 'timestamp')
-				.alias('v', 'version')
-				.argv
+switch(argv._[0]) {
+	case 'init':
+		command = 'init';
+		break;
 
-			var page = argv._.length >= 2 ? { name: argv._[1] } : root.page,
-		        rootdir = root.dir;
-		    
+	case 'a':
+	case 'add':
+	case 'addpage':
+		command = 'addpage';
+		break;
 
-		    if (!page) {
-		        console.log('No page given!');
-		        process.exit(2);
-		    }
+	case 'v':
+	case 'ver':
+	case 'version':
+		command = 'version';
+		break;
 
-		    if (argv.version) {
-		        page.version = argv.version;
-		    }
+	case 'b':
+	case 'build':
+		command = 'build';
+		break;
+};
 
-		    if (argv.timestamp) {
-		        page.timestamp = argv.timestamp;
-		    }
+if (commands && commands[command]) {
+	commands[command]({
+		argv: argv,
+		cwd: cwd
+	}, done);
+}
 
-		    root.page = page;
 
-			fb.build(root, cb_all);
-	}
-});
