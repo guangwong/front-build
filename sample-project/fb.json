@@ -1,3 +1,6 @@
 {
-    "version": "0.03"
+    "version": "0.03",
+    "groups": {
+        "all": ["page1@1.0"]
+    }
 }
