@@ -1,4 +1,5 @@
 var Page = require('../lib/page');
+var App = require('../lib/app');
 var should = require('should');
 var path = require('path');
 var fs = require('fs');
@@ -7,6 +8,10 @@ var fu = require('../lib/fileutil');
 
 describe('page build test', function(){
     var pageName = 'page1';
+    var app = new App({
+        rootDir: path.resolve('sample-project')
+    });
+
     var rootDir = path.resolve('sample-project', pageName);
     var version = '1.0';
     var timestamp = '20120505';
@@ -15,7 +20,8 @@ describe('page build test', function(){
     before(function (done) {
         thepage = new Page({
             rootDir: rootDir,
-            name: pageName
+            name: pageName,
+            app: app
         });
 
         thepage.setVersion(
@@ -31,11 +37,11 @@ describe('page build test', function(){
     });
 
     after(function (done) {
-        fu.rmTreeSync(path.resolve(rootDir, timestamp));
+        //fu.rmTreeSync(path.resolve(rootDir, timestamp));
         done();
     });
 
-    it('should create a Page right object', function () {
+    it('should be a Page object', function () {
         thepage.name.should.be.eql(pageName);
         thepage.rootDir.should.eql(rootDir);
         thepage.config.should.be.a('object');
@@ -114,15 +120,16 @@ describe('page build test', function(){
             data.should.include('mods:mod1');
             data.should.include('mods:mod2');
             data.should.include('mods:submod1');
-            fs.readFile(minConcatJS, function (err, data) {
+            fs.readFile(minConcatJS, 'utf8', function (err, data) {
                 if (err) {
                     return done(err);
                 }
+                console.log(data)
                 data.should.include('mods:mod1');
                 data.should.include('mods:mod2');
-                data.should.include('mods:submod1');
+                data.should.include('mods/submod1');
                 done();
-            })
+            });
         });
     });
 });
