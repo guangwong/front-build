@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 var argv = require('optimist')
-	.demand(1)
 	.string('timestamp')
     .string('version')
     .string('_')
@@ -26,36 +25,46 @@ function done(err) {
 			console.log('fail');
 		}
 		process.exit(1);
+		return;
 	}
 	console.log('success!');
 	process.exit(0);
 }
 
+var command = 'help';
 
 
+if (argv._[0]) {
+	switch(argv._[0]) {
+		case 'init':
+			command = 'init';
+			break;
 
-switch(argv._[0]) {
-	case 'init':
-		command = 'init';
-		break;
+		case 'a':
+		case 'add':
+		case 'addpage':
+			command = 'addpage';
+			break;
 
-	case 'a':
-	case 'add':
-	case 'addpage':
-		command = 'addpage';
-		break;
+		case 'v':
+		case 'ver':
+		case 'version':
+			command = 'version';
+			break;
 
-	case 'v':
-	case 'ver':
-	case 'version':
-		command = 'version';
-		break;
-
-	case 'b':
-	case 'build':
-		command = 'build';
-		break;
-};
+		case 'b':
+		case 'build':
+			command = 'build';
+			break;
+		case 'group':
+		case 'g':
+			command = 'group';
+			break;
+		case 'help':
+			command = 'help';
+			break;
+	};
+}
 
 if (commands && commands[command]) {
 	commands[command]({
