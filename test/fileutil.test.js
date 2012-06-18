@@ -173,7 +173,7 @@ describe('fileutil copyTreeSync test', function(){
 
 describe('test findInDir of fileutil', function(){
 
-    var src = path.resolve('files/test_tree');
+    var src = path.resolve('files', 'test_tree');
 
     it('should find all file match RegExp in directory', function (done) {
         fu.findInDir(src, /.+\.js$/i, function(err, list){
@@ -181,7 +181,8 @@ describe('test findInDir of fileutil', function(){
                 return done(err);
             }
             list.length.should.eql(4);
-            list.indexOf('sub2/find.js').should.not.eql(-1);
+            console.log(list);
+            list.indexOf(path.join('sub2', 'find.js')).should.not.eql(-1);
             done();
         });
 
@@ -197,12 +198,11 @@ describe('test iconv_copy_tree', function(){
         fu.rmTreeSync(dst);
     });
 
-    it('should conver files from gbk to utf8', function () {
+    it('should conv files from gbk to utf8', function () {
         fu.iconvDir(src, 'gbk', dst, 'utf8');
         var file1 = fs.readFileSync(path.resolve(dst, 'this_is_gbk'), 'utf8');
         var file2 = fs.readFileSync(path.resolve(dst, 'sub1/this_is_gbk'), 'utf8');
-
-        file1.should.eql('中文 1\n');
-        file2.should.eql('中文 2\n');
+        file1.should.include('中文 1');
+        file2.should.include('中文 2');
     });
 });

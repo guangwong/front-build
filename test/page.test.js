@@ -124,7 +124,6 @@ describe('page build test', function(){
                 if (err) {
                     return done(err);
                 }
-                console.log(data)
                 data.should.include('mods:mod1');
                 data.should.include('mods:mod2');
                 data.should.include('mods/submod1');
