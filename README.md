@@ -68,7 +68,7 @@
 
 
 
-### common
+### 应用的 common 使用以下步骤构建
 
     1. 创建目录: 临时src (common.srcDir); 临时build (common.destDir);
     2. 将common目录里面源码文件，转成utf8编码， 并全部拷贝到 src 目录
@@ -82,75 +82,69 @@
     4. 将最终压缩文件 build/xx-min.yy 文件从 utf-8 转码到 outpuCharse，并复制回 common
     5. 在timestamp 目录下生成 包含打包信息的 build.json.
 
-TODO
 
 ### utils
-
 TODO
 
-## 安装
-
-    1. 首先安装nodejs环境 (and npm);
-    2. npm install front-build -g;
-    3. done!
 
 ## 快速开始
 
-初始化一个应用
+### 安装
+    1. 首先安装nodejs环境 (and npm) [nodejs](http://nodejs.org/#download);
+    2. npm install front-build -g;
+    3. done!
 
-初始化一个项目文件夹为Root
+
 ````sh
 cd dir/to/app
 fb init
 ````
+初始化当前文件夹为Root， 请在项目根目录下执行。
 
-创建一个 Page
-
-在应用里面创建一个Page。在应用目录内执行
-
+如果已有fb.json 不必重复执行。
 
 ````sh
 fb add name_of_page
 ````
+在应用里面创建一个Page。在应用目录内执行
 
-为Page创建一个 Version
 
-在page文件夹里面执行, 为当前Page 创建一个version
-
-````sh
-fb version version_of_your_page
-````
-or
 
 ````sh
+fb version 1.0
+#or
 fb ver 1.0
 ````
 
+在page文件夹里面执行, 为当前Page 创建一个Version
 
-### 构建
-
-单个page构建
-
-````sh
-fb build {pagename}@{version} -t {timestame}
-````
-
-sample:
 
 ````sh
 fb build about@1.0 -t 20120601
 ````
 
-构建所有页面
+构建 1.0(Version) 的 about(Page) 到时间戳目录 ‘20120601’
+
+
+一次构建多个页面
+````sh
+fb build about@1.0 index@1.0 -t 20120601
+````
+
+或者使用组（group)
 
 ````sh
-fb build all -t 20121221
-````
-同时构建多个page
+fb group set front-page about@1.0 index@1.0
+fb group build front-page -t 20120601
+# 其它group 命令
 
-````sh
-fb build pagea@1.0 pageb@2.0 pagec@1.0 -t 20121221
+fb group
+fb group list ## 列出所有组
+fb group rm front-page ##删除一个组
+fb group add front-page home@2.0 ## 追加一个version 到组
 ````
+_注意_ 一个组里面只能包含一个Page的一个version；
+
 
 common 目录构建
 
