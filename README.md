@@ -90,7 +90,7 @@ TODO
 ## 快速开始
 
 ### 安装
-    1. 首先安装nodejs环境 (and npm) [nodejs](http://nodejs.org/#download);
+    1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download;
     2. npm install front-build -g;
     3. done!
 
@@ -152,5 +152,7 @@ common 目录构建
 fb build common
 ````
 
-## Bugs
 ## 兼容性
+  * window xp +
+  * linux
+  * OSX
