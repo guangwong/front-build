@@ -1,7 +1,8 @@
 # Front-Build
-- 基于目录规范
-- 自动化打包
-- 零配置
+
+    - 基于目录规范
+    - 自动化打包
+    - 零配置
 
 
 ## 目录规范
@@ -44,14 +45,15 @@
 
 ## FB如何构建你的代码
 
-### page
+### 应用的 page 构建
 
 #### 特点
-- 基于时间戳目录
-- 从入口文件（core 目录）开始
-- 支持编码设置
 
-#### fb使用以下步骤构建
+    - 发布基于时间戳目录
+    - core 目录是编译入口
+    - 开发环境与生产环境灵活切换
+
+#### fb使用以下步骤构建 page
     1. 创建目录 临时src (page.srcDir); 临时build (page.destDir); timestame目录
     2. 将版本目录里面的文件，转成utf8编码， 并全部拷贝到 src 目录
     3. 使用内置插件系统
@@ -90,9 +92,15 @@ TODO
 ## 快速开始
 
 ### 安装
+
     1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download;
     2. npm install front-build -g;
     3. done!
+
+### 更新
+
+    1. npm update front-build -g
+    2. done!
 
 
 ````sh
