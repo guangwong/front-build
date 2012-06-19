@@ -12,7 +12,7 @@ var cwd = process.cwd();
 
 var commands = require('../lib/commands');
 
-function done(err) {
+function done(err, message) {
 	if(err) {
 		if (argv.debug) {
 			throw err;
@@ -27,7 +27,9 @@ function done(err) {
 		process.exit(1);
 		return;
 	}
-	console.log('success!');
+	if (message) {
+		console.log(message);
+	}
 	process.exit(0);
 }
 
