@@ -225,7 +225,7 @@ describe('test fileutil.iconv', function(){
         done);
     });
     after(function(){
-        //fu.rmTreeSync(dst);
+        fu.rmTreeSync(dst);
     });
 
     it('should conv files from gbk to utf8', function () {
@@ -242,7 +242,7 @@ describe('test mkdirp', function() {
     before(function(done){
         fu.mkdirp(pathtocreate, done);
     });
-    
+
     after(function(){
         fu.rmTreeSync('./test-mkdirp');
     });
