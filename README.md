@@ -131,7 +131,7 @@ fb ver 1.0
 fb build about@1.0 -t 20120601
 ````
 
-构建 1.0(Version) 的 about(Page) 到时间戳目录 ‘20120601’
+构建 1.0(Version) 的 about(当前PageName) 到时间戳目录 ‘20120601’
 
 
 一次构建多个页面
@@ -163,4 +163,4 @@ fb build common
 ## 兼容性
   * window xp +
   * linux
-  * OSX
+  * OSX 10.7 +
