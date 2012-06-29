@@ -73,6 +73,7 @@ describe('fileutil writeJSON and readJSON readJSONSync test', function() {
                     if (err) {
                         return done(err);
                     }
+
                     fu.writeJSON(json_file_name, obj, done);
                 })
             }
@@ -181,7 +182,6 @@ describe('test findInDir of fileutil', function(){
                 return done(err);
             }
             list.length.should.eql(4);
-            console.log(list);
             list.indexOf(path.join('sub2', 'find.js')).should.not.eql(-1);
             done();
         });
@@ -205,4 +205,52 @@ describe('test iconv_copy_tree', function(){
         file1.should.include('中文 1');
         file2.should.include('中文 2');
     });
+});
+
+describe('test fileutil.iconv', function(){
+    var src = './files/test_tree';
+    var dst = './files/copy_of_test_iconv';
+    before(function(done){
+        fu.iconv({
+            from: {
+                path: src,
+                charset: 'gbk',
+                test: /\.txt$/i
+            },
+            to: {
+                path: dst,
+                charset: 'utf8'
+            }
+        }, 
+        done);
+    });
+    after(function(){
+        //fu.rmTreeSync(dst);
+    });
+
+    it('should conv files from gbk to utf8', function () {
+        path.existsSync(path.resolve(dst, 'this_is_gbk')).should.be.false;
+        var file2 = fs.readFileSync(path.resolve(dst, 'sub1/iconv.gbk.txt'), 'utf8');
+        file2.should.include('中文 2');
+    });
+});
+
+
+describe('test mkdirp', function() {
+    var pathtocreate = './test-mkdirp/path/form/here';
+
+    before(function(done){
+        fu.mkdirp(pathtocreate, done);
+    });
+    
+    after(function(){
+        fu.rmTreeSync('./test-mkdirp');
+    });
+
+    it('should create the target direcotry witout error', function(done){
+        path.exists(pathtocreate, function(exist){
+            exist.should.be.true;
+            done();
+        });
+    })
 });
