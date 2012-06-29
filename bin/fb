@@ -27,9 +27,11 @@ function done(err, message) {
 		process.exit(1);
 		return;
 	}
+	
 	if (message) {
 		console.log(message);
 	}
+
 	process.exit(0);
 }
 
@@ -40,6 +42,10 @@ if (argv._[0]) {
 	switch(argv._[0]) {
 		case 'init':
 			command = 'init';
+			break;
+
+		case 'update':
+			command = 'update';
 			break;
 
 		case 'a':
