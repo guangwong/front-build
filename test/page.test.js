@@ -75,7 +75,7 @@ describe('page build test', function(){
     });
 
     it('should build less', function(done) {
-        var buildLessFile = path.resolve(rootDir, timestamp, 'core/index.less.css');
+        var buildLessFile = path.resolve(rootDir, timestamp, 'core/index.css');
 
         fs.readFile(buildLessFile, 'utf8', function(err, data) {
             if (err) {
@@ -87,9 +87,27 @@ describe('page build test', function(){
         
     });
 
+    it('should build kissy', function(done) {
+        var buildjsfile = path.resolve(rootDir, timestamp, 'core/index.js');
+
+        fs.readFile(buildjsfile, 'utf8', function(err, data) {
+            if (err) {
+                return done(err);
+            }
+            data.should.include("KISSY.add('mods/mod1',");
+            data.should.include("KISSY.add('mods/mod2',");
+            data.should.include("KISSY.add('core/index',");
+            data.should.include("KISSY.add('mods/submod1',");
+            //utils
+            data.should.include("utils-sample-index.js");
+            done();
+        });
+        
+    });
+
     it('should compress css to -min.css', function(done) {
-        var minLessCss = path.resolve(rootDir, timestamp, 'core/index.less-min.css');
-        var minIndexCss = path.resolve(rootDir, timestamp, 'core/index-min.css')
+        var minLessCss = path.resolve(rootDir, timestamp, 'core/index-min.css');
+        var minIndexCss = path.resolve(rootDir, timestamp, 'core/index2-min.css')
 
         fs.readFile(minLessCss, 'utf8', function(err, data) {
             if (err) {
