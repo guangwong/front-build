@@ -1,0 +1,21 @@
+/*
+combined files : 
+
+../mods/a.css
+../mods/b.css
+*/
+
+
+#a.css {
+    color:red;
+}
+
+
+#b.css {
+    color:blue;
+}
+
+/*@import url('http://a.tbcdn.cn/tbsp/tbsp.css');*/
+index.css {display: block;}
+
+/*@import url('../mods/c.css');*/

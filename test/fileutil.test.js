@@ -229,12 +229,13 @@ describe('test fileutil.iconv', function(){
     var src = './files/test_tree';
     var dst = './files/copy_of_test_iconv';
     before(function(done){
+        var minReg = /-min\.\w+$/i;
         fu.iconv({
             from: {
                 path: src,
                 charset: 'gbk',
                 test: /\.txt$/i,
-                excludes: [/-min\.\w+$/i]
+                excludes: [minReg]
             },
             to: {
                 path: dst,
