@@ -1,8 +1,8 @@
 # Front-Build
 
     - 基于目录规范
-    - 自动化打包
-    - 零配置
+    - 自动化打包，追求零配置
+    - 面向前端
 
 
 ## 目录规范
@@ -40,20 +40,21 @@
     │           ├ style1-min.css
     │           ├ style2.css
     │           └ style2-min.css
-    └ fb.json                   // 应用的配置
+    └ fb.json                   // 应用的配置, fb 应用根路径的标识
 ````
 
 ## FB如何构建你的代码
 
 ### 应用的 page 构建
 
-#### 特点
 
+#### fb使用以下步骤构建 page
+
+特点
     - 发布基于时间戳目录
     - core 目录是编译入口
     - 开发环境与生产环境灵活切换
 
-#### fb使用以下步骤构建 page
     1. 创建目录 临时src (page.srcDir); 临时build (page.destDir); timestame目录
     2. 将版本目录里面的文件，转成utf8编码， 并全部拷贝到 src 目录
     3. 使用内置插件系统
@@ -65,28 +66,36 @@
         5. uglifyjs: build/core/xx.js -> build/core/xx-min.js
         6. cssmin: build/core/xx.css -> build/core/xx-min.css
         
-    4. 将build下的所有文件转码到outpuCharse，并复制到timestamp目录
+    4. 将build下的所有文件转码到outputCharset，并复制到timestamp目录
     5. 在timestamp 目录下生成 包含打包信息的 build.json.
 
 
 
-### 应用的 common 使用以下步骤构建
+### 应用的 common 构建
+
+特点
+    - common 根目录下的文件为打包入口
+    - 可在 fb.json 里面配置文件编码
 
     1. 创建目录: 临时src (common.srcDir); 临时build (common.destDir);
-    2. 将common目录里面源码文件，转成utf8编码， 并全部拷贝到 src 目录
+    2. 将common目录里面源码文件，从 inputCharset 转成utf8编码， 并全部拷贝到 临时src 目录
     3. 使用内置插件系统
     
-        1. module-compiler: KISSY的模块打包压缩， 从src/xx.index.js -> build/xx.index-minjs
-        2. lesscss:  打包， 从 src/xx.less -> build/core/xx.less.css
-        3. uglifyjs: build/xx.js -> build/xx-min.js
-        4. cssmin: build/xx.css -> build/xx-min.css
+        1. module-compiler: KISSY的模块打包压缩， 从src/*xx.js* -> build/*xx-min.js*
+        2. lesscss:  打包， 从 src/*xx.less* -> build/*xx-min.css*
+        3. uglifyjs: *build*/*xx.js* -> build/*xx-min.js*
+        4. cssmin: *build*/*xx.css* -> build/*xx-min.css*
         
-    4. 将最终压缩文件 build/xx-min.yy 文件从 utf-8 转码到 outpuCharse，并复制回 common
-    5. 在timestamp 目录下生成 包含打包信息的 build.json.
+    4. 将临时build 目录下的 **-min.** 等压缩文件从 utf-8 转码到 outputCharset，并复制回 common目录
+
+#### 注意点
+    - common 目录的 outputCharset === inputCharset, 可在 fb.json 里面配置 charset
+    - 可在app 里面执行 fb build common
 
 
-### utils
-TODO
+### utils 构建
+
+utils 一般不直接使用， 可打包进page。 
 
 
 ## 快速开始
