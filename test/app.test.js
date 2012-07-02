@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var should = require('should');
-
+var async = require('async');
 var fu = require('../lib/fileutil');
 var App = require('../lib/app');
 
@@ -34,7 +34,7 @@ describe('app init', function (){
                 return done(err);
             }
             json.should.be.ok;
-            should.exist(json.version);
+            should.exist(json.fbversion);
             done();
         });
     });
@@ -257,5 +257,52 @@ describe('App#getGroups,App#setGroup, App#getGroup, App#rmGroup', function () {
                 done();
             });
         });
+    });
+});
+
+describe('test app buildCommon', function(){
+    var app;
+    var rootDir = path.resolve('sample-project');
+
+    var files = [
+        'index.js',
+        'main.css',
+        'style.less'
+    ];
+
+    var minFiles = [
+        'index-min.js',
+        'main-min.css',
+        'style-min.css'
+    ];
+
+    before(function (done) {
+        app = new App({
+            rootDir: rootDir
+        });
+        
+        app.buildCommon(done);
+
+    });
+
+    after(function (done){
+        async.forEach(minFiles, function (file, callback){
+            fs.unlink(path.resolve(rootDir, 'common', file), callback);
+        }, done);
+    });
+
+    it('should build files to -min', function(done) {
+        async.map(minFiles, function (file, callback) {
+            fs.stat(path.resolve(rootDir, 'common', file), callback);
+        }, function (err, stats){
+            if (err) {
+                return done(err);
+            }
+            stats.forEach(function (stat) {
+                stat.isFile().should.be.true;
+            });
+
+            done();
+        })
     });
 });
