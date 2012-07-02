@@ -189,6 +189,24 @@ describe('test findInDir of fileutil', function(){
     });
 });
 
+describe('test mkdirp', function() {
+    var pathtocreate = './test-mkdirp/path/from/here';
+
+    before(function(done){
+        fu.mkdirp(pathtocreate, done);
+    });
+
+    after(function(){
+        fu.rmTreeSync('./test-mkdirp');
+    });
+
+    it('should create the target direcotry witout error', function(done){
+        path.exists(pathtocreate, function(exist){
+            exist.should.be.true;
+            done();
+        });
+    })
+});
 
 describe('test iconv_copy_tree', function(){
     var src = path.resolve('files/test_tree');
@@ -215,7 +233,8 @@ describe('test fileutil.iconv', function(){
             from: {
                 path: src,
                 charset: 'gbk',
-                test: /\.txt$/i
+                test: /\.txt$/i,
+                excludes: [/-min\.\w+$/i]
             },
             to: {
                 path: dst,
@@ -233,24 +252,10 @@ describe('test fileutil.iconv', function(){
         var file2 = fs.readFileSync(path.resolve(dst, 'sub1/iconv.gbk.txt'), 'utf8');
         file2.should.include('中文 2');
     });
+
+    it('should not conv files that match excludes tests', function(){
+        var p = path.resolve(dst, 'sub1/iconv.gbk-min.txt');
+        path.existsSync(p).should.be.false;
+    });
 });
 
-
-describe('test mkdirp', function() {
-    var pathtocreate = './test-mkdirp/path/form/here';
-
-    before(function(done){
-        fu.mkdirp(pathtocreate, done);
-    });
-
-    after(function(){
-        fu.rmTreeSync('./test-mkdirp');
-    });
-
-    it('should create the target direcotry witout error', function(done){
-        path.exists(pathtocreate, function(exist){
-            exist.should.be.true;
-            done();
-        });
-    })
-});
