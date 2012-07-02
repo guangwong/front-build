@@ -14,7 +14,7 @@ describe('page build test', function(){
 
     var rootDir = path.resolve('sample-project', pageName);
     var version = '1.0';
-    var timestamp = '20120505';
+    var timestamp = '20121212';
     var thepage;
 
     before(function (done) {
@@ -37,7 +37,7 @@ describe('page build test', function(){
     });
 
     after(function (done) {
-        //fu.rmTreeSync(path.resolve(rootDir, timestamp));
+        fu.rmTreeSync(path.resolve(rootDir, timestamp));
         done();
     });
 
@@ -75,7 +75,7 @@ describe('page build test', function(){
     });
 
     it('should build less', function(done) {
-        var buildLessFile = path.resolve(rootDir, timestamp, 'core/index.css');
+        var buildLessFile = path.resolve(rootDir, timestamp, 'core/lessfile.css');
 
         fs.readFile(buildLessFile, 'utf8', function(err, data) {
             if (err) {
@@ -106,8 +106,8 @@ describe('page build test', function(){
     });
 
     it('should compress css to -min.css', function(done) {
-        var minLessCss = path.resolve(rootDir, timestamp, 'core/index-min.css');
-        var minIndexCss = path.resolve(rootDir, timestamp, 'core/index2-min.css')
+        var minLessCss = path.resolve(rootDir, timestamp, 'core/lessfile-min.css');
+        var minIndexCss = path.resolve(rootDir, timestamp, 'core/index-min.css')
 
         fs.readFile(minLessCss, 'utf8', function(err, data) {
             if (err) {
@@ -154,7 +154,6 @@ describe('page build test', function(){
 describe('page add version test', function(){
     var rootDir = path.resolve('sample-project', 'page1');
     var version = '2.0';
-    var timestamp = '20120505';
     var thepage;
 
     before(function (done) {
