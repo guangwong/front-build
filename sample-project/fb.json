@@ -1,5 +1,5 @@
 {
-    "version": "0.03",
+    "charset": "utf8",
     "groups": {
         "all": [
             "page1@1.0"
@@ -8,5 +8,6 @@
             "page2@2.0",
             "page1@1.0"
         ]
-    }
+    },
+    "fbversion": "0.3.2"
 }
