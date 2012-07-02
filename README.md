@@ -121,6 +121,16 @@ fb init
 如果已有fb.json 不必重复执行。
 
 ````sh
+cd dir/to/app
+fb update
+````
+更新fb项目到最新版本
+
+此命令会更新fb.json， 在其中添加新版本的一些配置信息。
+
+同时会创建缺失的文件夹。
+
+````sh
 fb add name_of_page
 ````
 在应用里面创建一个Page。在应用目录内执行
