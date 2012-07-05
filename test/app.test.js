@@ -264,7 +264,7 @@ describe('app#addPage test', function () {
     var app;
     var pageName = '_testaddpage';
     var version = '10.11';
-    var rootDir = path.resolve('sample-project');
+    var rootDir = path.resolve('./sample-project');
     var page;
     var pageVersion =  pageName + '/' + version;
     before(function (done) {
@@ -299,9 +299,6 @@ describe('app#addPage test', function () {
             done();
         });
     });
-    
-
-
 });
 
 describe('test app buildCommon', function(){
@@ -348,5 +345,18 @@ describe('test app buildCommon', function(){
 
             done();
         })
+    });
+});
+
+describe('app#update test', function() {
+    var app;
+    var rootDir = path.resolve('sample-project');
+
+    before(function (done) {
+        app = new App({
+            rootDir: rootDir
+        });
+
+        app.update(done);
     });
 });
