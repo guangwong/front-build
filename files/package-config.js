@@ -8,7 +8,7 @@
          * @param {Object} config
          *  @param pagename
          *  @param version
-         *  @param pub 目录时间
+         *  @param pub timestamp of published directory
          *  @param basepath
          *  @param charset
          *  @param tag
@@ -17,7 +17,7 @@
             var pkgs = [],
                 packageConfig = {},
                 pagePath = S.substitute('{basepath}{page}/{version}/', config),
-                //开发或生产环境的开关
+                //switch dev or production env
                 debug = KISSY.Config.debug,
                 pagePathBuild = S.substitute('{baspath}/{page}/{pub}/', config);
 
@@ -33,6 +33,14 @@
                 name: 'common',
                 path: config.basepath
             }));
+
+            //utils package is only for dev mode
+            if (debug) {
+                pkgs.push(S.merge(packageConfig, {
+                    name: 'utils',
+                    path: config.basepath
+                }));
+            }
 
             //page packages
             S.each(['core', 'mods'], function (name) {
