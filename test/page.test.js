@@ -6,6 +6,89 @@ var fs = require('fs');
 var fu = require('../lib/fileutil');
 
 
+describe('Page parser test', function(){
+    var src = [
+        {
+            from: 'page@1.0',
+            parsed: {
+                pageName: 'page',
+                version: '1.0'
+            }
+        },
+        {
+            from: 'page/1.0',
+            parsed: {
+                pageName: 'page',
+                version: '1.0'
+            }
+        },
+        {
+            from: 'page\\1.0',
+            parsed: {
+                pageName: 'page',
+                version: '1.0'
+            }
+        },
+        {
+            from: '_~-page/1.0',
+            parsed: {
+                pageName: '_~-page',
+                version: '1.0'
+            }
+        },
+        {
+            from: '_/page/1.0',
+            parsed: null
+        },
+        {
+            from: '_(page)/1.0',
+            parsed: null
+        },
+        {
+            from: '-page/1.0',
+            parsed: null
+        },
+        {
+            from: 'page/3.10000.1',
+            parsed: {
+                pageName: 'page',
+                version: '3.10000.1'
+            }
+        },
+        {
+            from: 'page/1.0',
+            parsed: {
+                pageName: 'page',
+                version: '1.0'
+            }
+        },
+        {
+            from: '_/1.0',
+            parsed: {
+                pageName: '_',
+                version: '1.0'
+            }
+        },
+        {
+            from: 'abcdefghijklmnopqrstuvwxyz/1.0',
+            parsed: {
+                pageName: 'abcdefghijklmnopqrstuvwxyz',
+                version: '1.0'
+            }
+        },
+    ];
+    it('should parsed all the tests', function(){
+        src.forEach(function(item){
+            var parsed = Page.parsePageVersion(item.from);
+            if (item.parsed === null) {
+                should.not.exist(parsed);
+            } else {
+                parsed.should.be.eql(item.parsed);
+            }
+        });
+    });
+});
+
 describe('page build test', function(){
     var pageName = 'page1';
     var app = new App({
