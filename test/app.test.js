@@ -260,6 +260,50 @@ describe('App#getGroups,App#setGroup, App#getGroup, App#rmGroup', function () {
     });
 });
 
+describe('app#addPage test', function () {
+    var app;
+    var pageName = '_testaddpage';
+    var version = '10.11';
+    var rootDir = path.resolve('sample-project');
+    var page;
+    var pageVersion =  pageName + '/' + version;
+    before(function (done) {
+        app = new App({
+            rootDir: rootDir
+        });
+        
+        app.addPage(pageVersion, done);
+    });
+
+    after(function (done) {
+        fu.rmTreeSync(path.resolve(rootDir, pageName));
+        done();
+    });
+    
+    it('should create a version directory', function (done) {
+        fs.stat(path.resolve(rootDir, pageName), function(err, stat){
+            if (err) {
+                return done(err);
+            }
+            stat.isDirectory().should.be.true;
+            done(null);
+        });
+    });
+
+    it('should create a fb.page.json', function (done) {
+        fu.readJSON(path.resolve(rootDir, pageName, version, 'fb.page.json'), function(err, json){
+            if (err) {
+                return done(err);
+            }
+            json.should.be.ok;
+            done();
+        });
+    });
+    
+
+
+});
+
 describe('test app buildCommon', function(){
     var app;
     var rootDir = path.resolve('sample-project');
