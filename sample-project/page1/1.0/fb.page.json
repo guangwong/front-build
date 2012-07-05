@@ -1,13 +1,14 @@
 {
-    "concat": {
-    	"core/concat.js": [
-    		"mods/mod1.js",
-    		"mods/mod2.js"
-     	]
-    },
-    "uglifyjs": {
-    },
-    "plugins": {
+    "inputCharset": "utf8",
+    "outputCharset": "utf8",
+    "concat" : {
+        "core/concat.js" : [
+            "mods/mod1.js",
+            "mods/mod2.js"
+        ],
+        "core/concat.css": [
+            "mods/a.css",
+            "mods/b.css"
+        ]
     }
-
 }

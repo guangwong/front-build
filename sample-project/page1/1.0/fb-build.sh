@@ -1,2 +1,2 @@
 #!/bin/sh
-fb build -t 000000
+fb build page1/1.0 -t 000000
