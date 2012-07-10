@@ -197,6 +197,16 @@ common 目录构建
 fb build common
 ````
 
+## 依赖
+
+    - css-combo https://github.com/daxingplay/css-combo
+    - iconv-lite https://github.com/ashtuchkin/iconv-lite
+    - tbuild https://github.com/czy88840616/tbuild
+    - less.js
+    - cssmin
+    - uglifyjs
+
+
 ## 兼容性
 
     * window xp +
