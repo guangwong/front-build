@@ -30,6 +30,20 @@ describe('Page parser test', function(){
             }
         },
         {
+            from: 'page\\1.0\\',
+            parsed: {
+                pageName: 'page',
+                version: '1.0'
+            }
+        },
+        {
+            from: 'page/1.0/',
+            parsed: {
+                pageName: 'page',
+                version: '1.0'
+            }
+        },
+        {
             from: '_~-page/1.0',
             parsed: {
                 pageName: '_~-page',
