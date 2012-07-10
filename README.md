@@ -3,7 +3,8 @@
     - 基于目录规范
     - 自动化打包，追求零配置
     - 面向前端
-
+## 相对于ant，FB的优势
+<img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
 ## 快速开始
 
 ### 安装
