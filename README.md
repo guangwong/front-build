@@ -5,8 +5,12 @@
     - 面向前端
 ## 相对于ant，FB的优势
 <img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
-## 快速开始
+## 特别适合使用FB的场景
+     - 基于kissy1.2的新项目或新应用
+     - 重构应用前端代码
 
+## 快速开始
+可以看：<a href="http://www.36ria.com/5536" target="_blank">《使用FB快速构建—kissy1.2最佳实践探索》</a>
 ### 安装
 
     1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download;
