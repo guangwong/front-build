@@ -15,7 +15,7 @@
   },
   "main": "./lib/index.js",
   "engines": {
-    "node": "~0.6.7"
+    "node": "~0.8.1"
   },
   "dependencies": {
     "optimist": "~0.3.1",
