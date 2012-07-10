@@ -348,3 +348,36 @@ describe('page addVersion test', function(){
         });
     });
 });
+
+describe('page#getTimestamps', function () {
+    var pageName1 = 'page1';
+    var rootDir1 = path.resolve('sample-project', pageName1);
+    var page1 = new Page({
+        name: pageName1,
+        rootDir: rootDir1
+    });
+
+    var pageName2 = 'page2';
+    var rootDir2 = path.resolve('sample-project', pageName2);
+    var page2 = new Page({
+        name: pageName2,
+        rootDir: rootDir2
+    });
+
+    it('should get a blank array with no pub directories', function (done) {
+        page1.getTimestamps(function(timestamps) {
+            timestamps.length.should.eql(0);
+            done();
+        });
+    });
+
+    it('should get all the pub timestamps', function (done) {
+        page2.getTimestamps(function(timestamps) {
+            timestamps.should.be.ok;
+            timestamps.should.include('20120901')
+            timestamps.length.should.eql(3);
+            done();
+        });
+    });
+
+});
