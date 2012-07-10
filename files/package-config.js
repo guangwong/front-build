@@ -14,13 +14,13 @@
          *  @param tag
          */
         config: function (config) {
+            config.basepath = config.basepath.replace(/\/$/, '');
             var pkgs = [],
                 packageConfig = {},
-                pagePath = S.substitute('{basepath}{page}/{version}/', config),
+                pagePath = S.substitute('{basepath}/{page}/{version}/', config),
                 //switch dev or production env
                 debug = KISSY.Config.debug,
-                pagePathBuild = S.substitute('{baspath}/{page}/{pub}/', config);
-
+                pagePathBuild = S.substitute('{basepath}/{page}/{pub}/', config);
             //kissy config
             S.each(['charset', 'tag'], function (key) {
                 if (config[key]) {
@@ -54,5 +54,5 @@
                 packages: pkgs
             });
         }
-    };    
+    };
 })();
