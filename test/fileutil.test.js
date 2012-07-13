@@ -2,6 +2,7 @@ var fs = require('fs'),
     path = require('path'),
     should = require('should'),
     fu = require('../lib/fileutil'),
+    async = require('async'),
     cwd = process.cwd();
 
 describe('fileutil writeJSONSync and readJSON readJSONSync test', function() {
@@ -109,7 +110,7 @@ describe('fileutil writeJSON and readJSON readJSONSync test', function() {
 });
 
 
-describe('fileutil rmTree Test', function () {
+describe('rmTreeSync Test', function () {
     var root_name = 'test_rmtree_dir';
     var sub1 = path.join(root_name, 'sub1');
     var sub2 = path.join(root_name, 'sub2');
@@ -136,6 +137,56 @@ describe('fileutil rmTree Test', function () {
         path.existsSync(root_name).should.be.false;
     });
 });
+
+describe('rmTree Test', function () {
+    var root_name = 'test_rmtree_dir';
+    var sub1 = path.join(root_name, 'sub1');
+    var sub2 = path.join(root_name, 'sub2');
+    var subsub1 = path.join(sub1, 'subsub1');
+    var subsub2 = path.join(sub1, 'subsub2');
+    var paths = [root_name, sub1, sub2, subsub1, subsub2];
+
+    var files = [
+        {
+            name: 'file1.txt',
+            content: 'file1 content'
+        },
+        {
+            name: 'file2.txt',
+            content: 'file2 content'
+        }
+    ];
+
+
+    before(function(done){
+        async.forEachSeries(paths, function (p, callback) {
+            fs.mkdir(p, function (err) {
+                if (err) {
+                    return done(err);
+                }
+                async.forEach(files, function (fo, callback){
+                    fs.writeFile(path.resolve(p, fo.name), fo.content, callback);
+                }, callback);
+            });
+        }, done);
+    });
+
+    it('should rm all files created', function(done){
+
+
+        fu.rmTree(root_name, function (err) {
+            if (err) {
+                return done(err);
+            }
+            fs.exists(root_name, function (exist) {
+                exist.should.be.false;
+                done();
+            });
+        });
+
+    });
+});
+
 
 describe('fileutil copyTreeSync test', function(){
     var src = path.resolve('files/test_tree');
