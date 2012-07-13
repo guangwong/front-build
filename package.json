@@ -2,7 +2,7 @@
   "author": "maxbbn <qipbbn@gmail.com> (maxbbn.com)",
   "name": "front-build",
   "description": "build front project",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "repository": {
     "type": "git",
     "url": "git://github.com/maxbbn/front-build.git"
