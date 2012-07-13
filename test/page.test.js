@@ -115,21 +115,29 @@ describe('page build test', function(){
     var thepage;
 
     before(function (done) {
-        thepage = new Page({
-            rootDir: rootDir,
-            name: pageName,
-            app: app
+        app.getConfig(function(err, config){
+            if (err) {
+                return done(err);
+            }
+
+
+            thepage = new Page({
+                rootDir: rootDir,
+                name: pageName,
+                app: app
+            });
+            
+            thepage.setVersion(
+                version, 
+                function(err){
+                    if (err) {
+                        return done(err);
+                    }
+                    thepage.build(timestamp, done);
+                }
+            );
         });
 
-        thepage.setVersion(
-            version, 
-            function(err){
-                if (err) {
-                    return done(err);
-                }
-                thepage.build(timestamp, done);
-            }
-        );
 
     });
 
