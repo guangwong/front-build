@@ -118,8 +118,9 @@
 
 utils 一般不直接使用， 可打包进Page。 
 
+## 常用命令介绍
 
-
+### fb init
 
 ````sh
 cd dir/to/app
@@ -128,6 +129,8 @@ fb init
 初始化当前文件夹为Root， 请在项目根目录下执行。
 
 如果已有fb.json 不必重复执行。
+
+### fb update
 
 ````sh
 cd dir/to/app
@@ -139,39 +142,37 @@ fb update
 
 同时会创建缺失的文件夹。
 
+### fb add
+
 ````sh
 fb add name_of_page/1.0
 ````
-在应用里面创建或初始化一个Version 为 "1.0" 的Page；
-pageName 为 "name_of_page"
+在应用里面创建或初始化 版本 为 "1.0" 的Page "name_of_page"
 
-
-````sh
-fb version 1.0
-#or
-fb ver 1.0
-````
-**removed from v0.5.4, please use fb add name_of_page/1.0**
-
-在Page文件夹里面执行, 为当前Page 创建一个Version
-
-
+### fb build
 ````sh
 fb build about@1.0 -t 20120601
 ````
 
 构建 1.0(Version) 的 about(当前PageName) 到时间戳目录 ‘20120601’
 
-如果不指定 -t, FB会自动选择最晚的时间戳目录为目标时间戳
-
+如果不指定 -t, FB会自动打包到最新的时间戳目录
 
 一次构建多个页面
+
 ````sh
 ## 同时指定多个page
 fb build about@1.0 index@1.0 -t 20120601
 ````
+common 目录构建
+
+````sh
+fb build common
+````
 
 或者使用组（group)
+
+### fb group command
 
 ````sh
 fb group set group1 about@1.0 index@1.0
@@ -190,11 +191,6 @@ fb group add front-page home@2.0 ## 追加一个version 到组
 
 _注意_ 一个组里面只能包含一个Page的一个version；
 
-common 目录构建
-
-````sh
-fb build common
-````
 
 ## 依赖的包
 
@@ -204,10 +200,10 @@ fb build common
     - less.js http://lesscss.org
     - cssmin 
     - uglifyjs https://github.com/mishoo/UglifyJS
+    - csslint http://csslint.net
 
 
 ## 兼容性
-
+    * node 0.8.x +
     * window xp +
-    * linux
-    * OSX 10.6 +
+    * OSX 10.7 +
