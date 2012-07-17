@@ -5,12 +5,61 @@
     - 面向前端
 
 ## 相对于ant，FB的优势
-
 <img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
+
 
 ## 特别适合使用FB的场景
     - 基于kissy1.2的新项目或新应用
     - 重构应用前端代码
+
+## 最新更新 v0.3.9
+
+    - 添加 css lint
+    - 添加 目录监控功能
+
+### CSSLint &times; FB
+
+FB 打包开始前会对你的源码进行Lint， 并在命令台中显示出来
+
+````sh
+$ fb build page1/1.0 -t 20121212
+
+#...
+plugin: csslint
+
+csslint: There are 1 problems in core/index.css.
+
+index.css
+1: warning at line 4, col 1
+Element (index.css) is overqualified, just use .css without element name.
+index.css {display: block;}
+
+csslint: There are 1 problems in mods/a.css.
+#...
+
+````
+
+### 目录监控 &times; FB
+
+在build 命令之后添加 -w 或 --watch
+
+FB 会进入自动监控模式。
+
+每次对应page里面的文件修改后， FB自动对你的Page进行打包
+
+````sh
+$ fb build page1/1.0 -t 20121212 -w
+
+building page1@1.0 to 20121212
+#...
+plugin: lesscss
+plugin: concat
+plugin: uglifyjs
+plugin: cssmin
+build end
+watching...
+````
+
 
 ## 快速开始
 ### 安装FB
