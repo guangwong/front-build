@@ -3,24 +3,28 @@
     - 基于目录规范
     - 自动化打包，追求零配置
     - 面向前端
+
 ## 相对于ant，FB的优势
+
 <img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
+
 ## 特别适合使用FB的场景
-     - 基于kissy1.2的新项目或新应用
-     - 重构应用前端代码
+    - 基于kissy1.2的新项目或新应用
+    - 重构应用前端代码
 
 ## 快速开始
-可以看：<a href="http://www.36ria.com/5536" target="_blank">《使用FB快速构建—kissy1.2最佳实践探索》</a>
-### 安装
+### 安装FB
 
     1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download
     2. npm install front-build -g
     3. done!
 
-### 更新
+### 更新FB
 
     1. npm update front-build -g
     2. done!
+
+了解更多：<a href="http://www.36ria.com/5536" target="_blank">《使用FB快速构建—kissy1.2最佳实践探索》</a>
 
 ## 目录结构
 
