@@ -6,6 +6,7 @@ var argv = require('optimist')
     .alias('t', 'timestamp')
     .alias('v', 'version')
     .alias('d', 'debug')
+    .alias('w', 'watch')
 	.argv;
 
 var cwd = process.cwd();

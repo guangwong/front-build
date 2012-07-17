@@ -17,14 +17,14 @@ describe('fileutil writeJSONSync and readJSON readJSONSync test', function() {
 
     var json_file_name = 'test_json_file';
 
-    before(function(){
+    before(function (){
         if (path.existsSync(json_file_name)) {
             fs.unlinkSync(json_file_name);
         }
         fu.writeJSONSync(json_file_name, obj);
     });
 
-    after(function(done){
+    after(function (done){
         fs.unlink(json_file_name, done);
     });
 
