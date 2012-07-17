@@ -13,8 +13,8 @@
 可以看：<a href="http://www.36ria.com/5536" target="_blank">《使用FB快速构建—kissy1.2最佳实践探索》</a>
 ### 安装
 
-    1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download;
-    2. npm install front-build -g;
+    1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download
+    2. npm install front-build -g
     3. done!
 
 ### 更新
@@ -196,14 +196,14 @@ common 目录构建
 fb build common
 ````
 
-## 依赖
+## 依赖的包
 
     - css-combo https://github.com/daxingplay/css-combo
     - iconv-lite https://github.com/ashtuchkin/iconv-lite
     - tbuild https://github.com/czy88840616/tbuild
-    - less.js 
-    - cssmin
-    - uglifyjs
+    - less.js http://lesscss.org
+    - cssmin 
+    - uglifyjs https://github.com/mishoo/UglifyJS
 
 
 ## 兼容性
