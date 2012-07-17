@@ -1,10 +1,11 @@
 var fs = require('fs');
 var path = require('path');
-var wd = require('../lib/watchdir');
+var watchDir = require('../lib/watchdir');
 var fu = require('../lib/fileutil');
 
-describe('wd', function () {
-	var rootDir = 'dir_watch';
+describe('watchDir', function () {
+	var rootDir = path.resolve('watch_dir_test');
+	var filePath = path.resolve(rootDir, 'a.js');
 
 	before(function (done) {
 		fs.mkdir(rootDir, done);
@@ -14,8 +15,8 @@ describe('wd', function () {
 		fu.rmTree(rootDir, done);
 	});
 
-	it('should call when file added', function (done) {
-		var watcher = wd(rootDir, {
+	it('should emit change when file added', function (done) {
+		var watcher = watchDir(rootDir, {
 			exludes: [
 				'.svn',
 				'.git'
@@ -27,8 +28,15 @@ describe('wd', function () {
 			]
 		});
 
-		watcher.on('change', function (ev, filename) {
-			console.log('%s:\t$s', ev, filename);
+		watcher.once('change', function(file){
+			file.filename.should.eql(filePath);
+			done();
+			watcher.close();
 		});
+
+		watcher.once('init', function () {
+			fs.writeFile(filePath, 'hello');
+		});
+
 	});
 });
