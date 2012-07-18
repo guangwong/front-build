@@ -29,6 +29,13 @@ describe('watchDir', function () {
 			}
 			watcher = watchDir(rootDir);
 			watcher.once('init', done);
+			watcher.on('rename', function (file) {
+				console.log('rename: %s', file.filename);
+			});
+
+			wather.on('update', function () {
+				console.log('update: %s', file.filename);
+			});
 		});
 
 	});
@@ -39,52 +46,65 @@ describe('watchDir', function () {
 	});
 
 	it('should emit rename when file added', function (done) {
-		
-		watcher.once('rename', function (file) {
-			file.filename.should.eql(rootDir);
-			
-			done();
+		console.log('----add  file filePath');
+		watcher.on('rename', function (file) {
+			if (rootDir === file.filename) {
+				watcher.removeAllListeners('rename');
+				done();
+			}
 		});
+
 
 		fs.writeFile(filePath, 'hello');
 
 	});
 
-	it('should emit change when file added', function (done) {
-
-		watcher.once('change', function (file) {
-			file.filename.should.eql(filePath);
-			done();
+	it('should emit change when file updated', function (done) {
+		console.log('----update file filePath');
+		watcher.on('change', function (file) {
+			if (file.filename == filePath) {
+				watcher.removeAllListeners('change');
+				done();
+			}
 		});
-
 		fs.writeFile(filePath, 'hello2');
 
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-
-		watcher.once('rename', function (file) {
-			file.filename.should.eql(rootDir);
-			done();
+		console.log('----add subDir');
+		watcher.on('rename', function (file) {
+			console.log('reanme: ', file.filename);
+			if (file.filename == rootDir) {
+				watcher.removeAllListeners('rename');
+				done();
+			}
 		});
 		fs.mkdir(subDir);
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-
-		watcher.once('rename', function (file) {
-			file.filename.should.eql(subDir);
-			done();
+		console.log('----add subFile.js');
+		watcher.on('rename', function (file) {
+			console.log('reanme: ', file.filename);
+			if (file.filename == subDir) {
+				watcher.removeAllListeners('rename');
+				done();
+			}
 		});
 
 		fs.writeFile(subFile, 'subFile.js');
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
+		console.log('----update subFile.js');
 
-		watcher.once('change', function (file) {
-			file.filename.should.eql(subFile);
-			done();
+		watcher.on('change', function (file) {
+			console.log('change: ', file.filename);
+			if (file.filename == subFile) {
+				watcher.removeAllListeners('change');
+				done();
+			}
 		});
 
 		fs.writeFile(subFile, 'subFile.js' + 'update');
