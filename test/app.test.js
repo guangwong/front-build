@@ -149,69 +149,6 @@ describe('app#getCurrent', function () {
 
 });
 
-describe('App#testPageName', function() {
-    var app;
-    var rootDir = path.resolve('sample-project');
-
-    before(function (){
-        app = new App({rootDir: rootDir});
-    });
-
-    it('should not be common, utils, docs', function (){
-        app.testPageName('common').should.be.false;
-        app.testPageName('utils').should.be.false;
-        app.testPageName('docs').should.be.false;
-    });
-
-    it('should not start with "-" ', function (){
-        app.testPageName('-pagename').should.be.false;
-    });
-
-    it('should return true with some valid pageName', function (){
-        app.testPageName('index').should.be.true;
-        app.testPageName('info').should.be.true;
-        app.testPageName('detail').should.be.true;
-        app.testPageName('list').should.be.true;
-    });
-
-});
-
-describe('App#testPageVersion', function() {
-    var app;
-    var rootDir = path.resolve('sample-project');
-
-    before(function (){
-        app = new App({rootDir: rootDir});
-    });
-
-    it('should only contain one "@"', function () {
-        app.testPageVersion('page1@@1.0').should.be.false;
-        app.testPageVersion('p@2.0').should.be.true;
-        app.testPageVersion('p@2.0@').should.be.false;
-    });
-
-    it('should have version after pageName', function () {
-        app.testPageVersion('1.0@p1').should.be.false;
-    });
-
-    it('should not be common, utils, docs', function (){
-        app.testPageVersion('common@1.0').should.be.false;
-        app.testPageVersion('utils@1.0').should.be.false;
-        app.testPageVersion('docs@1.0').should.be.false;
-    });
-
-    it('should not start with "-" ', function (){
-        app.testPageVersion('-pagename@1.0').should.be.false;
-    });
-
-    it('should return true with some valid pageName', function (){
-        app.testPageVersion('index@1.0').should.be.true;
-        app.testPageVersion('info@1.0.1').should.be.true;
-        app.testPageVersion('_detail@10.11.11111').should.be.true;
-        app.testPageVersion('_list-index@0.1.1').should.be.true;
-    });
-});
-
 describe('App#getGroups,App#setGroup, App#getGroup, App#rmGroup', function () {
     var app;
     var rootDir = path.resolve('sample-project');
