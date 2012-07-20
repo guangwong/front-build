@@ -1,12 +1,12 @@
 {
     "inputCharset": "utf8",
     "outputCharset": "utf8",
-    "concat" : {
-        "core/concat.js" : [
+    "concat": {
+        "concat.js": [
             "mods/mod1.js",
             "mods/mod2.js"
         ],
-        "core/concat.css": [
+        "concat.css": [
             "mods/a.css",
             "mods/b.css"
         ]

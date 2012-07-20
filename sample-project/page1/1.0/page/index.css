@@ -1,5 +1,5 @@
-@import url('../mods/a.css');
-@import url('../mods/b.css');
+@import url('mods/a.css');
+@import url('mods/b.css');
 /*@import url('http://a.tbcdn.cn/tbsp/tbsp.css');*/
 index.css {display: block;}
 
