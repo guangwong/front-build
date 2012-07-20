@@ -161,15 +161,15 @@ describe('page build test', function(){
         });
     });
 
-    it('should create core under timestamp directory', function(done){
-        path.exists(path.resolve(rootDir, timestamp, 'core'), function (exist) {
+    it('should create page under timestamp directory', function(done){
+        path.exists(path.resolve(rootDir, timestamp, 'page'), function (exist) {
             exist.should.be.true;
             done();
         });
     });
 
     it('should create concat files list in fb.page.json', function(done){
-        fs.readFile(path.resolve(rootDir, timestamp, 'core/concat.js'), 'utf8', function (err, content) {
+        fs.readFile(path.resolve(rootDir, timestamp, 'page/concat.js'), 'utf8', function (err, content) {
             if (err) {
                 return done(err);
             }
@@ -179,8 +179,19 @@ describe('page build test', function(){
         });
     });
 
+    it('should create concat css files list in fb.page.json', function(done){
+        fs.readFile(path.resolve(rootDir, timestamp, 'page/concat.css'), 'utf8', function (err, content) {
+            if (err) {
+                return done(err);
+            }
+            content.should.include('#a.css');
+            content.should.include('#b.css');
+            done();
+        });
+    });
+
     it('should build less', function(done) {
-        var buildLessFile = path.resolve(rootDir, timestamp, 'core/lessfile.css');
+        var buildLessFile = path.resolve(rootDir, timestamp, 'page/lessfile.css');
 
         fs.readFile(buildLessFile, 'utf8', function(err, data) {
             if (err) {
@@ -192,17 +203,17 @@ describe('page build test', function(){
         
     });
 
-    it('should build kissy', function(done) {
-        var buildjsfile = path.resolve(rootDir, timestamp, 'core/index.js');
+    it('should build kissy js file', function(done) {
+        var buildjsfile = path.resolve(rootDir, timestamp, 'page/index.js');
 
         fs.readFile(buildjsfile, 'utf8', function(err, data) {
             if (err) {
                 return done(err);
             }
-            data.should.include("KISSY.add('mods/mod1',");
-            data.should.include("KISSY.add('mods/mod2',");
-            data.should.include("KISSY.add('core/index',");
-            data.should.include("KISSY.add('mods/submod1',");
+            data.should.include("KISSY.add('page/mods/mod1',");
+            data.should.include("KISSY.add('page/mods/mod2',");
+            data.should.include("KISSY.add('page/index',");
+            data.should.include("KISSY.add('page/mods/submod1',");
             //utils
             data.should.include("utils-sample-index.js");
             done();
@@ -211,8 +222,8 @@ describe('page build test', function(){
     });
 
     it('should compress css to -min.css', function(done) {
-        var minLessCss = path.resolve(rootDir, timestamp, 'core/lessfile-min.css');
-        var minIndexCss = path.resolve(rootDir, timestamp, 'core/index-min.css')
+        var minLessCss = path.resolve(rootDir, timestamp, 'page/lessfile-min.css');
+        var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css')
 
         fs.readFile(minLessCss, 'utf8', function(err, data) {
             if (err) {
@@ -233,8 +244,8 @@ describe('page build test', function(){
     });
 
     it('should compress js to -min.js', function(done) {
-        var minIndexJS = path.resolve(rootDir, timestamp, 'core/index-min.js');
-        var minConcatJS = path.resolve(rootDir, timestamp, 'core/concat-min.js');
+        var minIndexJS = path.resolve(rootDir, timestamp, 'page/index-min.js');
+        var minConcatJS = path.resolve(rootDir, timestamp, 'page/concat-min.js');
 
         fs.readFile(minIndexJS, 'utf8', function (err, data) {
             if (err) {
@@ -258,7 +269,7 @@ describe('page build test', function(){
 
 describe('page add version test', function(){
     var rootDir = path.resolve('sample-project', 'page1');
-    var version = '2.0';
+    var version = '10.0';
     var thepage;
 
     before(function (done) {
@@ -299,7 +310,7 @@ describe('page add version test', function(){
     it('should create all default directories', function(done) {
         var count = 0;
         var dir_count = 0;
-        var dirs = ['mods', 'core', 'test'];
+        var dirs = ['page', 'page/mods', 'test'];
         dirs.forEach(function(dir){
             path.exists(path.resolve(rootDir, version, dir), function(exist){
                 count ++;
