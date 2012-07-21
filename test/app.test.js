@@ -297,3 +297,33 @@ describe('app#update test', function() {
         app.update(done);
     });
 });
+
+describe('app#getPages Test', function() {
+    var app;
+    var rootDir = path.resolve('sample-project');
+
+    before(function (done) {
+        app = new App({
+            rootDir: rootDir
+        });
+        done();
+    });
+
+    it('should get all pages', function (done) {
+        app.getPages(function (err, pages) {
+            console.log('----', err, pages);
+            if (err) {
+                return done(err);
+            }
+            pages.length.should.eql(3);
+            pages.forEach(function (page) {
+                page.pageName.should.be.ok;
+                page.version.should.be.ok;
+
+            });
+            done();
+        });
+    });
+
+
+});
