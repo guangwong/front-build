@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1= title
+  p= app.rootDir
+
+  .main
+    .block
+        strong common
+        .act
+            a(href='#') build
+    .pages
+      - each pages, pageName in groups
+        .page
+          strong= pageName
+          ul.versions
+            - each page in pages
+              li= page.version
+              .act
+                a(href='#') build
