@@ -72,6 +72,9 @@ if (argv._[0]) {
 		case 'help':
 			command = 'help';
 			break;
+		case 'web':
+			command = 'web';
+			break;
 	};
 }
 
