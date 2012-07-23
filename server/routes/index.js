@@ -60,50 +60,50 @@ exports.buildCommon = function (req, res, next) {
 }
 
 exports.page = function (req, res, next) {
-    var app = req.fbapp;
-    var pageName = req.params.pageName;
-    var version = req.params.version;
+    var fbapp = req.fbapp;
+    var fbpage = req.fbpage;
 
-    var p = Page.parsePageVersion(req.params.pageVersion);
+    fbpage.getTimestamps(function (timestamps) {
 
-    if (!p) {
-        return req.next(new Errow('pageVersion is not valid'));
-    }
-
-    var page = app.getPage(p.pageName);
-
-    page.setVersion (p.version, function (err) {
-        if (err) {
-            return next(err);
-        }
-
-        page.getTimestamps(function (timestamps) {
-            if (err) {
-                return next(err);
-            }
-
-            res.render('version', {
-                title: p.pageName,
-                pageConfig : {
-                    name: 'fbpage',
-                    version: '1.0',
-                    timestamp: '20120722',
-                    tag: '20120722'
-                },
-                page: page,
-                app: app,
-                timestamps: timestamps
-            });
-
+        res.render('version', {
+            title: fbpage.pageName,
+            pageConfig : {
+                name: 'fbpage',
+                version: '1.0',
+                timestamp: '20120722',
+                tag: '20120722'
+            },
+            page: fbpage,
+            app: fbapp,
+            timestamps: timestamps
         });
 
     });
+
 };
 
 
 
-exports.buildPage = function (req, res) {
-    if (!app) {
-        return req.next(new Error('no app'));
+exports.buildPage = function (req, res, next) {
+    var fbapp = req.fbapp;
+    if (!fbapp) {
+        return next(new Error('no app'));
     }
+    var fbpage = req.fbpage;
+
+    if (!fbpage) {
+        return next(new Error('no page'));
+    }
+
+    var timestamp = req.param('timestamp');
+    fbpage.build(timestamp, function (err, reports) {
+        console.log(err);
+        res.send({
+            err: err ? {
+                message: err.message
+            } : null,
+            reports: reports
+        });
+    });
+
 };
