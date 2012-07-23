@@ -17,9 +17,11 @@
     - 目录结构升级
     - 添加Web界面 (preview)
 
-### 目录结构升级到 v2.0
-#### 新的目录结构
+### 目录结构升级
 
+如何升级目录结构，请看这个 https://github.com/maxbbn/front-build/issues/9
+
+#### 新的目录结构
 page/version 目录下面的core 改名为 page, mods 移除， page目录下的子目录既模块文件
 
 ````
