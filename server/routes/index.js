@@ -59,7 +59,7 @@ exports.buildCommon = function (req, res, next) {
     });
 }
 
-exports.page = function (req, res) {
+exports.page = function (req, res, next) {
     var app = req.fbapp;
     var pageName = req.params.pageName;
     var version = req.params.version;
@@ -74,12 +74,12 @@ exports.page = function (req, res) {
 
     page.setVersion (p.version, function (err) {
         if (err) {
-            return res.next(err);
+            return next(err);
         }
 
         page.getTimestamps(function (timestamps) {
             if (err) {
-                return req.next(err);
+                return next(err);
             }
 
             res.render('version', {
