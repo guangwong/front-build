@@ -43,12 +43,10 @@
             }
 
             //page packages
-            S.each(['core', 'mods'], function (name) {
-                pkgs.push(S.merge(packageConfig, {
-                    name: name,
-                    path: debug? pagePath : pagePathBuild
-                }));
-            });
+            pkgs.push(S.merge(packageConfig, {
+                name: 'page',
+                path: debug? pagePath : pagePathBuild
+            }));
 
             S.config({
                 packages: pkgs
