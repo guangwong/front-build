@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .container
+    .row-fluid
+      .span12
+        .fb-title
+          h1 
+            a(href='/app?root=#{app.rootDir}')= app.name
+            |/ 
+            span= title
+            |/
+            sapn= page.version
+          p.path= page.rootDir
+
+          .buildto
+            input.span3(type='text')
+            a.btn(href='#') build
+
+        ul.timestamps
+          - each ts in timestamps
+            li= ts

@@ -1,5 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .container
+    .row-fluid
+      .span12
+        .modal
+          .modal-header
+            h3= title
+          .modal-body
+            form.well(action='/app',method='GET')
+              label path
+              input.span9(type='text',name='root')
+              button.btn.btn-primary(type='submit') Submit

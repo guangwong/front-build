@@ -1,20 +1,26 @@
 extends layout
 
 block content
-  h1= title
-  p= app.rootDir
-
-  .main
-    .block
-        strong common
-        .act
-            a(href='#') build
-    .pages
-      - each pages, pageName in groups
-        .page
-          strong= pageName
-          ul.versions
-            - each page in pages
-              li= page.version
-              .act
-                a(href='#') build
+  .container
+    .row-fluid
+      .span12
+        .fb-title
+          h1= title
+          p.path= app.rootDir
+        .fb-page
+            h3 common
+            .options
+              a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') build
+        .pages
+          - each pages, pageName in groups
+            .fb-page
+              h3= pageName
+              ul.versions
+                - each page in pages
+                  li.version
+                    //- input.versionCheck(type='checkbox')
+                    a.version_no(href='/page/#{pageName}@#{page.version}?root=#{app.rootDir}')= page.version
+                    .options
+                      a(href='#') build
+  script
+    KISSY.use('page/index');

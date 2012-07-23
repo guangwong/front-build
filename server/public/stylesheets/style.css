@@ -1,11 +1,46 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  height:100%;
-  background:#222;
-  color:#eee;
+.fb-title h1 {
+  font-size: 54px;
+  line-height: 50px;
+  margin-bottom: 10px;
+  font-weight: normal;
 }
-
-a {
-  color: #00B7FF;
+.fb-title .path {
+  color: #bbb;
+}
+.fb-page {
+  margin-bottom: 10px;
+  position: relative;
+}
+.fb-page h3 {
+  background: #29c2bd;
+  border: 2px solid #000;
+  padding: 10px;
+  color: #fff;
+  border-radius: 5px 5px 0 5px;
+}
+.fb-page .version {
+  border: #999 2px solid;
+  border-radius: 0 0 5px 5px;
+  border-top: 0;
+  margin-left: 100px;
+  position: relative;
+}
+.fb-page .version a.version_no {
+  background: #d3e9f4;
+  color: #3898be;
+  display: block;
+  font-size: 16px;
+  padding: 5px;
+}
+.fb-page .version a.version_no:hover {
+  background: #f2f2f2;
+}
+.fb-page .options {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+}
+.fb-page .versions {
+  list-style: none;
+  margin: 0;
 }
