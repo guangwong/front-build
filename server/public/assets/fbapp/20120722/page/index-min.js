@@ -1,0 +1,1 @@
+KISSY.add("page/index",function(a){var b=a.all;a.ready(function(){b("#fb-build-common").on("click",function(a){var c=b(a.target)})})}); 
