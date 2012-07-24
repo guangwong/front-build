@@ -11,7 +11,7 @@ block content
             h3 common
             .options
               span.status 
-              a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') build
+              a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
         .pages
           - each pages, pageName in groups
             .fb-page
@@ -20,12 +20,19 @@ block content
                 - each page in pages
                   li.version
                     //- input.versionCheck(type='checkbox')
-                    a.version_no(href='/page/#{pageName}@#{page.version}?root=#{app.rootDir}')= page.version
+                    a.version_no(href='/page/#{page.name}@#{page.version}?root=#{app.rootDir}')= page.version
                     .options.form-inline
                       span.status
                       |&nbsp;
                       input(type='text')
                       |&nbsp;
-                      a.btn.fb-build-page(href='/build-page/#{page.pageName}@#{page.version}?root=#{app.rootDir}') build
+                      a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
+                        |Build
+                .clearfix
+                  .version-add.version.form-inline
+                    input(type='text')
+                    |&nbsp;
+                    a.btn
+                      i.icon-plus
   script
     KISSY.use('page/index');

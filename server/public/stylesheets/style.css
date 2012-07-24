@@ -8,7 +8,7 @@
   color: #bbb;
 }
 .fb-page {
-  margin-bottom: 10px;
+  margin: 10px 0;
   position: relative;
 }
 .fb-page h3 {
@@ -31,9 +31,8 @@
 }
 .version {
   border: #999 2px solid;
-  border-radius: 0 0 5px 5px;
   border-top: 0;
-  margin-left: 100px;
+  margin-left: 50px;
   position: relative;
   background: #d3e9f4;
   color: #3898be;
@@ -42,13 +41,16 @@
 .version a.version_no {
   font-size: 16px;
 }
+.version .options {
+  padding: 5px;
+  color: #666;
+}
 .versions {
   list-style: none;
   margin: 0;
 }
-.version .options {
-  padding: 5px;
-  color: #666;
+.version-add {
+  float: left;
 }
 ul.timestamps {
   list-style: none;

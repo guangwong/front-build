@@ -51,7 +51,7 @@ app.param('pageVersion', function (req, res, next, pageVersion) {
   if (!p) {
       return next(new Errow('pageVersion is not valid'));
   }
-  var page = fbapp.getPage(p.pageName);
+  var page = fbapp.getPage(p.name);
   page.setVersion(p.version, function (err) {
     if (err) {
       return next(err);

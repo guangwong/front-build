@@ -11,42 +11,42 @@ describe('Page parser test', function(){
         {
             from: 'page@1.0',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '1.0'
             }
         },
         {
             from: 'page/1.0',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '1.0'
             }
         },
         {
             from: 'page\\1.0',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '1.0'
             }
         },
         {
             from: 'page\\1.0\\',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '1.0'
             }
         },
         {
             from: 'page/1.0/',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '1.0'
             }
         },
         {
             from: '_~-page/1.0',
             parsed: {
-                pageName: '_~-page',
+                name: '_~-page',
                 version: '1.0'
             }
         },
@@ -65,32 +65,33 @@ describe('Page parser test', function(){
         {
             from: 'page/3.10000.1',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '3.10000.1'
             }
         },
         {
             from: 'page/1.0',
             parsed: {
-                pageName: 'page',
+                name: 'page',
                 version: '1.0'
             }
         },
         {
             from: '_/1.0',
             parsed: {
-                pageName: '_',
+                name: '_',
                 version: '1.0'
             }
         },
         {
             from: 'abcdefghijklmnopqrstuvwxyz/1.0',
             parsed: {
-                pageName: 'abcdefghijklmnopqrstuvwxyz',
+                name: 'abcdefghijklmnopqrstuvwxyz',
                 version: '1.0'
             }
         },
     ];
+
     it('should parsed all the tests', function(){
         src.forEach(function(item){
             var parsed = Page.parsePageVersion(item.from);

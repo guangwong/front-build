@@ -30,7 +30,7 @@ exports.app = function (req, res, next) {
             return next(err);
         }
         var grouped = _.groupBy(pages, function (page) {
-            return page.pageName;
+            return page.name;
         });
 
         res.render('app', {
@@ -66,7 +66,7 @@ exports.page = function (req, res, next) {
     fbpage.getTimestamps(function (timestamps) {
 
         res.render('version', {
-            title: fbpage.pageName,
+            title: fbpage.name,
             pageConfig : {
                 name: 'fbpage',
                 version: '1.0',
@@ -96,8 +96,8 @@ exports.buildPage = function (req, res, next) {
     }
 
     var timestamp = req.param('timestamp');
+
     fbpage.build(timestamp, function (err, reports) {
-        console.log(err);
         res.send({
             err: err ? {
                 message: err.message

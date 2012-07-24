@@ -317,7 +317,7 @@ describe('app#getPages Test', function() {
             }
             pages.length.should.eql(3);
             pages.forEach(function (page) {
-                page.pageName.should.be.ok;
+                page.name.should.be.ok;
                 page.version.should.be.ok;
 
             });
