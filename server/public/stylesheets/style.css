@@ -69,3 +69,8 @@ ul.timestamps li:hover {
   display: inline-block;
   margin: 0 10px;
 }
+.ks-popup,
+.ks-overlay {
+  position: absolute;
+  left: -9999px;
+}

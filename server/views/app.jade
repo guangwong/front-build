@@ -22,13 +22,16 @@ block content
                     //- input.versionCheck(type='checkbox')
                     a.version_no(href='/page/#{page.name}@#{page.version}?root=#{app.rootDir}')= page.version
                     .options.form-inline
-                      span.status
-                      |&nbsp;
-                      input(type='text')
-                      |&nbsp;
-                      a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
-                        |Build
-                .clearfix
+                      .input-prepend
+                        span.status
+                        |&nbsp;
+                        span.add-on
+                          i.icon-calendar
+                        input.timestamp-input(type='text')
+                        |&nbsp;
+                        a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
+                          |Build
+                //- .clearfix
                   .version-add.version.form-inline
                     input(type='text')
                     |&nbsp;

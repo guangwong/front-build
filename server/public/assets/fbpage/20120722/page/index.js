@@ -2,7 +2,7 @@
 combined files : 
 
 utils/build-page
-utils/build-common
+utils/calendar-init
 page/index
 
 */
@@ -42,47 +42,47 @@ KISSY.add('utils/build-page',function (S) {
             });
         }
     }
-});KISSY.add('utils/build-common',function (S) {
+});KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
     var $ = S.all;
-
     return {
-        init: function () {
-            var $elCommonBuild = $('#fb-build-common');
-            var $elStatus = $elCommonBuild.siblings('.status');
+        init: function (config) {
 
-            $elCommonBuild.on('click', function (ev) {
-                var $et = $(ev.target);
-                ev.preventDefault();
-                $elStatus.html('building...');
+            var popup = new Overlay.Popup();
+            popup.render();
 
-                S.ajax({
-                    url: $et.attr('href'),
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.err) {
-                            var err = data.err;
-                            $elStatus
-                                .html('Error:' + err.message)
-                            return;
-                        }
-                        $elStatus.html('success!');
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000)
-                    }
-                });
+            var cal = new Calendar(popup.get('contentEl')).on('select', function(e) {
+                if (this.targetInput) {
+                    $(this.targetInput).val(S.Date.format(e.date, 'yyyymmdd'));
+                }
+                popup.hide();
             });
-            
+
+            $(config.triggers).on('focus', function (ev) {
+                popup.show();
+                var et = $(ev.target);
+                popup.align(et, ['bl', 'tl']);
+                cal.targetInput = et;
+            });
+            $('body').on('mousedown', function (ev) {
+                if (!popup.get('contentEl').contains(ev.target)) {
+                    popup.hide();
+                }
+            });
         }
-    };
-});KISSY.add('page/index',function (S, buildPage) {
+    }
+}, {
+    requires: ['calendar', 'overlay', 'calendar/assets/base.css']
+});KISSY.add('page/index',function (S, buildPage, Calendar) {
     var $ = S.all;
 
     //buildCommon
     S.ready(function () {
         buildPage.init();
+        Calendar.init({
+            triggers: 'input.timestamp-input'
+        });
     });
     
 }, {
-    requires: ['utils/build-page', 'utils/build-common']
+    requires: ['utils/build-page', 'utils/calendar-init']
 });
