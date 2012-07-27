@@ -8,14 +8,17 @@ block content
           h1 
             a(href='/app?root=#{app.rootDir}')= app.name
             |/ 
-            span= title
+            span= page.name
             |/
             sapn= page.version
           p.path= page.rootDir
 
-          .buildto
-            input.span3(type='text')
+          .buildto.form-inline
+            input(type='text')
+            |&nbsp;
             a.btn(href='#') build
+            |&nbsp;
+            .status
 
         ul.timestamps
           - each ts in timestamps
