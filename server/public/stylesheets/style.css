@@ -1,9 +1,8 @@
+html {
+  height: 100%;
+}
 body {
-  background-image: url("/images/front-build.png");
-  background-position: 50% 0;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  padding-top: 150px;
+  height: 100%;
 }
 .fb-title {
   padding: 10px;
@@ -27,7 +26,7 @@ body {
   border: 2px solid #000;
   padding: 10px;
   color: #fff;
-  border-radius: 5px 5px 0 5px;
+  border-radius: 5px 5px 0 0;
 }
 .fb-page .options {
   position: absolute;
@@ -43,7 +42,6 @@ body {
 .version {
   border: #999 2px solid;
   border-top: 0;
-  margin-left: 50px;
   position: relative;
   background: #d3e9f4;
   color: #3898be;
@@ -84,4 +82,17 @@ ul.timestamps li:hover {
 .ks-overlay {
   position: absolute;
   left: -9999px;
+}
+.report {
+  border: 1px solid #999;
+  margin-bottom: 10px;
+}
+.report-hd {
+  background: #fff;
+}
+.report-hd dl {
+  padding-left: 20px;
+}
+.report-bd {
+  background: ;
 }

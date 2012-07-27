@@ -1,13 +1,12 @@
-KISSY.add(function (S, buildPage, buildCommon, Calendar) {
+KISSY.add(function (S, pageBuilder, buildCommon, Calendar) {
     var $ = S.all;
 
     //buildCommon
     S.ready(function () {
-        buildPage.init();
-        buildCommon.init();
         Calendar.init({
             triggers: 'input.timestamp-input'
         });
+        buildCommon.init()
     });
     
 }, {

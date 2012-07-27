@@ -1,14 +1,20 @@
-KISSY.add(function (S, buildPage, Calendar) {
+KISSY.add(function (S, pageBuilder, Calendar, Reporter) {
     var $ = S.all;
 
     //buildCommon
     S.ready(function () {
-        buildPage.init();
+        // buildPage.init();
+        var reporter = new Reporter('#reports')
+        pageBuilder.on('report', function (ev) {
+            reporter.addReport(ev.reports);
+        });
+
         Calendar.init({
             triggers: 'input.timestamp-input'
         });
+
     });
     
 }, {
-    requires: ['utils/build-page', 'utils/calendar-init']
+    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter']
 });

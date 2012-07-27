@@ -114,6 +114,7 @@ describe('page build test', function(){
     var version = '1.0';
     var timestamp = '20121212';
     var thepage;
+    var buildReports;
 
     before(function (done) {
         app.getConfig(function(err, config){
@@ -134,7 +135,14 @@ describe('page build test', function(){
                     if (err) {
                         return done(err);
                     }
-                    thepage.build(timestamp, done);
+                    thepage.build(timestamp, function (err, reports) {
+                        if (err) {
+                            return done(err);
+                        }
+
+                        buildReports = reports;
+                        done();
+                    });
                 }
             );
         });
@@ -266,6 +274,22 @@ describe('page build test', function(){
             });
         });
     });
+
+    it('should produce reports', function () {
+        var pluginsReports = buildReports.plugins;
+        var fbReports = buildReports.fb;
+
+        console.log(pluginsReports[0]);
+
+        fbReports.should.be.a('object')
+            .and.have.property('build_version')
+        fbReports
+            .should.have.property('build_start_time')
+        fbReports
+            .should.have.property('build_used_time')
+        pluginsReports.should.be.a('object');
+    });
+
 });
 
 describe('page add version test', function(){

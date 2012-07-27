@@ -15,7 +15,7 @@ KISSY.add(function (S, Calendar, Overlay) {
                 popup.hide();
             });
 
-            $(config.triggers).on('focus', function (ev) {
+            $(config.triggers).on('click', function (ev) {
                 popup.show();
                 var et = $(ev.target);
                 popup.align(et, ['bl', 'tl']);
