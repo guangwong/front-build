@@ -1,23 +1,23 @@
 /**
- * @fileoverview ÏîÄ¿»·¾³ÅäÖÃ£¬°üÀ¨°üÅäÖÃµÈ
- * @author ÎÄÁú, ½£Æ½£¨Ã÷ºÓ£©
+ * @fileoverview é¡¹ç›®ç¯å¢ƒé…ç½®ï¼ŒåŒ…æ‹¬åŒ…é…ç½®ç­‰
+ * @author æ–‡é¾™, å‰‘å¹³ï¼ˆæ˜æ²³ï¼‰
  */
 KISSY.add("fb/env",function(S){
     window.ENV = window.FB = window.FB || {/**@lends ENV*/
         /**
-         * °æ±¾
+         * ç‰ˆæœ¬
          */
         version: 1.0,
         /**
-         * Ô´ÂëÂ·¾¶Ä£°å
+         * æºç è·¯å¾„æ¨¡æ¿
          */
         srcPathTpl:"{path}/{name}/{version}/",
         /**
-         * ·¢²¼Â·¾¶Ä£°å
+         * å‘å¸ƒè·¯å¾„æ¨¡æ¿
          */
         pubPathTpl:"{path}/{name}/{pub}/",
         /**
-         * »·¾³¶¨ÒåµÄ°üÃû
+         * ç¯å¢ƒå®šä¹‰çš„åŒ…å
          */
         definePkgs:{
             COMMON:'common',
@@ -25,14 +25,14 @@ KISSY.add("fb/env",function(S){
             PAGE:'page'
         },
         /**
-         * »ùÓÚkissy1.2Ò³ÃæµÄ»·¾³ÅäÖÃ£¬Ö÷ÒªÓÃÓÚFB¹¤¾ß¹¹½¨µÄÄ¿Â¼½á¹¹
+         * åŸºäºkissy1.2é¡µé¢çš„ç¯å¢ƒé…ç½®ï¼Œä¸»è¦ç”¨äºFBå·¥å…·æ„å»ºçš„ç›®å½•ç»“æ„
          * @param {Object} config
-         *  @param config.name     Ò³ÃæÃû£¨»áÆ´ÈëÄ£¿éjsÂ·¾¶ÖĞ£©
-         *  @param config.version  Ô´ÂëÄ¿Â¼Ãû£¨fbµÄÄ¿Â¼Ô¼¶¨°æ±¾ºÅÄ¿Â¼¼´Ô´ÂëÄ¿Â¼£©£¬Ò²»áÆ´ÈëÄ£¿éjsÂ·¾¶ÖĞ
-         *  @param config.pub      ·¢²¼Ä¿Â¼¼´Ä£¿é´ò°üºóÄ¿Â¼£¨µ±Ò³ÃæÖĞÒıÈëµÄkissy-min.js£¬»áÈ¥ÒıÓÃ¸ÃÎÄ¼ş¼ĞµÄÄ£¿éjs£¬±ÈÈçapply-min.js£©
-         *  @param config.path      »ùÂ·¾¶£¨Ä£¿éÂ·¾¶Ñ°Ö·µÄ»ùµã£©
-         *  @param config.charset ±àÂë
-         *  @param config.tag      Â·¾¶Î²²¿Ê±¼ä´Á
+         *  @param config.name     é¡µé¢åï¼ˆä¼šæ‹¼å…¥æ¨¡å—jsè·¯å¾„ä¸­ï¼‰
+         *  @param config.version  æºç ç›®å½•åï¼ˆfbçš„ç›®å½•çº¦å®šç‰ˆæœ¬å·ç›®å½•å³æºç ç›®å½•ï¼‰ï¼Œä¹Ÿä¼šæ‹¼å…¥æ¨¡å—jsè·¯å¾„ä¸­
+         *  @param config.pub      å‘å¸ƒç›®å½•å³æ¨¡å—æ‰“åŒ…åç›®å½•ï¼ˆå½“é¡µé¢ä¸­å¼•å…¥çš„kissy-min.jsï¼Œä¼šå»å¼•ç”¨è¯¥æ–‡ä»¶å¤¹çš„æ¨¡å—jsï¼Œæ¯”å¦‚apply-min.jsï¼‰
+         *  @param config.path      åŸºè·¯å¾„ï¼ˆæ¨¡å—è·¯å¾„å¯»å€çš„åŸºç‚¹ï¼‰
+         *  @param config.charset ç¼–ç 
+         *  @param config.tag      è·¯å¾„å°¾éƒ¨æ—¶é—´æˆ³
          */
         config: function (config) {
             if (!config.path)  config.path = '';
@@ -75,29 +75,29 @@ KISSY.add("fb/env",function(S){
             });
         },
         /**
-         * ÊÇ·ñ¿ªÆôÁËµ÷ÊÔ
+         * æ˜¯å¦å¼€å¯äº†è°ƒè¯•
          * @return {Boolean}
          */
         isDebug:function(){
             return S.Config.debug;
         },
         /**
-         * ÊÇ·ñÊÇdaily»·¾³Â·¾¶
+         * æ˜¯å¦æ˜¯dailyç¯å¢ƒè·¯å¾„
          * @return {Boolean}
          */
         isDaily : function(){
             return document.domain.indexOf('daily.') > -1;
         },
         /**
-         * »ñÈ¡cdnµÄÂ·¾¶
-         * @return {String} cdnÂ·¾¶£¨daily»òÏßÉÏ£©
+         * è·å–cdnçš„è·¯å¾„
+         * @return {String} cdnè·¯å¾„ï¼ˆdailyæˆ–çº¿ä¸Šï¼‰
          */
         getCdn : function(){
             var isDaily = ENV.isDaily();
             return isDaily && 'http://assets.daily.taobao.net' || 'http://a.tbcdn.cn';
         }
     };
-    //È«¾ÖÊÂ¼şÖĞĞÄ
+    //å…¨å±€äº‹ä»¶ä¸­å¿ƒ
     ENV.eventCenter = S.mix({}, S.EventTarget);
     return ENV;
 });
