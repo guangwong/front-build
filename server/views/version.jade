@@ -27,6 +27,8 @@ block content
         #reports
         ul.timestamps
           - each ts in timestamps
-            li= ts
+            li 
+              span.timestamp #{ts.timestamp}
+              span.build-version [#{ts.build ? ts.build.build_version : 'noversion'}]
   script
     KISSY.use('page/index');
