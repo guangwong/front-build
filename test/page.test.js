@@ -279,7 +279,6 @@ describe('page build test', function(){
         var pluginsReports = buildReports.plugins;
         var fbReports = buildReports.fb;
 
-        console.log(pluginsReports[0]);
 
         fbReports.should.be.a('object')
             .and.have.property('build_version')
@@ -410,7 +409,6 @@ describe('page#getTimestamps', function () {
 
     it('should get a blank array with no pub directories', function (done) {
         page1.getTimestamps(function(err, timestamps) {
-            console.log(timestamps);
             should.not.exist(err);
             timestamps.should.be.an.array;
             timestamps.length.should.eql(0);
@@ -420,7 +418,7 @@ describe('page#getTimestamps', function () {
 
     it('should get all the pub timestamps', function (done) {
         page2.getTimestamps(function(err, timestamps) {
-            console.log(timestamps);
+
             should.not.exist(err);
             timestamps.should.be.ok;
             // timestamps.should.include('20120901')

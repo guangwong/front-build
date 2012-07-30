@@ -311,7 +311,6 @@ describe('app#getPages Test', function() {
 
     it('should get all pages', function (done) {
         app.getPages(function (err, pages) {
-            console.log('----', err, pages);
             if (err) {
                 return done(err);
             }

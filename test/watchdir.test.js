@@ -46,9 +46,9 @@ describe('watchDir', function () {
 	});
 
 	it('should emit rename when file added', function (done) {
-		console.log('----add  file filePath');
+		// console.log('----add  file filePath');
 		watcher.on('rename', function (file) {
-			console.log('rename: %s', file.filename);
+			// console.log('rename: %s', file.filename);
 			if (rootDir === file.filename) {
 				watcher.removeAllListeners('rename');
 				done();
@@ -61,9 +61,9 @@ describe('watchDir', function () {
 	});
 
 	it('should emit change when file updated', function (done) {
-		console.log('----update file filePath');
+		// console.log('----update file filePath');
 		watcher.on('change', function (file) {
-			console.log('change: %s', file.filename);
+			// console.log('change: %s', file.filename);
 			if (file.filename === filePath) {
 				watcher.removeAllListeners('change');
 				done();
@@ -74,9 +74,9 @@ describe('watchDir', function () {
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		console.log('----add subDir');
+		// console.log('----add subDir');
 		watcher.on('rename', function (file) {
-			console.log('reanme: %s', file.filename);
+			// console.log('reanme: %s', file.filename);
 			if (file.filename === rootDir) {
 				watcher.removeAllListeners('rename');
 				done();
@@ -86,9 +86,9 @@ describe('watchDir', function () {
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		console.log('----add subFile.js');
+		// console.log('----add subFile.js');
 		watcher.on('rename', function (file) {
-			console.log('reanme: %s', file.filename);
+			// console.log('reanme: %s', file.filename);
 			if (file.filename === subDir) {
 				watcher.removeAllListeners('rename');
 				done();
@@ -99,10 +99,10 @@ describe('watchDir', function () {
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		console.log('----update subFile.js');
+		// console.log('----update subFile.js');
 
 		watcher.on('change', function (file) {
-			console.log('change: %s', file.filename);
+			// console.log('change: %s', file.filename);
 			if (file.filename === subFile) {
 				watcher.removeAllListeners('change');
 				done();
