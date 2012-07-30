@@ -63,7 +63,7 @@ exports.page = function (req, res, next) {
     var fbapp = req.fbapp;
     var fbpage = req.fbpage;
 
-    fbpage.getTimestamps(function (timestamps) {
+    fbpage.getTimestamps(function (err, timestamps) {
 
         res.render('version', {
             title: fbpage.name,
@@ -106,4 +106,23 @@ exports.buildPage = function (req, res, next) {
         });
     });
 
+};
+
+exports.addPage = function (req, res, next) {
+    var fbapp = req.fbapp;
+    var pageName = req.param('pagename');
+    var version = req.param('version');
+    if (!pageName || !version) {
+        var error = new Error();
+        error.name = 'addPage Error';
+        error.message = 'no pagename or version';
+        next(error);
+        return;
+    }
+    fbapp.addPage(pageName + '/' + version, function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('back');
+    });
 };

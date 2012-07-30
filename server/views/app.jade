@@ -29,7 +29,7 @@ block content
                           i.icon-calendar
                         input.timestamp-input(type='text')
                         |&nbsp;
-                        a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
+                        a.btn.fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
                           |Build
                 //- .clearfix
                   .version-add.version.form-inline
@@ -40,11 +40,12 @@ block content
         .fb-page
           .row-fluid
             .span12
-              .form-inline.form-page-add
-                input.input-small(type='text',placeholder='pagename')
+              form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
+                input(type='hidden', value=app.rootDir, name='root')
+                input.input-small(type='text', name='pagename', placeholder='pagename')
                 |&nbsp;
-                input.input-small(type='text',placeholder='version')
+                input.input-small(type='text', name='version', placeholder='version')
                 |&nbsp;
-                button.btn(type='submit') Add
+                button.btn(type='submit') ADD
   script
     KISSY.use('page/index');

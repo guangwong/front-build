@@ -20,12 +20,13 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(function (req, res, next) {
-    if (!req.query.root) {
+    var rootDir = req.param('root');
+    if (!rootDir) {
       next();
       return;
     }
 
-    App.getApp(req.query.root, function (err, app) {
+    App.getApp(rootDir, function (err, app) {
       if (err) {
         return next(err);
       }
@@ -67,6 +68,18 @@ app.get('/page/:pageVersion', routes.page);
 app.get('/build-page/:pageVersion', routes.buildPage);
 app.get('/build-common', routes.buildCommon);
 app.post('/build-common', routes.buildCommon);
+app.post('/add-page', routes.addPage);
+app.locals({
+  getUrl: function (path, obj) {
+    return require('url').format({
+      protocol: 'http',
+      hostname: '127.0.0.1',
+      port: '8765',
+      query: obj,
+      pathname: path
+    });
+  }
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
