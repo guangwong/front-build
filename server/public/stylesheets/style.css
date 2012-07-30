@@ -5,8 +5,8 @@ body {
   height: 100%;
 }
 .fb-title {
-  padding: 10px;
-  background: rgba(255,255,255,0.5);
+  padding: 10px 200px 10px 10px;
+  background: #fff url("/images/logo.png") 100% 10px no-repeat;
 }
 .fb-title h1 {
   font-size: 54px;
@@ -43,6 +43,7 @@ body {
   border: 2px #999 dashed;
   text-align: center;
   padding: 20px;
+  margin-top: 30px;
 }
 .version {
   border: #999 2px solid;
@@ -75,9 +76,20 @@ ul.timestamps li {
   border-bottom: 1px solid #fff;
   background: #fff;
   border-top: 1px solid #eee;
+  position: relative;
 }
 ul.timestamps li:hover {
   background: #f2f2f2;
+}
+ul.timestamps .build-version {
+  color: #aaa;
+  margin-left: 20px;
+}
+ul.timestamps .build-time {
+  position: absolute;
+  color: #aaa;
+  right: 10px;
+  top: 5px;
 }
 .buildto .status {
   display: inline-block;
