@@ -1,3 +1,8 @@
 <div class="report-plugin-item">
-    <pre>{{text}}</pre>
+    <div class="report-plugin-item-hd">
+        <h4>{{#if content}}<i class="icon-file"></i>{{/if}}{{name}}</h4>
+    </div>
+    {{#if content}}
+    <div class='report-plugin-item-bd'>{{content}}</div>
+    {{/if}}
 </div>

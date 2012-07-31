@@ -4,12 +4,12 @@ block content
   .container
     .row-fluid
       .span12
-        .modal
+        .modal.kpi-modal
           .modal-header
             h3
               img(src='/images/logo.png')
           .modal-body
             form.well(action='/app',method='GET')
-              label path
+              label Local app path
               input.span9(type='text',name='root')
               button.btn.btn-primary(type='submit') Submit

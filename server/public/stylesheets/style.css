@@ -4,6 +4,22 @@ html {
 body {
   height: 100%;
 }
+.kpi-modal {
+  width: 500px;
+}
+.kpi-modal .modal-header {
+  border-bottom: none;
+}
+.kpi-modal .modal-header:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.kpi-modal .modal-header img {
+  float: right;
+}
 .fb-title {
   padding: 10px 200px 10px 10px;
   background: #fff url("/images/logo.png") 100% 10px no-repeat;
@@ -112,4 +128,14 @@ ul.timestamps .build-time {
 }
 .report-bd {
   background: ;
+}
+.report-plugin-item-hd {
+  background: #d3e9f4;
+  border-bottom: 1px solid #fff;
+  padding: 10px;
+}
+.report-plugin-item-bd {
+  display: none;
+  padding: 10px;
+  background: #fff;
 }
