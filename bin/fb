@@ -36,6 +36,7 @@ function done(err, message) {
 	process.exit(0);
 }
 
+//默认显示帮助
 var command = 'help';
 
 

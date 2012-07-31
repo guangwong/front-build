@@ -8,7 +8,7 @@
     "url": "git://github.com/maxbbn/front-build.git"
   },
   "bin": {
-    "pie": "./bin/pie"
+    "ki": "./bin/fb"
   },
   "scripts": {
     "test": "mocha"
