@@ -236,7 +236,15 @@ describe('test findInDir of fileutil', function(){
             list.indexOf(path.join('sub2', 'find.js')).should.not.eql(-1);
             done();
         });
-
+    });
+    it('should ignore file in .svn directory', function (done) {
+        fu.findInDir(src, /svn[\/\\]file$/i, function(err, list){
+            if (err) {
+                return done(err);
+            }
+            list.length.should.eql(0);
+            done();
+        });
     });
 });
 
