@@ -1,4 +1,4 @@
-# Kissy Pie (kpi)
+# Kissy Pie (ki)
 
     - 基于目录规范
     - 自动化打包，追求零配置
@@ -18,7 +18,7 @@
     - 添加 Kissy Pie 分支
 
 ## 快速开始
-### 安装Kissy Pie
+### 安装 Kissy Pie
 
     1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download
     2. npm install kissy-pie -g
@@ -128,21 +128,21 @@ utils 一般不直接使用， 可打包进Page。
 
 ## 常用命令介绍
 
-### kpi init
+### pi init
 
 ````sh
 cd dir/to/app
-kpi init
+pi init
 ````
 初始化当前文件夹为Root， 请在项目根目录下执行。
 
 如果已有fb.json 不必重复执行。
 
-### kpi update
+### pi update
 
 ````sh
 cd dir/to/app
-kpi update
+pi update
 ````
 Kissy Pie 升级后，更新本地项目到最新版本
 
@@ -150,22 +150,22 @@ Kissy Pie 升级后，更新本地项目到最新版本
 
 同时会创建缺失的文件夹。
 
-### kpi web
+### pi web
 
 开启本地Web服务器，从浏览器访问 http://127.0.0.1:8765
 
 强烈推荐！！可在一个可视化界面里面执行常用的操作，如打包，添加新的Page或Version等。 
 
-### kpi add
+### pi add
 
 ````sh
-kpi add name_of_page/1.0
+pi add name_of_page/1.0
 ````
 在应用里面创建或初始化 版本 为 "1.0" 的Page "name_of_page"
 
-### kpi build
+### ki build
 ````sh
-kpi build about@1.0 -t 20120601
+pi build about@1.0 -t 20120601
 ````
 
 构建 1.0(Version) 的 about(当前PageName) 到时间戳目录 ‘20120601’
@@ -176,31 +176,31 @@ kpi build about@1.0 -t 20120601
 
 ````sh
 ## 同时指定多个page
-kpi build about@1.0 index@1.0 -t 20120601
+pi build about@1.0 index@1.0 -t 20120601
 ````
 common 目录构建
 
 ````sh
-kpi build common
+pi build common
 ````
 
 或者使用组（group)
 
-### kpi group command
+### pi group command
 
 ````sh
-kpi group set group1 about@1.0 index@1.0
-kpi group build group1 -t 20120601
+pi group set group1 about@1.0 index@1.0
+pi group build group1 -t 20120601
 
 ````
 
 其它group 命令
 
 ````sh
-kpi group
-kpi group list ## 列出所有组
-kpi group rm front-page ##删除一个组
-kpi group add front-page home@2.0 ## 追加一个version 到组
+pi group
+pi group list ## 列出所有组
+pi group rm front-page ##删除一个组
+pi group add front-page home@2.0 ## 追加一个version 到组
 ````
 
 _注意_ 一个组里面只能包含一个Page的一个version；
