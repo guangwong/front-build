@@ -16,16 +16,17 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
-  app.use(express.logger('dev'));
+  // app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(function (req, res, next) {
     var rootDir = req.param('root');
+
     if (!rootDir) {
       next();
       return;
     }
-
+    console.log(rootDir)
     App.getApp(rootDir, function (err, app) {
       if (err) {
         return next(err);
@@ -42,7 +43,6 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
-
 app.param('pageVersion', function (req, res, next, pageVersion) {
   var fbapp = req.fbapp;
   if (!fbapp) {
@@ -69,6 +69,7 @@ app.get('/build-page/:pageVersion', routes.buildPage);
 app.get('/build-common', routes.buildCommon);
 app.post('/build-common', routes.buildCommon);
 app.post('/add-page', routes.addPage);
+
 app.locals({
   getUrl: function (path, obj) {
     return require('url').format({
