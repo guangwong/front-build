@@ -10,6 +10,7 @@ page/template/report-plugin.tpl
 page/template/report-csslint.tpl
 page/template/report-kissy-template.tpl
 page/template/report-uglifyjs.tpl
+page/template/report-cssmin.tpl
 page/index
 
 */
@@ -91,7 +92,7 @@ KISSY.add('utils/build-page',function (S) {
     }
 }, {
     requires: ['calendar', 'overlay', 'calendar/assets/base.css']
-});KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kissy_template_tpl, uglifyjs_tpl) {
+});KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kissy_template_tpl, uglifyjs_tpl, cssmin_tpl) {
     var $ = S.all;
 
     var Reporter = function (container) {
@@ -129,7 +130,7 @@ KISSY.add('utils/build-page',function (S) {
                 }
             });
 
-            var html = Reporter.template_wrap.render(outputs);
+            var html = Reporter.wrap_tpl.render(outputs);
 
             var reports = self.$el.all('.report');
 
@@ -142,31 +143,32 @@ KISSY.add('utils/build-page',function (S) {
 
         pluginRenderer: {
             'csslint': function (report) {
-                return Reporter.template_csslint.render(report);
+                return Reporter.csslint_tpl.render(report);
             },
             'kissy-template': function (report) {
-                return Reporter.template_kissy_template.render(report);
+                return Reporter.kissy_template_tpl.render(report);
             },
             'uglifyjs': function (report) {
-                return Reporter.template_uglifyjs.render(report);
+                return Reporter.uglifyjs_tpl.render(report);
+            },
+            'cssmin': function (report) {
+                return Reporter.cssmin_tpl.render(report);
             }
         },
 
         renderer: {
             fb: function (report) {
-                return Reporter.template_fb.render(report);
+                return Reporter.fb_tpl.render(report);
             },
 
             plugins: function (report) {
                 var self = this;
                 var o = [];
-                console.log(report);
                 S.each(report, function (item) {
                     var name = item.name;
                     var render = self.pluginRenderer[name] || null;
                     var content = render ? render(item) : '';
-                    console.log(name)
-                    o.push(Reporter.template_plugin.render({
+                    o.push(Reporter.plugin_tpl.render({
                         name: name,
                         content: content
                     }));
@@ -176,12 +178,13 @@ KISSY.add('utils/build-page',function (S) {
         }
 
     }, {
-        'template_fb' : Template(fb_tpl.html),
-        'template_plugin': Template(plugin_tpl.html),
-        'template_wrap': Template(wrap_tpl.html),
-        'template_csslint': Template(csslint_tpl.html),
-        'template_kissy_template': Template(kissy_template_tpl.html),
-        'template_uglifyjs': Template(uglifyjs_tpl.html)
+        'fb_tpl' : Template(fb_tpl.html),
+        'plugin_tpl': Template(plugin_tpl.html),
+        'wrap_tpl': Template(wrap_tpl.html),
+        'csslint_tpl': Template(csslint_tpl.html),
+        'kissy_template_tpl': Template(kissy_template_tpl.html),
+        'uglifyjs_tpl': Template(uglifyjs_tpl.html),
+        'cssmin_tpl': Template(cssmin_tpl.html)
     });
     return Reporter;
 }, {
@@ -192,7 +195,8 @@ KISSY.add('utils/build-page',function (S) {
         'page/template/report-plugin.tpl',
         'page/template/report-csslint.tpl',
         'page/template/report-kissy-template.tpl',
-        'page/template/report-uglifyjs.tpl'
+        'page/template/report-uglifyjs.tpl',
+        'page/template/report-cssmin.tpl',
 
     ]
 });KISSY.add('page/template/report-fb.tpl',function(){
@@ -200,13 +204,15 @@ KISSY.add('utils/build-page',function (S) {
 });KISSY.add('page/template/report-wrap.tpl',function(){
     return {"html":"<div class=\"report\">\n    <div class=\"report-hd\">{{fb}}</div>\n    <div class=\"report-bd\">{{plugins}}</div>\n</div>"};
 });KISSY.add('page/template/report-plugin.tpl',function(){
-    return {"html":"<div class=\"report-plugin-item\">\n    <div class=\"report-plugin-item-hd\">\n        <h4>{{#if content}}<i class=\"icon-file\"></i>{{/if}}{{name}}</h4>\n    </div>\n    {{#if content}}\n    <div class='report-plugin-item-bd'>{{content}}</div>\n    {{/if}}\n</div>"};
+    return {"html":"<div class=\"report-plugin-item\">\n    <div class=\"report-plugin-item-hd{{#if content}} report-plugin-hd-has-content{{/if}}\">\n        <h4>{{name}}</h4>\n    </div>\n    {{#if content}}\n    <div class='report-plugin-item-bd'>{{content}}</div>\n    {{/if}}\n</div>"};
 });KISSY.add('page/template/report-csslint.tpl',function(){
     return {"html":"<div class=\"csslint-list\">\n    {{#each lintReport as item}}\n        <div class='csslint-list-item'>\n            <h4 class='csslint-file'>{{item.file}}</h4>\n            <p>{{item.fullpath}}</p>\n            <pre>{{item.output}}</pre>\n        </div>\n    {{/each}}\n</div>\n<div class='plugin-build-info'>\n    用时 {{used_time}} ms\n</div>"};
 });KISSY.add('page/template/report-kissy-template.tpl',function(){
-    return {"html":"<h4>file list</h4>\n<ul>\n    {{#each files as file}}\n        <li>\n            {{file}}\n        </li>\n    {{/each}}\n</ul>\n<div class='plugin-build-info'>\n    用时 {{used_time}} ms\n</div>"};
+    return {"html":"<h4>处理文件列表:</h4>\n{{#if !files.length}}\n    <div>\n        没有文件\n    </div>\n{{#else}}\n    <ul class=\"plugin-file-list\">\n        {{#each files as file}}\n            <li>\n                <i class=\"icon-file\"></i> {{file}}\n            </li>\n        {{/each}}\n    </ul>\n{{/if}}\n<div class='plugin-build-info'>\n    用时 {{used_time}} ms\n</div>"};
 });KISSY.add('page/template/report-uglifyjs.tpl',function(){
-    return {"html":"<h4>file list</h4>\n<ul>\n    {{#each files as file}}\n        <li>\n            {{file}}\n        </li>\n    {{/each}}\n</ul>\n<div class='plugin-build-info'>\n    用时 {{used_time}} ms\n</div>"};
+    return {"html":"<h4>处理文件列表:</h4>\n{{#if !files.length}}\n    <div>\n        没有文件\n    </div>\n{{#else}}\n    <ul class=\"plugin-file-list\">\n        {{#each files as file}}\n            <li>\n                <i class=\"icon-file\"></i> {{file}}\n            </li>\n        {{/each}}\n    </ul>\n{{/if}}\n<div class='plugin-build-info'>\n    用时 {{used_time}} ms\n</div>"};
+});KISSY.add('page/template/report-cssmin.tpl',function(){
+    return {"html":"<h4>处理文件列表:</h4>\n{{#if !files.length}}\n    <div>\n        没有文件\n    </div>\n{{#else}}\n    <ul class=\"plugin-file-list\">\n        {{#each files as file}}\n            <li>\n                <i class=\"icon-file\"></i> {{file}}\n            </li>\n        {{/each}}\n    </ul>\n{{/if}}\n<div class='plugin-build-info'>\n    用时 {{used_time}} ms\n</div>"};
 });KISSY.add('page/index',function (S, pageBuilder, Calendar, Reporter) {
     var $ = S.all;
 

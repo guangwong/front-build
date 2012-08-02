@@ -1,12 +1,3 @@
-html {
-  height: 100%;
-}
-body {
-  height: 100%;
-}
-.kpi-modal {
-  width: 500px;
-}
 .kpi-modal .modal-header {
   border-bottom: none;
 }
@@ -116,8 +107,11 @@ ul.timestamps .build-time {
   position: absolute;
   left: -9999px;
 }
+#reports {
+  margin-top: 10px;
+}
 .report {
-  border: 1px solid #999;
+  border: spx solid #ddd;
   margin-bottom: 10px;
 }
 .report-hd {
@@ -138,4 +132,13 @@ ul.timestamps .build-time {
   display: none;
   padding: 10px;
   background: #fff;
+}
+.report-plugin-item-hd h4 {
+  color: #999;
+}
+.report-plugin-hd-has-content h4 {
+  color: #000;
+}
+.plugin-file-list {
+  list-style: none;
 }
