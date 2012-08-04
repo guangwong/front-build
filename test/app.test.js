@@ -238,52 +238,7 @@ describe('app#addPage test', function () {
     });
 });
 
-describe('test app buildCommon', function(){
-    var app;
-    var rootDir = path.resolve('sample-project');
 
-    var files = [
-        'index.js',
-        'main.css',
-        'style.less'
-    ];
-
-    var minFiles = [
-        'index-min.js',
-        'main-min.css',
-        'style-min.css'
-    ];
-
-    before(function (done) {
-        app = new App({
-            rootDir: rootDir
-        });
-        
-        app.buildCommon(done);
-
-    });
-
-    after(function (done){
-        async.forEach(minFiles, function (file, callback){
-            fs.unlink(path.resolve(rootDir, 'common', file), callback);
-        }, done);
-    });
-
-    it('should build files to -min', function(done) {
-        async.map(minFiles, function (file, callback) {
-            fs.stat(path.resolve(rootDir, 'common', file), callback);
-        }, function (err, stats){
-            if (err) {
-                return done(err);
-            }
-            stats.forEach(function (stat) {
-                stat.isFile().should.be.true;
-            });
-
-            done();
-        })
-    });
-});
 
 describe('app#update test', function() {
     var app;
@@ -325,4 +280,78 @@ describe('app#getPages Test', function() {
     });
 
 
+});
+
+
+describe('APP#getGlobalConfig', function () {
+    var oConfig;
+
+    before(function (done) {
+        App.getGlobalConfig(function (json) {
+            oConfig = json;
+            done();
+        });
+    });
+
+    it ('should return a Object', function () {
+        should.exist(oConfig);
+        oConfig.should.be.a('object');
+    });
+
+    it ('should extends the default Configs', function () {
+        oConfig.packages.should.be.a('object');
+    });
+
+    it ('should read json from default user fb.default.json file', function () {
+        should.exist(oConfig.packages['common-lib']);
+        oConfig.packages['common-lib'].should.be.a('object');
+        oConfig.packages['common-lib'].should.have.property('path');
+    });
+});
+
+describe('test App#buildCommon', function () {
+    var app;
+    var rootDir = path.resolve('sample-project');
+
+    var files = [
+        'index.js',
+        'main.css',
+        'style.less'
+    ];
+
+    var minFiles = [
+        'index-min.js',
+        'main-min.css',
+        'style-min.css'
+    ];
+
+    before(function (done) {
+        app = new App({
+            rootDir: rootDir
+        });
+        
+        app.buildCommon(done);
+
+    });
+
+    after(function (done) {
+        async.forEach(minFiles, function (file, callback){
+            fs.unlink(path.resolve(rootDir, 'common', file), callback);
+        }, done);
+    });
+
+    it('should build files to -min', function(done) {
+        async.map(minFiles, function (file, callback) {
+            fs.stat(path.resolve(rootDir, 'common', file), callback);
+        }, function (err, stats){
+            if (err) {
+                return done(err);
+            }
+            stats.forEach(function (stat) {
+                stat.isFile().should.be.true;
+            });
+
+            done();
+        })
+    });
 });
