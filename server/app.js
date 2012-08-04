@@ -26,7 +26,6 @@ app.configure(function(){
       next();
       return;
     }
-    console.log(rootDir)
     App.getApp(rootDir, function (err, app) {
       if (err) {
         return next(err);
