@@ -320,11 +320,19 @@ describe('test fileutil.iconv', function(){
 });
 
 describe('fileutil.getUserHome test', function () {
+    var userhome;
+    before(function () {
+        userhome = fu.getUserHome()
+    })
     it('should return a string', function () {
-        var userhome = fu.getUserHome();
         should.exist(userhome);
         userhome.should.be.a('string');
         userhome.should.be.ok;
-        console.log('userhome: %s', userhome);
-    })
-})
+    });
+    it('should be exist', function (done) {
+        fs.exists(userhome, function (exist) {
+            exist.should.be.true;
+            done();
+        });
+    });
+});
