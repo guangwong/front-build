@@ -318,3 +318,13 @@ describe('test fileutil.iconv', function(){
         path.existsSync(p).should.be.false;
     });
 });
+
+describe('fileutil.getUserHome test', function () {
+    it('should return a string', function () {
+        var userhome = fu.getUserHome();
+        should.exist(userhome);
+        userhome.should.be.a('string');
+        userhome.should.be.ok;
+        console.log('userhome: %s', userhome);
+    })
+})
