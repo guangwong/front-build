@@ -31,7 +31,7 @@
 
 了解更多：<a href="http://www.36ria.com/5536" target="_blank">《使用Kissy Pie快速构建—kissy1.2最佳实践探索》</a>
 
-## 目录结构
+## 目录结构样例
 
 ````
 - app                           // root of app
@@ -70,7 +70,7 @@
 
 ````
 
-## 目录结构说明：
+## 目录结构说明
 
     - 一个应用包含一个Common， 一个Utils目录，和多个Page。
     - Common 目录是应用通用脚本和样式。 通常被会被多个Page使用， 使用方式为被页面直接使用。
@@ -86,6 +86,7 @@
     3. 使用内置插件系统
     
         1. module-compiler: KISSY的模块打包， 从src/page/xx.js -> build/page/xx.js
+        2. kissy-template: Kissy Template 模版编译，由 src/page/../xx.tpl.html 编译成 src/page/../xx.tpl.js
         2. css-combo: css打包， 从src/page/xx.css -> build/page/xx.css
         3. lesscss:  打包， 从 src/page/xx.less -> build/page/xx.less.css
         4. concat: 根据配置合并文件
@@ -128,21 +129,21 @@ utils 一般不直接使用， 可打包进Page。
 
 ## 常用命令介绍
 
-### pi init
+### ki init
 
 ````sh
 cd dir/to/app
-pi init
+ki init
 ````
 初始化当前文件夹为Root， 请在项目根目录下执行。
 
 如果已有fb.json 不必重复执行。
 
-### pi update
+### ki update
 
 ````sh
 cd dir/to/app
-pi update
+ki update
 ````
 Kissy Pie 升级后，更新本地项目到最新版本
 
@@ -150,22 +151,22 @@ Kissy Pie 升级后，更新本地项目到最新版本
 
 同时会创建缺失的文件夹。
 
-### pi web
+### ki web
 
 开启本地Web服务器，从浏览器访问 http://127.0.0.1:8765
 
 强烈推荐！！可在一个可视化界面里面执行常用的操作，如打包，添加新的Page或Version等。 
 
-### pi add
+### ki add
 
 ````sh
-pi add name_of_page/1.0
+ki add name_of_page/1.0
 ````
 在应用里面创建或初始化 版本 为 "1.0" 的Page "name_of_page"
 
 ### ki build
 ````sh
-pi build about@1.0 -t 20120601
+ki build about@1.0 -t 20120601
 ````
 
 构建 1.0(Version) 的 about(当前PageName) 到时间戳目录 ‘20120601’
@@ -176,31 +177,31 @@ pi build about@1.0 -t 20120601
 
 ````sh
 ## 同时指定多个page
-pi build about@1.0 index@1.0 -t 20120601
+ki build about@1.0 index@1.0 -t 20120601
 ````
 common 目录构建
 
 ````sh
-pi build common
+ki build common
 ````
 
 或者使用组（group)
 
-### pi group command
+### ki group command
 
 ````sh
-pi group set group1 about@1.0 index@1.0
-pi group build group1 -t 20120601
+ki group set group1 about@1.0 index@1.0
+ki group build group1 -t 20120601
 
 ````
 
 其它group 命令
 
 ````sh
-pi group
-pi group list ## 列出所有组
-pi group rm front-page ##删除一个组
-pi group add front-page home@2.0 ## 追加一个version 到组
+ki group
+ki group list ## 列出所有组
+ki group rm front-page ##删除一个组
+ki group add front-page home@2.0 ## 追加一个version 到组
 ````
 
 _注意_ 一个组里面只能包含一个Page的一个version；
