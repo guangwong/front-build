@@ -13,5 +13,11 @@
             "page2@2.0"
         ]
     },
-    "fbversion": "0.3.7"
+    "fbversion": "0.4.4",
+    "packages": {
+        "common-lib": {
+            "path": "~/lab/common-lib"
+        }
+    },
+    "lineEnd": "\n"
 }
