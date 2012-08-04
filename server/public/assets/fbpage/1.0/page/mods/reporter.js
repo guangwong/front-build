@@ -1,4 +1,4 @@
-KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kissy_template_tpl, uglifyjs_tpl, cssmin_tpl) {
+KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kissy_template_tpl, uglifyjs_tpl, cssmin_tpl, concat_tpl) {
     var $ = S.all;
 
     var Reporter = function (container) {
@@ -59,6 +59,9 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kiss
             },
             'cssmin': function (report) {
                 return Reporter.cssmin_tpl.render(report);
+            },
+            'concat': function (report) {
+                return Reporter.concat_tpl.render(report);
             }
         },
 
@@ -90,19 +93,21 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kiss
         'csslint_tpl': Template(csslint_tpl.html),
         'kissy_template_tpl': Template(kissy_template_tpl.html),
         'uglifyjs_tpl': Template(uglifyjs_tpl.html),
-        'cssmin_tpl': Template(cssmin_tpl.html)
+        'cssmin_tpl': Template(cssmin_tpl.html),
+        'concat_tpl': Template(concat_tpl.html)
     });
     return Reporter;
 }, {
     requires: [
         'template',
-        'page/template/report-fb.tpl',
-        'page/template/report-wrap.tpl',
-        'page/template/report-plugin.tpl',
-        'page/template/report-csslint.tpl',
-        'page/template/report-kissy-template.tpl',
-        'page/template/report-uglifyjs.tpl',
-        'page/template/report-cssmin.tpl',
+        'page/template/report-fb.tpl.js',
+        'page/template/report-wrap.tpl.js',
+        'page/template/report-plugin.tpl.js',
+        'page/template/report-csslint.tpl.js',
+        'page/template/report-kissy-template.tpl.js',
+        'page/template/report-uglifyjs.tpl.js',
+        'page/template/report-cssmin.tpl.js',
+        'page/template/report-concat.tpl.js'
 
     ]
 });
