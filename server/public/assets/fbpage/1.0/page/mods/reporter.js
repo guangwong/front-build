@@ -48,21 +48,15 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kiss
         },
 
         pluginRenderer: {
-            'csslint': function (report) {
-                return Reporter.csslint_tpl.render(report);
-            },
-            'kissy-template': function (report) {
-                return Reporter.kissy_template_tpl.render(report);
-            },
-            'uglifyjs': function (report) {
-                return Reporter.uglifyjs_tpl.render(report);
-            },
-            'cssmin': function (report) {
-                return Reporter.cssmin_tpl.render(report);
-            },
-            'concat': function (report) {
-                return Reporter.concat_tpl.render(report);
-            }
+            'csslint': 'csslint_tpl',
+            'kissy-template': 'kissy_template_tpl',
+            'uglifyjs': 'uglifyjs_tpl',
+            'cssmin': 'cssmin_tpl',
+            'concat': 'concat_tpl',
+            'css-combo': 'css_combo_tpl'
+        },
+
+        pluginReportMapper: function (reports) {
         },
 
         renderer: {
@@ -70,19 +64,26 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kiss
                 return Reporter.fb_tpl.render(report);
             },
 
-            plugins: function (report) {
+            plugins: function (reports) {
                 var self = this;
-                var o = [];
-                S.each(report, function (item) {
-                    var name = item.name;
-                    var render = self.pluginRenderer[name] || null;
-                    var content = render ? render(item) : '';
-                    o.push(Reporter.plugin_tpl.render({
+                var html = [];
+                S.each(reports, function (report) {
+                    var name = report.name;
+                    var tmpl = self.pluginRenderer[name] || null;
+                    if (tmpl) {
+                        tmpl = Reporter[tmpl];
+                    }
+                    console.log(self.pluginRenderer)
+                    console.log(name, tmpl);
+                    var content = tmpl ? tmpl.render(report) : '';
+                    html.push(Reporter.plugin_tpl.render({
                         name: name,
+                        report: report,
                         content: content
                     }));
                 });
-                return o.join('');
+                console.log(html);
+                return html.join('');
             }
         }
 
@@ -94,20 +95,21 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, plugin_tpl, csslint_tpl, kiss
         'kissy_template_tpl': Template(kissy_template_tpl.html),
         'uglifyjs_tpl': Template(uglifyjs_tpl.html),
         'cssmin_tpl': Template(cssmin_tpl.html),
-        'concat_tpl': Template(concat_tpl.html)
+        'concat_tpl': Template(concat_tpl.html),
+        'css_combo_tpl': Template(cssmin_tpl.html)
     });
     return Reporter;
 }, {
     requires: [
         'template',
-        'page/template/report-fb.tpl.js',
-        'page/template/report-wrap.tpl.js',
-        'page/template/report-plugin.tpl.js',
-        'page/template/report-csslint.tpl.js',
-        'page/template/report-kissy-template.tpl.js',
-        'page/template/report-uglifyjs.tpl.js',
-        'page/template/report-cssmin.tpl.js',
-        'page/template/report-concat.tpl.js'
+        'page/template/report-fb.tpl',
+        'page/template/report-wrap.tpl',
+        'page/template/report-plugin.tpl',
+        'page/template/report-csslint.tpl',
+        'page/template/report-kissy-template.tpl',
+        'page/template/report-uglifyjs.tpl',
+        'page/template/report-cssmin.tpl',
+        'page/template/report-concat.tpl'
 
     ]
 });

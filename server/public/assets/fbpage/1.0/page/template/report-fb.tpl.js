@@ -1,3 +1,3 @@
 KISSY.add(function(){
-    return {"html":"<div class=\"report-fb\">\r\n    <div class=\"row-fluid\">\r\n        <dl class='span4'>\r\n            <dt>版本</dt>\r\n            <dd>{{build_version}}</dd>\r\n        </dl>\r\n        <dl class='span4'>\r\n            <dt>打包时间戳</dt>\r\n            <dd>{{build_timestamp}}</dd>\r\n        </dl>\r\n        <dl class='span4'>\r\n            <dt>用时</dt>\r\n            <dd>{{build_used_time}}ms</dd>\r\n        </dl>\r\n    </div>\r\n</div>"};
+    return {"html":"<div class=\"report-fb\">\n    <div class=\"row-fluid\">\n        <dl class='span4'>\n            <dt>版本</dt>\n            <dd>{{build_version}}</dd>\n        </dl>\n        <dl class='span4'>\n            <dt>打包时间戳</dt>\n            <dd>{{build_timestamp}}</dd>\n        </dl>\n        <dl class='span4'>\n            <dt>用时</dt>\n            <dd>{{build_used_time}}ms</dd>\n        </dl>\n    </div>\n</div>"};
 });
