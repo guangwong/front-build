@@ -13,7 +13,7 @@
 }
 .fb-title {
   padding: 10px 200px 10px 10px;
-  background: #fff url("/images/logo.png") 100% 10px no-repeat;
+  background: url("/images/logo.png") 100% 10px no-repeat;
 }
 .fb-title h1 {
   font-size: 54px;
@@ -23,6 +23,9 @@
 }
 .fb-title .path {
   color: #bbb;
+}
+.fb-title a {
+  color: #135653;
 }
 .fb-page {
   margin: 10px 0;
@@ -94,9 +97,10 @@ ul.timestamps .build-version {
 }
 ul.timestamps .build-time {
   position: absolute;
-  color: #aaa;
+  font-size: 12px;
+  color: #666;
   right: 10px;
-  top: 5px;
+  top: 10px;
 }
 .buildto .status {
   display: inline-block;
@@ -120,6 +124,9 @@ ul.timestamps .build-time {
 .report-hd dl {
   padding-left: 20px;
 }
+.report-hd h3 {
+  padding: 10px;
+}
 .report-bd {
   background: ;
 }
@@ -140,6 +147,15 @@ ul.timestamps .build-time {
   list-style: none;
   float: left;
   margin-left: 10px;
+}
+.report-plugin-item-ft li {
+  float: left;
+}
+.report-plugin-item-ft .used-time {
+  width: 80px;
+}
+.report-plugin-item-ft .plugin-bdg {
+  margin-right: 5px;
 }
 .report-plugin-item-bd {
   display: none;

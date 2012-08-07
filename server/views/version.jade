@@ -31,6 +31,8 @@ block content
               span.timestamp #{ts.timestamp}
               - if(ts.build)
                 span.build-version from #{ts.build.build_version}
-                span.build-time 用时 #{ts.build.build_used_time}ms
+                span.build-time
+                  i.icon-time
+                  | #{ts.build.build_used_time}ms
   script
     KISSY.use('page/index');
