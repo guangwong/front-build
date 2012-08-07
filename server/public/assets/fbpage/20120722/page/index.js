@@ -76,6 +76,7 @@ KISSY.add('utils/build-page',function (S) {
             var popup = new Overlay.Popup({
                 width:192
             });
+
             popup.render();
 
             var cal = new Calendar(popup.get('contentEl')).on('select', function(e) {
@@ -85,17 +86,18 @@ KISSY.add('utils/build-page',function (S) {
                 popup.hide();
             });
 
-            $(config.triggers).on('click', function (ev) {
-                popup.show();
-                var et = $(ev.target);
-                popup.align(et, ['bl', 'tl']);
-                cal.targetInput = et;
-            });
-            $('body').on('mousedown', function (ev) {
-                if (!popup.get('contentEl').contains(ev.target)) {
-                    popup.hide();
-                }
-            });
+            $(config.triggers)
+                .on('click', function (ev) {
+                    popup.show();
+                    var et = $(ev.target);
+                    popup.align(et, ['bl', 'tl']);
+                    cal.targetInput = et;
+                })
+                .on('blur', function (ev) {
+                    setTimeout(function () {
+                        popup.hide();
+                    }, 100);
+                });
         }
     }
 }, {
@@ -161,7 +163,7 @@ KISSY.add('utils/build-page',function (S) {
             } else {
                 el.appendTo(self.$el);
             }
-            el.slideDown();
+            el.slideDown(.2);
 
         },
 

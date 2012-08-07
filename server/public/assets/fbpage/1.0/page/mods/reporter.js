@@ -59,7 +59,7 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
             } else {
                 el.appendTo(self.$el);
             }
-            el.slideDown();
+            el.slideDown(.2);
 
         },
 
