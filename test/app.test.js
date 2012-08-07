@@ -269,10 +269,10 @@ describe('app#getPages Test', function() {
             if (err) {
                 return done(err);
             }
-            pages.length.should.eql(3);
+            pages.length.should.eql(4);
             pages.forEach(function (page) {
-                page.name.should.be.ok;
-                page.version.should.be.ok;
+                should.exist(page.name);
+                should.exist(page.version);
 
             });
             done();
