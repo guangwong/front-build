@@ -25,7 +25,7 @@
     "uglify-js": "~1.2.6",
     "iconv-lite": "~0.2.1",
     "underscore": "~1.3.3",
-    "css-combo": "~0.2.3",
+    "css-combo": "~0.2.4",
     "mkdirp": "~0.3.3",
     "jade": "*",
     "express": "3.0.0beta7"
