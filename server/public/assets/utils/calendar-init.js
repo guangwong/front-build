@@ -9,7 +9,9 @@ KISSY.add(function (S, Calendar, Overlay) {
 
             popup.render();
 
-            var cal = new Calendar(popup.get('contentEl')).on('select', function(e) {
+            var cal = new Calendar(popup.get('contentEl'));
+
+            cal.on('select', function(e) {
                 if (this.targetInput) {
                     $(this.targetInput).val(S.Date.format(e.date, 'yyyymmdd'));
                 }
@@ -26,7 +28,7 @@ KISSY.add(function (S, Calendar, Overlay) {
                 .on('blur', function (ev) {
                     setTimeout(function () {
                         popup.hide();
-                    }, 100);
+                    }, 300);
                 });
         }
     }
