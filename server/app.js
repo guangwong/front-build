@@ -68,6 +68,9 @@ app.get('/build-page/:pageVersion', routes.buildPage);
 app.get('/build-common', routes.buildCommon);
 app.post('/build-common', routes.buildCommon);
 app.post('/add-page', routes.addPage);
+app.get('/pid', function (req, res) {
+  res.end(process.pid.toString());
+});
 
 app.locals({
   getUrl: function (path, obj) {
