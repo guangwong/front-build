@@ -19,12 +19,15 @@ body
     padding:10px 200px 10px 10px;
     background:url('/images/logo.png') 100% 10px no-repeat;
     h1
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;
         font-size:54px;
         line-height:50px;
         margin-bottom:10px;
         font-weight:normal;
     .path
         color:#BBB;
+        margin-top:-10px;
+        font-size:10px;
     a
         color:#135653;
 .fb-page 
@@ -104,5 +107,9 @@ ul.timestamps
 .ks-overlay
     position:absolute;
     left: -9999px;
+.timestamp
+    cursor:pointer;
+    &:hover
+        background:#ffff99;
     
 @import "reports.styl";

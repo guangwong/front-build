@@ -7,7 +7,7 @@ block content
         .fb-title
           h1 
             a(href='/app?root=#{app.rootDir}')= app.name
-            |/ 
+            |/
             span= page.name
             |/
             sapn= page.version
@@ -28,7 +28,7 @@ block content
         ul.timestamps
           - each ts in timestamps
             li 
-              span.timestamp #{ts.timestamp}
+              span.build-timestamp.timestamp #{ts.timestamp}
               - if(ts.build)
                 span.build-version from #{ts.build.build_version}
                 span.build-time
