@@ -139,14 +139,14 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
 }, {
     requires: [
         'template',
-        'page/template/report-fb.tpl',
-        'page/template/report-wrap.tpl',
-        'page/template/report-error-wrap.tpl',
-        'page/template/report-plugin.tpl',
-        'page/template/report-csslint.tpl',
-        'page/template/report-files.tpl',
-        'page/template/report-concat.tpl',
-        'page/template/report-css-combo.tpl'
+        'page/template/report-fb-tpl',
+        'page/template/report-wrap-tpl',
+        'page/template/report-error-wrap-tpl',
+        'page/template/report-plugin-tpl',
+        'page/template/report-csslint-tpl',
+        'page/template/report-files-tpl',
+        'page/template/report-concat-tpl',
+        'page/template/report-css-combo-tpl'
 
     ]
 });
