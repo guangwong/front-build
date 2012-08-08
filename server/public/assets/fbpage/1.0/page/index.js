@@ -21,5 +21,5 @@ KISSY.add(function (S, pageBuilder, Calendar, Reporter) {
     });
     
 }, {
-    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter']
+    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp']
 });
