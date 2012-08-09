@@ -245,11 +245,35 @@ describe('app#update test', function() {
     var rootDir = path.resolve('sample-project');
 
     before(function (done) {
+        fu.rmTreeSync(path.resolve(rootDir, 'tools'));
         app = new App({
             rootDir: rootDir
         });
 
         app.update(done);
+    });
+
+    it('should create the missing tools directory', function (done) {
+        fs.exists(path.resolve(rootDir, 'tools'), function (exist) {
+            exist.should.be.true;
+            done();
+        });
+    });
+    it('should create the missing tools files', function (done) {
+        var file = path.resolve(rootDir, 'tools', 'web-client.sh');
+        fs.stat(file, function (err, stat) {
+            if (err) {
+                return done(err);
+            }
+            stat.isFile().should.be.true;
+            fs.readFile(file, function (err, content) {
+                if (err) {
+                    return done(err);
+                }
+                content.length.should.above(0);
+                done();
+            });
+        });
     });
 });
 
