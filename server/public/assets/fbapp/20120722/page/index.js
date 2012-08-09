@@ -4,6 +4,7 @@ combined files :
 utils/build-page
 utils/build-common
 utils/calendar-init
+utils/app-history
 page/index
 
 */
@@ -97,6 +98,7 @@ KISSY.add('utils/build-page',function (S) {
     var $ = S.all;
     return {
         init: function (config) {
+            var hideTimeout;
 
             var popup = new Overlay.Popup({
                 width:192
@@ -115,13 +117,14 @@ KISSY.add('utils/build-page',function (S) {
 
             $(config.triggers)
                 .on('click', function (ev) {
+                    clearTimeout(hideTimeout);
                     popup.show();
                     var et = $(ev.target);
                     popup.align(et, ['bl', 'tl']);
                     cal.targetInput = et;
                 })
                 .on('blur', function (ev) {
-                    setTimeout(function () {
+                    hideTimeout = setTimeout(function () {
                         popup.hide();
                     }, 300);
                 });
@@ -129,7 +132,57 @@ KISSY.add('utils/build-page',function (S) {
     }
 }, {
     requires: ['calendar', 'overlay', 'calendar/assets/base.css']
-});KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar) {
+});KISSY.add('utils/app-history',function (S) {
+    if (!localStorage) {
+        return null;
+    }
+
+    var KEY = 'AppHistory';
+
+    function getList() {
+        var src = localStorage.getItem(KEY);
+
+        if (!src) {
+            return [];
+        }
+        try {
+            var list = src.split(',');
+        } catch (e) {
+            return [];
+        }
+
+        return list;
+    }
+
+    function saveList(list) {
+        return localStorage.setItem(KEY, list.join(','));
+    }
+
+    return {
+        push: function (path) {
+            var list = getList();
+
+            list = S.filter(list, function (item) {
+                item != path;
+            });
+
+            list.unshift(path);
+            saveList(list);
+        },
+        
+        get: function () {
+            return getList();
+        },
+        
+        rm: function (path) {
+            var list = getList();
+            list = S.filter(list, function (item) {
+                item != path
+            });
+            saveList(list);
+        }
+    }
+});KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar, appHistory) {
     var $ = S.all;
 
     //buildCommon
@@ -137,9 +190,14 @@ KISSY.add('utils/build-page',function (S) {
         Calendar.init({
             triggers: 'input.timestamp-input'
         });
-        buildCommon.init()
+        buildCommon.init();
+        var search = location.search.substr(1);
+        var query = S.unparam(search);
+        appHistory.push(query.root);
+        var list = appHistory.get();
+        console.log(list);
     });
     
 }, {
-    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init']
+    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history']
 });
