@@ -4,6 +4,17 @@
     - 自动化打包，追求零配置
     - 面向前端
 
+## v0.4.2 ~ v0.4.5
+
+    - bugfixes
+        * 在转码时，忽略 .svn 目录
+        * css-combo 升级到0.2.4
+
+    - 添加打包信息的展示，出错详细信息展示， 升级的Web界面
+    - 添加全局配置， 配置文件放在用户目录
+    - 添加tools 目录下的命令快捷方式， 如打开Web界面，或升级修复应用
+    - 在应用目录下执行fb web 或 tools/web-client.bat(sh) 可直接在浏览器中打开应用
+
 ## 相对于ant，Kissy Pie的优势
 <img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
 
@@ -154,6 +165,8 @@ Kissy Pie 升级后，更新本地项目到最新版本
 ### ki web
 
 开启本地Web服务器，从浏览器访问 http://127.0.0.1:8765
+
+如果在应用下执行， 可在界面中直达当前应用。
 
 强烈推荐！！可在一个可视化界面里面执行常用的操作，如打包，添加新的Page或Version等。 
 
