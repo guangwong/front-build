@@ -1,5 +1,11 @@
 {
-    "fbversion": "0.3.9",
     "charset": "utf8",
-    "groups": {}
+    "groups": {},
+    "fbversion": "0.4.4",
+    "packages": {
+        "common-lib": {
+            "path": "~/lab/common-lib"
+        }
+    },
+    "lineEnd": "\n"
 }
