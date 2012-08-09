@@ -2,6 +2,7 @@ KISSY.add(function (S, Calendar, Overlay) {
     var $ = S.all;
     return {
         init: function (config) {
+            var hideTimeout;
 
             var popup = new Overlay.Popup({
                 width:192
@@ -20,13 +21,14 @@ KISSY.add(function (S, Calendar, Overlay) {
 
             $(config.triggers)
                 .on('click', function (ev) {
+                    clearTimeout(hideTimeout);
                     popup.show();
                     var et = $(ev.target);
                     popup.align(et, ['bl', 'tl']);
                     cal.targetInput = et;
                 })
                 .on('blur', function (ev) {
-                    setTimeout(function () {
+                    hideTimeout = setTimeout(function () {
                         popup.hide();
                     }, 300);
                 });
