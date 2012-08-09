@@ -1,4 +1,4 @@
-KISSY.add(function (S, pageBuilder, buildCommon, Calendar) {
+KISSY.add(function (S, pageBuilder, buildCommon, Calendar, appHistory) {
     var $ = S.all;
 
     //buildCommon
@@ -6,9 +6,14 @@ KISSY.add(function (S, pageBuilder, buildCommon, Calendar) {
         Calendar.init({
             triggers: 'input.timestamp-input'
         });
-        buildCommon.init()
+        buildCommon.init();
+        var search = location.search.substr(1);
+        var query = S.unparam(search);
+        appHistory.push(query.root);
+        var list = appHistory.get();
+        console.log(list);
     });
     
 }, {
-    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init']
+    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history']
 });
