@@ -25,12 +25,9 @@
                 //switch dev or production env
                 debug = KISSY.Config.debug,
                 pagePathBuild = S.substitute('{path}/{name}/{pub}/', config);
-            //kissy config
-            S.each(['charset', 'tag'], function (key) {
-                if (config[key]) {
-                    packageConfig[key] = config[key];
-                }
-            });
+
+            //package config
+            S.mix(packageConfig, config, true, ['charset', 'tag']);
 
             //common package
             pkgs.push(S.merge(packageConfig, {
