@@ -1,19 +1,19 @@
-.kpi-modal .modal-header {
-  border-bottom: none;
-}
-.kpi-modal .modal-header:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-.kpi-modal .modal-header img {
+.fb-logo {
   float: right;
+  margin: 4px;
+}
+.ki-modal {
+  clear: both;
+}
+.app-history a {
+  display: block;
+  padding: 5px;
+}
+.app-history a:hover {
+  background: #f2f2f2;
 }
 .fb-title {
-  padding: 10px 200px 10px 10px;
-  background: url("/images/logo.png") 100% 10px no-repeat;
+  padding: 10px;
 }
 .fb-title h1 {
   font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;

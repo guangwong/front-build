@@ -4,6 +4,9 @@ block content
   .container
     .row-fluid
       .span12
+        .fb-logo
+          a(href='/')
+            img(src='/images/logo.png')
         .fb-title
           h1= title
           p.path= app.rootDir
@@ -31,12 +34,6 @@ block content
                         |&nbsp;
                         a.btn.fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
                           |Build
-                //- .clearfix
-                  .version-add.version.form-inline
-                    input(type='text')
-                    |&nbsp;
-                    a.btn
-                      i.icon-plus
         .fb-page
           .row-fluid
             .span12
