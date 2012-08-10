@@ -9,11 +9,10 @@
     - bugfixes
         * 在转码时，忽略 .svn 目录
         * css-combo 升级到0.2.4
-
     - 添加打包信息的展示，出错详细信息展示， 升级的Web界面
     - 添加全局配置， 配置文件放在用户目录
-    - 添加tools 目录下的命令快捷方式， 如打开Web界面，或升级修复应用
-    - 在应用目录下执行fb web 或 tools/web-client.bat(sh) 可直接在浏览器中打开应用
+    - 添加 tools 目录下的命令快捷方式， 如打开Web界面，或升级修复应用
+    - 在应用目录下执行 ki web 或 tools/web-client.bat(sh) 可直接在浏览器中打开应用
 
 ## 相对于ant，Kissy Pie的优势
 <img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
