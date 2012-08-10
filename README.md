@@ -1,18 +1,18 @@
 # Kissy Pie (ki)
 
-    - 基于目录规范
-    - 自动化打包，追求零配置
-    - 面向前端
+- 基于目录规范
+- 自动化打包，追求零配置
+- 面向前端
 
 ## v0.4.2 ~ v0.4.5
 
-    - bugfixes
-        * 在转码时，忽略 .svn 目录
-        * css-combo 升级到0.2.4
-    - 添加打包信息的展示，出错详细信息展示， 升级的Web界面
-    - 添加全局配置， 配置文件放在用户目录
-    - 添加 tools 目录下的命令快捷方式， 如打开Web界面，或升级修复应用
-    - 在应用目录下执行 ki web 或 tools/web-client.bat(sh) 可直接在浏览器中打开应用
+- bugfixes
+    * 在转码时，忽略 .svn 目录
+    * css-combo 升级到0.2.4
+- 添加打包信息的展示，出错详细信息展示， 升级的Web界面
+- 添加全局配置， 配置文件放在用户目录
+- 添加 tools 目录下的命令快捷方式， 如打开Web界面，或升级修复应用
+- 在应用目录下执行 ki web 或 tools/web-client.bat(sh) 可直接在浏览器中打开应用
 
 ## 相对于ant，Kissy Pie的优势
 <img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
@@ -24,20 +24,20 @@
 
 ## v0.4.1
 
-    - 优化Web界面
-    - 添加 Kissy Pie 分支
+- 优化Web界面
+- 添加 Kissy Pie 分支
 
 ## 快速开始
 ### 安装 Kissy Pie
 
-    1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download
-    2. npm install kissy-pie -g
-    3. done!
+1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download
+2. npm install kissy-pie -g
+3. done!
 
 ### 更新 Kissy Pie
 
-    1. npm update front-build -g
-    2. done!
+1. npm update front-build -g
+2. done!
 
 了解更多：<a href="http://www.36ria.com/5536" target="_blank">《使用Kissy Pie快速构建—kissy1.2最佳实践探索》</a>
 
@@ -82,55 +82,54 @@
 
 ## 目录结构说明
 
-    - 一个应用包含一个Common， 一个Utils目录，和多个Page。
-    - Common 目录是应用通用脚本和样式。 通常被会被多个Page使用， 使用方式为被页面直接使用。
-    - Page 是以页面的维度划分的, Page分版本，支持多版本共存；每次打包生成新的时间戳目录；版本目录和时间戳在同一目录下，通过文件名区分。
-    - Utils 是应用的通用的工具或组件类脚本和样式， 通常在开发阶段由Page通过Loader加载使用，上线后由Kissy Pie工具打包入Page的文件中来减小请求数。
+- 一个应用包含一个Common， 一个Utils目录，和多个 Page。
+- Common 目录是应用通用脚本和样式。 通常被会被多个 Page 使用， 使用方式为被页面直接使用。
+- Page 是以页面的维度划分的, Page 分版本，支持多版本共存；每次打包生成新的时间戳目录；版本目录和时间戳在同一目录下，通过文件名区分。
+- Utils 是应用的通用的工具或组件类脚本和样式， 通常在开发阶段由Page通过Loader加载使用，上线后由 Kissy Pie 工具打包入 Page 的文件中来减小请求数。
 
 ## Kissy Pie如何构建你的代码
 
 ### 应用的 Page 构建
 
-    1. 创建目录 临时src (Page.srcDir); 临时build (Page.destDir); timestame目录
-    2. 将版本目录里面的文件，转成utf8编码， 并全部拷贝到 src 目录
-    3. 使用内置插件系统
-    
-        1. module-compiler: KISSY的模块打包， 从src/page/xx.js -> build/page/xx.js
-        2. kissy-template: Kissy Template 模版编译，由 src/page/../xx.tpl.html 编译成 src/page/../xx.tpl.js
-        2. css-combo: css打包， 从src/page/xx.css -> build/page/xx.css
-        3. lesscss:  打包， 从 src/page/xx.less -> build/page/xx.less.css
-        4. concat: 根据配置合并文件
-        5. uglifyjs: build/page/xx.js -> build/page/xx-min.js
-        6. cssmin: build/page/xx.css -> build/page/xx-min.css
-        
-    4. 将build下的所有文件转码到outputCharset，并复制到timestamp目录
-    5. 在timestamp 目录下生成 包含打包信息的 build.json.
+1. 创建目录 临时 src (Page.srcDir); 临时 build (Page.destDir); timestame 目录
+2. 将版本目录里面的文件，转成utf8编码， 并全部拷贝到 src 目录
+3. 使用内置插件系统
+    1. module-compiler: KISSY的模块打包， 从src/page/xx.js -> build/page/xx.js
+    2. kissy-template: Kissy Template 模版编译，由 src/page/../xx.tpl.html 编译成 src/page/../xx.tpl.js
+    2. css-combo: css打包， 从src/page/xx.css -> build/page/xx.css
+    3. lesscss:  打包， 从 src/page/xx.less -> build/page/xx.less.css
+    4. concat: 根据配置合并文件
+    5. uglifyjs: build/page/xx.js -> build/page/xx-min.js
+    6. cssmin: build/page/xx.css -> build/page/xx-min.css
+4. 将build下的所有文件转码到outputCharset，并复制到timestamp目录
+5. 在timestamp 目录下生成 包含打包信息的 build.json.
 
 特点
-    - 发布基于时间戳目录
-    - page *根目录文件* 是编译入口
-    - 开发环境与生产环境灵活切换 (通过KISSY.Config.debug开关)
+
+- 发布基于时间戳目录
+- page *根目录文件* 是编译入口
+- 开发环境与生产环境灵活切换 (通过KISSY.Config.debug开关)
 
 ### 应用的 common 构建
 
-    1. 创建目录: 临时src (common.srcDir); 临时build (common.destDir);
-    2. 将common目录里面源码文件，从 inputCharset 转成utf8编码， 并全部拷贝到 临时src 目录
-    3. 使用内置插件系统
-    
-        1. module-compiler: KISSY的模块打包压缩， 从src/*xx.js* -> build/*xx-min.js*
-        2. lesscss:  打包， 从 src/*xx.less* -> build/*xx-min.css*
-        3. uglifyjs: *build*/*xx.js* -> build/*xx-min.js*
-        4. cssmin: *build*/*xx.css* -> build/*xx-min.css*
-        
-    4. 将临时build 目录下的 **-min.** 等压缩文件从 utf-8 转码到 outputCharset，并复制回 common目录
+1. 创建目录: 临时src (common.srcDir); 临时build (common.destDir);
+2. 将common目录里面源码文件，从 inputCharset 转成utf8编码， 并全部拷贝到 临时src 目录
+3. 使用内置插件系统
+    1. module-compiler: KISSY的模块打包压缩， 从src/*xx.js* -> build/*xx-min.js*
+    2. lesscss:  打包， 从 src/*xx.less* -> build/*xx-min.css*
+    3. uglifyjs: *build*/*xx.js* -> build/*xx-min.js*
+    4. cssmin: *build*/*xx.css* -> build/*xx-min.css*
+4. 将临时build 目录下的 **-min.** 等压缩文件从 utf-8 转码到 outputCharset，并复制回 common目录
     
 特点
-    - common *根目录下的文件* 为打包入口
-    - 可在 fb.json 里面配置文件编码
+
+- common *根目录下的文件* 为打包入口
+- 可在 fb.json 里面配置文件编码
 
 #### 注意点
-    - common 目录的 outputCharset === inputCharset, 可在 fb.json 里面配置 charset
-    - 可在app 里面执行 fb build common
+
+- common 目录的 outputCharset === inputCharset, 可在 fb.json 里面配置 charset
+- 可在app 里面执行 fb build common
 
 
 ### utils 构建
@@ -221,16 +220,17 @@ _注意_ 一个组里面只能包含一个Page的一个version；
 
 ## 依赖的包
 
-    - css-combo https://github.com/daxingplay/css-combo
-    - iconv-lite https://github.com/ashtuchkin/iconv-lite
-    - tbuild https://github.com/czy88840616/tbuild
-    - less.js http://lesscss.org
-    - cssmin 
-    - uglifyjs https://github.com/mishoo/UglifyJS
-    - csslint http://csslint.net
+- css-combo https://github.com/daxingplay/css-combo
+- iconv-lite https://github.com/ashtuchkin/iconv-lite
+- tbuild https://github.com/czy88840616/tbuild
+- less.js http://lesscss.org
+- cssmin 
+- uglifyjs https://github.com/mishoo/UglifyJS
+- csslint http://csslint.net
 
 
 ## 兼容性
-    * node 0.8.x +
-    * window xp +
-    * OSX 10.7 +
+
+* node 0.8.x +
+* window xp +
+* OSX 10.7 +
