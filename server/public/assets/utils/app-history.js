@@ -1,5 +1,5 @@
 KISSY.add(function (S) {
-    if (!localStorage) {
+    if (!window.localStorage) {
         return null;
     }
 
@@ -33,12 +33,12 @@ KISSY.add(function (S) {
             });
 
             list.unshift(path);
-
             saveList(list);
         },
         
         get: function () {
-            return getList();
+            var list = getList();
+            return list;
         },
         
         rm: function (path) {

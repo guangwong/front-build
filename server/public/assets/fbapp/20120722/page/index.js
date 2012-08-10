@@ -29,13 +29,11 @@ KISSY.add('utils/build-page',function (S) {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
 
                     if (data.err) {
                         var err = data.err;
                         $elStatus
                             .html('Error:' + err.message);
-                        console.log(data.err);
                         self.fire('error', {
                             error: data.err
                         });
@@ -133,7 +131,7 @@ KISSY.add('utils/build-page',function (S) {
 }, {
     requires: ['calendar', 'overlay', 'calendar/assets/base.css']
 });KISSY.add('utils/app-history',function (S) {
-    if (!localStorage) {
+    if (!window.localStorage) {
         return null;
     }
 
@@ -163,7 +161,7 @@ KISSY.add('utils/build-page',function (S) {
             var list = getList();
 
             list = S.filter(list, function (item) {
-                item != path;
+                return item != path;
             });
 
             list.unshift(path);
@@ -171,13 +169,14 @@ KISSY.add('utils/build-page',function (S) {
         },
         
         get: function () {
-            return getList();
+            var list = getList();
+            return list;
         },
         
         rm: function (path) {
             var list = getList();
             list = S.filter(list, function (item) {
-                item != path
+                return item != path
             });
             saveList(list);
         }
@@ -193,9 +192,10 @@ KISSY.add('utils/build-page',function (S) {
         buildCommon.init();
         var search = location.search.substr(1);
         var query = S.unparam(search);
-        appHistory.push(query.root);
-        var list = appHistory.get();
-        console.log(list);
+        
+        if (appHistory) {
+            appHistory.push(query.root);
+        }
     });
     
 }, {

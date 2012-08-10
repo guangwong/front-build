@@ -9,9 +9,10 @@ KISSY.add(function (S, pageBuilder, buildCommon, Calendar, appHistory) {
         buildCommon.init();
         var search = location.search.substr(1);
         var query = S.unparam(search);
-        appHistory.push(query.root);
-        var list = appHistory.get();
-        console.log(list);
+        
+        if (appHistory) {
+            appHistory.push(query.root);
+        }
     });
     
 }, {

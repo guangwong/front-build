@@ -37,13 +37,11 @@ KISSY.add('utils/build-page',function (S) {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
 
                     if (data.err) {
                         var err = data.err;
                         $elStatus
                             .html('Error:' + err.message);
-                        console.log(data.err);
                         self.fire('error', {
                             error: data.err
                         });
@@ -200,7 +198,6 @@ KISSY.add('utils/build-page',function (S) {
                         report.count = report.files.length;
                         break;
                 }
-                console.log(report);
                 return report;
             });
         },

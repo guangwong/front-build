@@ -13,16 +13,16 @@ block content
             sapn= page.version
           p.path= page.rootDir
 
-          .buildto.form-inline
+          .buildto.form-inline.buildto-version
             .input-prepend
               |&nbsp;
+              span.status
               span.add-on
                 i.icon-calendar
               input.timestamp-input(type='text')
               |&nbsp;
               a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
                 |Build            
-              span.status
 
         #reports
         ul.timestamps

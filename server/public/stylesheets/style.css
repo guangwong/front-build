@@ -109,6 +109,9 @@ ul.timestamps .build-time {
   display: inline-block;
   margin: 0 10px;
 }
+.buildto-version {
+  text-align: right;
+}
 .ks-popup,
 .ks-overlay {
   position: absolute;

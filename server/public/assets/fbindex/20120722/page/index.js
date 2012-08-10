@@ -7,7 +7,7 @@ page/index
 
 */
 KISSY.add('utils/app-history',function (S) {
-    if (!localStorage) {
+    if (!window.localStorage) {
         return null;
     }
 
@@ -37,7 +37,7 @@ KISSY.add('utils/app-history',function (S) {
             var list = getList();
 
             list = S.filter(list, function (item) {
-                item != path;
+                return item != path;
             });
 
             list.unshift(path);
@@ -45,13 +45,14 @@ KISSY.add('utils/app-history',function (S) {
         },
         
         get: function () {
-            return getList();
+            var list = getList();
+            return list;
         },
         
         rm: function (path) {
             var list = getList();
             list = S.filter(list, function (item) {
-                item != path
+                return item != path
             });
             saveList(list);
         }
@@ -60,12 +61,14 @@ KISSY.add('utils/app-history',function (S) {
     return {"html":"{{#each his as item}}\n<div>\n    <a href=\"/app?root={{item}}\"> {{item}} </a>\n</div>\n{{/each}}\n"};
 });KISSY.add('page/index',function (S, Template, appHistory, app_history_tpl) {
     var $ = S.all;
-    S.ready(function () {
-        var his = appHistory.get();
-        $('#app-history').html(Template(app_history_tpl.html).render({
-            his: his
-        }))
-    });
+    if (appHistory) {
+        S.ready(function () {
+            var his = appHistory.get();
+            $('#app-history').html(Template(app_history_tpl.html).render({
+                his: his
+            }))
+        });
+    }
 }, {
     requires: ['template', 'utils/app-history', './template/app-history-tpl']
 });

@@ -91,7 +91,6 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
                         report.count = report.files.length;
                         break;
                 }
-                console.log(report);
                 return report;
             });
         },
