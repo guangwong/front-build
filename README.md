@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
 # Kissy Pie (ki)
 
 - 基于目录规范
