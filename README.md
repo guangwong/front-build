@@ -1,8 +1,6 @@
 # Kissy Pie (ki)
 
-- 基于目录规范
-- 自动化打包，追求零配置
-- 面向前端
+一套基于目录规范, 零配置, 自动化打包工具。
 
 ## v0.4.2 ~ v0.4.5
 
@@ -15,18 +13,18 @@
 - 在应用目录下执行 ki web 或 tools/web-client.bat(sh) 可直接在浏览器中打开应用
 
 ## 相对于ant，Kissy Pie的优势
-<img src="http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png" />
+![ Kissy Pie的优势 ](http://www.36ria.com/wp-content/uploads/2012/07/FBvsAnt.png)
 
 
 ## 特别适合使用 Kissy Pie 的场景
 
-- 基于 kissy1.2 的新项目或新应用
+- 基于 kissy1.2+ 的新项目或新应用
 - 重构应用前端代码
 
 ## 快速开始
 ### 安装 Kissy Pie
 
-1. 首先安装nodejs环境 (and npm) http://nodejs.org/#download
+1. 首先安装 nodejs 环境 (and npm) http://nodejs.org/#download
 2. npm install kissy-pie -g
 3. done!
 
@@ -34,8 +32,6 @@
 
 1. npm update front-build -g
 2. done!
-
-了解更多：<a href="http://www.36ria.com/5536" target="_blank">《使用Kissy Pie快速构建—kissy1.2最佳实践探索》</a>
 
 ## 目录结构样例
 
@@ -80,8 +76,8 @@
 
 - 一个应用包含一个Common， 一个Utils目录，和多个 Page。
 - Common 目录是应用通用脚本和样式。 通常被会被多个 Page 使用， 使用方式为被页面直接使用。
-- Page 是以页面的维度划分的, Page 分版本，支持多版本共存；每次打包生成新的时间戳目录；版本目录和时间戳在同一目录下，通过文件名区分。
-- Utils 是应用的通用的工具或组件类脚本和样式， 通常在开发阶段由Page通过Loader加载使用，上线后由 Kissy Pie 工具打包入 Page 的文件中来减小请求数。
+- Page 是以页面的维度划分的, Page 分版本，支持多版本共存；每次打包到时间戳目录；版本目录和时间戳在同一目录下，通过文件夹名区分。
+- Utils 是应用的通用的工具或组件类脚本和样式， 通常在开发阶段由Page通过Loader加载使用，上线后由 Kissy Pie 工具打包入时间戳目录。
 
 ## Kissy Pie如何构建你的代码
 
@@ -213,6 +209,10 @@ ki group add front-page home@2.0 ## 追加一个version 到组
 
 _注意_ 一个组里面只能包含一个Page的一个version；
 
+
+## 相关资料
+
+[《使用Kissy Pie快速构建—kissy1.2最佳实践探索》](http://www.36ria.com/5536)
 
 ## 依赖的包
 
