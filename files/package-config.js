@@ -12,6 +12,7 @@
          *  @param path     url of you fbapp root
          *  @param charset 
          *  @param tag      timestamp appended
+         *  @param debug    debug mod stat
          */
         config: function (config) {
             if (!config.path) {
@@ -23,7 +24,7 @@
                 packageConfig = {},
                 pagePath = S.substitute('{path}/{name}/{version}/', config),
                 //switch dev or production env
-                debug = KISSY.Config.debug,
+                debug = config.debug? true : KISSY.Config.debug,
                 pagePathBuild = S.substitute('{path}/{name}/{pub}/', config);
 
             //package config
