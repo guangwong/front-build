@@ -35,6 +35,7 @@ KISSY.add('utils/build-page',function (S) {
                 data: {
                     timestamp: timestamp
                 },
+                cache: false,
                 dataType: 'json',
                 success: function (data) {
 
@@ -278,7 +279,25 @@ KISSY.add('utils/build-page',function (S) {
     S.ready(function () {
         $('body').delegate('click', '.build-timestamp', function (ev) {
             var $et = $(ev.target);
-            $('.timestamp-input').val($et.html());
+            var $input = $('.timestamp-input');
+            var $clone = $et.clone(true);
+            var offsetFrom = $et.offset();
+            var offsetTo = $input.offset();
+            $clone.appendTo('body');
+            $clone
+                .css('position', 'absolute')
+                .css('left', offsetFrom.left)
+                .css('top', offsetFrom.top)
+                .show()
+                .animate({
+                    'left': offsetTo.left,
+                    'top': offsetTo.top
+                }, .2, 'easeNone', function () {
+                    $input.val($et.html());
+                    setTimeout(function () {
+                        $clone.remove();
+                    }, 0);
+                });
         })
     })
 });KISSY.add('page/index',function (S, pageBuilder, Calendar, Reporter) {
