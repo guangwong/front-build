@@ -17,6 +17,7 @@ KISSY.add(function (S) {
                 data: {
                     timestamp: timestamp
                 },
+                cache: false,
                 dataType: 'json',
                 success: function (data) {
 
