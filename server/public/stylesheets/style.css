@@ -123,6 +123,13 @@ ul.timestamps .build-time {
 .timestamp:hover {
   background: #ff9;
 }
+.footer {
+  margin-top: 80px;
+  text-align: right;
+}
+.footer a {
+  color: #000;
+}
 #reports {
   margin-top: 10px;
 }
