@@ -1,5 +1,11 @@
 {
     "charset": "gbk",
+    "fbversion": "0.4.5",
+    "packages": {
+        "common-lib": {
+            "path": "~/lab/common-lib"
+        }
+    },
     "groups": {
         "all": [
             "page1@1.0"
@@ -12,12 +18,6 @@
             "page1@1.0",
             "page2@2.0"
         ]
-    },
-    "fbversion": "0.4.4",
-    "packages": {
-        "common-lib": {
-            "path": "~/lab/common-lib"
-        }
     },
     "lineEnd": "\n"
 }
