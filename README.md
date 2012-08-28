@@ -114,22 +114,22 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
             
             <td>
                 <code>ki group set front home/1.0 about/1.0 </code><br>
-                设置一个组<br><br>
+                设置一个 'front' 组<br><br>
                 
-                <code>ki group add {groupname} [{pagename}/{version}]...</code><br>
-                添加Page到现有的组<br><br>
+                <code>ki group add front home/1.0 about/1.0</code><br>
+                添加Page到现有的'front'组<br><br>
                 
-                <code>ki group list|show {groupname}</code><br>
-                显示一个组包含的Page<br><br>
+                <code>ki group list|show front</code><br>
+                显示　'front' 组<br><br>
                 
                 <code>ki group</code><br>
                 显示所有的组<br><br>
                 
                 <code>ki group build front -t 20121221</code><br>
-                打包一个组里的所有page到时间戳<br><br>
+                打包　'front' 组到时间戳<br><br>
                 
                 <code>ki group rm front</code><br>
-                删除一个组<br><br>
+                删除 'front' 组<br><br>
             </td>
         </tr>
 
