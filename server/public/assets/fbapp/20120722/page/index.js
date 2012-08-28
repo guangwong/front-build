@@ -5,54 +5,121 @@ utils/build-page
 utils/build-common
 utils/calendar-init
 utils/app-history
+page/mods/group-select
 page/index
 
 */
 KISSY.add('utils/build-page',function (S) {
     var $ = S.all;
 
+    function buildPages(url, data, callback) {
+
+        S.ajax({
+            url: url,
+
+            data: data,
+
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
+                callback(null, data);
+                
+            }
+        });
+    }
+
     function PageBuilder () {
-        var $buildbtn = $('.fb-build-page');
         var self = this;
-        $buildbtn.on('click', function (ev) {
+        $('body').delegate('click', '.fb-build-page', function (ev) {
             ev.preventDefault();
             var $btn = $(ev.target);
+            var isGroupBuild = $btn.attr('data-group-build');
             var $elStatus = $btn.siblings('.status');
             var $input = $btn.siblings('input');
             $elStatus.html('building...');
+            var pages = [];
             var timestamp = $input.val();
 
-            S.ajax({
-                url: $btn.attr('href'),
-                data: {
-                    timestamp: timestamp
-                },
-                dataType: 'json',
-                success: function (data) {
-
-                    if (data.err) {
-                        var err = data.err;
-                        $elStatus
-                            .html('Error:' + err.message);
-                        self.fire('error', {
-                            error: data.err
-                        });
-                        return;
+            if (isGroupBuild) {
+                $('input.j-version-checkbox').each(function ($input) {
+                    if ($input.prop('checked') && $input.val()) {
+                        pages.push($input.val());
                     }
+                });
 
-                    $elStatus.html('success!');
+                buildPages($btn.attr('href'),
+                    {
+                        timestamp: timestamp,
+                        pages: pages.join(',')
+                    },
 
-                    setTimeout(function () {
-                        $elStatus.html('')
-                    }, 2000);
+                    function (err, data) {
+                        if (err) {
+                            return S.error(err);
+                        }
 
-                    if (data.reports) {
-                        self.fire('report', {
-                            reports: data.reports
-                        });
-                    }
+                        if (data.err) {
+                            var err = data.err;
+
+                            $elStatus
+                                .html('Error:' + err.message);
+
+                            self.fire('error', {
+                                error: data.err
+                            });
+
+                            return;
+                        }
+
+                        $elStatus.html('success!');
+
+                        setTimeout(function () {
+                            $elStatus.html('')
+                        }, 2000);
+                    });
+
+            } else {
+                buildPages($btn.attr('href'), 
+                    {
+                        timestamp: timestamp
+                    },
+                    function (err, data) {
+                        if (err) {
+                            return S.error(err);
+                        }
+
+                        if (data.err) {
+                            var err = data.err;
+
+                            $elStatus
+                                .html('Error:' + err.message);
+
+                            self.fire('error', {
+                                error: data.err
+                            });
+
+                            return;
+                        }
+
+                        $elStatus.html('success!');
+
+                        setTimeout(function () {
+                            $elStatus.html('')
+                        }, 2000);
+
+                        if (data.reports) {
+                            self.fire('report', {
+                                reports: data.reports
+                            });
+                        }
+                    });
+                if ($btn.attr('data-page')) {
+                    pages.push($btn.attr('data-page'));
                 }
-            });
+            }
+
+
+            
         });
     }
 
@@ -181,6 +248,30 @@ KISSY.add('utils/build-page',function (S) {
             saveList(list);
         }
     }
+});KISSY.add('page/mods/group-select',function (S) {
+    var $ = S.all;
+    S.ready(function () {
+        var checkboxs = $('.j-version-checkbox');
+
+        $('body').delegate('click', '.j-select-group', function (ev) {
+            var $et = $(ev.target);
+            ev.preventDefault();
+            var versions = $et.attr('title');
+            if (versions) {
+                versions = versions.split(',');
+            } else {
+                versions = [];
+            }
+
+            checkboxs.each(function (el) {
+                if (S.indexOf(el.val(), versions) > -1) {
+                    el.prop('checked', true);
+                } else {
+                    el.prop('checked', false);
+                }
+            })
+        });
+    });
 });KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar, appHistory) {
     var $ = S.all;
 
@@ -192,12 +283,12 @@ KISSY.add('utils/build-page',function (S) {
         buildCommon.init();
         var search = location.search.substr(1);
         var query = S.unparam(search);
-        
-        if (appHistory) {
-            appHistory.push(query.root);
-        }
     });
+
+    return {
+        appHistory: appHistory
+    }
     
 }, {
-    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history']
+    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history', './mods/group-select']
 });

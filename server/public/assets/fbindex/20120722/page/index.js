@@ -63,10 +63,14 @@ KISSY.add('utils/app-history',function (S) {
     var $ = S.all;
     if (appHistory) {
         S.ready(function () {
-            var his = appHistory.get();
-            $('#app-history').html(Template(app_history_tpl.html).render({
-                his: his
-            }))
+            var his = appHistory.get(),
+                $el_his = $('#app-history');
+
+            if (his.length) {
+                $el_his.html(Template(app_history_tpl.html).render({
+                    his: his
+                }));
+            }
         });
     }
 }, {

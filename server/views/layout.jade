@@ -4,18 +4,22 @@ html
     title= title
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    - if(pageConfig.ksDebug)
+        link(rel='stylesheet/less', href='/assets/#{pageConfig.name}/#{pageConfig.version}/page/index.less')
+        script(src='/assets/common/less-1.3.0-min.js')
+    - else
+        link(rel='stylesheet', href='/assets/#{pageConfig.name}/#{pageConfig.timestamp}/page/index-min.css')
     meta(name="viewport",content="width=device-width, initial-scale=1.0")
     script(src='http://a.tbcdn.cn/s/kissy/1.3.0rc/kissy-min.js')
     script(src='/assets/common/package-config-min.js')
-    script
+    script.
         FB.config({
             path: '/assets',
             name: '#{pageConfig.name}',
             version: '#{pageConfig.version}',
             pub: '#{pageConfig.timestamp}',
             tag: '#{pageConfig.timestampAppend}'
-        })
+        });
   body
     block content
 
@@ -23,14 +27,18 @@ html
         .row-fluid
             .span12
                 .footer
-                    i.icon-home
-                    a(href='https://github.com/maxbbn/front-build') Github
-                    |&nbsp;
-                    i.icon-exclamation-sign
-                    a(href='https://github.com/maxbbn/front-build/issues') Issues
-                    |&nbsp;
-                    i.icon-leaf
-                    a(href='https://github.com/maxbbn/front-build/issues/11') Wishlist
+                    .logo
+                        a(href='/')
+                            img(src='/images/logo.png')
+                    .links
+                        i.icon-home
+                        a(href='https://github.com/maxbbn/front-build') Github
+                        |&nbsp;
+                        i.icon-exclamation-sign
+                        a(href='https://github.com/maxbbn/front-build/issues') Issues
+                        |&nbsp;
+                        i.icon-leaf
+                        a(href='https://github.com/maxbbn/front-build/issues/11') Wishlist
     script.
       if (KISSY.UA.ie && KISSY.UA.ie < 9) {
         KISSY.use('common/ie');

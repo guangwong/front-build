@@ -9,12 +9,12 @@ KISSY.add(function (S, pageBuilder, buildCommon, Calendar, appHistory) {
         buildCommon.init();
         var search = location.search.substr(1);
         var query = S.unparam(search);
-        
-        if (appHistory) {
-            appHistory.push(query.root);
-        }
     });
+
+    return {
+        appHistory: appHistory
+    }
     
 }, {
-    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history']
+    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history', './mods/group-select']
 });

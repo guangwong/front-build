@@ -4,9 +4,6 @@ block content
   .container
     .row-fluid
       .span12
-        .fb-logo
-          a(href='/')
-            img(src='/images/logo.png')
         .fb-title
           h1 
             a(href='/app?root=#{app.rootDir}')= app.name
@@ -24,7 +21,7 @@ block content
                 i.icon-calendar
               input.timestamp-input(type='text')
               |&nbsp;
-              a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
+              a.btn.fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
                 |Build            
 
         #reports
@@ -36,7 +33,7 @@ block content
                 span.build-version from #{ts.build.build_version}
                 span.build-time
                   i.icon-time(title='用时')
-                  | $nbsp;
+                  | &nbsp;
                   | #{ts.build.build_used_time}ms
   script
     KISSY.use('page/index');
