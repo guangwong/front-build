@@ -149,7 +149,7 @@ describe('app#getCurrent', function () {
 
 });
 
-describe('App#getGroups,App#setGroup, App#getGroup, App#rmGroup', function () {
+describe('App Group function', function () {
     var app;
     var rootDir = path.resolve('sample-project');
 
@@ -158,7 +158,21 @@ describe('App#getGroups,App#setGroup, App#getGroup, App#rmGroup', function () {
     });
 
     it('should setGroup without any error', function (done) {
-        app.setGroup('test_group1', ['page1@1.0', 'page2@2.0'], done);
+        app.setGroup('test_group1', ['page1/1.0/', 'page2@2.0', 'page3\\1.0'], done);
+    });
+
+    it('should setGroup fail if has two version of the same page name', function (done) {
+        app.setGroup('test_group2', ['page1/1.0/', 'page2@2.0', 'page3\\1.0', 'page3\\2.0'], function (err) {
+            should.exist(err);
+            done();
+        });
+    });
+
+    it('should fail when set Group with wrong pagenames', function (done) {
+        app.setGroup('test_group2', ['page1/1.0/', 'page2-2.0'], function (err) {
+            should.exist(err);
+            done();
+        });
     });
 
     it('should get all groups', function(done){
@@ -168,17 +182,17 @@ describe('App#getGroups,App#setGroup, App#getGroup, App#rmGroup', function () {
             }
             should.exist(groups['test_group1']);
 
-            groups['test_group1'].should.be.eql(['page1@1.0', 'page2@2.0']);
+            groups['test_group1'].should.be.eql(['page1/1.0', 'page2/2.0', 'page3/1.0']);
             done();
         });
     });
 
-    it('should getGroups', function(done){
+    it('should get Group with groupName', function(done){
         app.getGroup('test_group1', function (err, pages) {
             if (err) {
                 return done(err);
             }
-            pages.should.be.eql(['page1@1.0', 'page2@2.0']);
+            pages.should.be.eql(['page1/1.0', 'page2/2.0', 'page3/1.0']);
             done();
         });
     });
