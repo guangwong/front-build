@@ -41,14 +41,15 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
 
 ## 使用
 你可以通过两种方法来管理你的应用
+
 A. 界面
-B.　命令行
+B. 命令行
 
-## 界面方式
+### 界面
 
-你可以在命令行中使用 `ki web` 来启动 Kissy Pie 基于Web浏览器界面。
+你可以在命令行中使用 `ki web` 来启动基于浏览器的可视界面。
 
-## 命令行方式
+### 命令行
 
 <table>
     <thead>
@@ -77,43 +78,57 @@ B.　命令行
             <td></td>
         </tr>
         <tr>
-            <td>ki add　{pagename}/{version}</td>
-            <td>在应用里面创建或初始化 版本 为 "1.0" 的Page "name_of_page"</td>
-            <td><code>ki add name_of_page/1.0</code></td>
+            <td>ki add</td>
+            
+            <td>创建一个Page或版本</td>
+            
+            <td><code>ki add home/1.0</code></td>
         </tr>
         <tr>
             <td>
-                打包Page
-                <code>ki build　[{pagename}/{version}]...　-t {timestamp}</code><br>
-                打包Common目录
-                <code>ki build　common</code>
+                ki build
             </td>
+            
             <td>打包一个版本到时间戳目录</td>
+            
             <td>
                 <code>ki build samplepage/1.0 -t 20121221</code>
                 <code>ki build samplepage/1.0 samplepage2/1.0 samplepage3/1.0 -t 20121221</code>
                 <code>ki build samplepage/1.0</code>
                 <code>ki build samplepage/1.0 -t 20121221 -w</code>
+                <code>ki build common</code>
             </td>
         </tr>
 
         <tr>
             <td>
-                <code>ki group</code>
-                <code>ki g</code>
+                ki group<br>
+                ki g
             </td>
 
             <td>
                 可以通过ki group build {groupname}方便执行批量操作 <br>
                 _注意_ 一个组里面只能包含一个Page的一个version；
             </td>
+            
             <td>
-                <code>ki group set {groupname} [{pagename}/{version}]...</code> 设置一个组<br>
-                <code>ki group add {groupname} [{pagename}/{version}]...</code>　添加一个page到现有的组<br>
-                <code>ki group list|show {groupname}</code>　显示一个组包含的page<br>
-                <code>ki group</code>　显示所有的组<br>
-                <code>ki group rm {groupname}</code>　删除一个组<br>
-                <code>ki group build {groupname} -t {timestamp}</code>　打包一个组里的所有page到时间戳<br>
+                <code>ki group set front home/1.0 about/1.0 </code><br>
+                设置一个组<br><br>
+                
+                <code>ki group add {groupname} [{pagename}/{version}]...</code><br>
+                添加Page到现有的组<br><br>
+                
+                <code>ki group list|show {groupname}</code><br>
+                显示一个组包含的Page<br><br>
+                
+                <code>ki group</code><br>
+                显示所有的组<br><br>
+                
+                <code>ki group build front -t 20121221</code><br>
+                打包一个组里的所有page到时间戳<br><br>
+                
+                <code>ki group rm front</code><br>
+                删除一个组<br><br>
             </td>
         </tr>
 
@@ -136,7 +151,7 @@ B.　命令行
 - cssmin 
 - uglifyjs https://github.com/mishoo/UglifyJS
 - csslint http://csslint.net
-- expressjs
+- expressjs http://expressjs.org
 
 
 ## 兼容性
