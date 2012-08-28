@@ -89,11 +89,20 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
             <td>打包一个版本到时间戳目录</td>
             
             <td>
-                <code>ki build samplepage/1.0 -t 20121221</code>
-                <code>ki build samplepage/1.0 samplepage2/1.0 samplepage3/1.0 -t 20121221</code>
-                <code>ki build samplepage/1.0</code>
-                <code>ki build samplepage/1.0 -t 20121221 -w</code>
-                <code>ki build common</code>
+                <code>ki build samplepage/1.0 -t 20121221</code><br>
+                打包一个Page<br><br>
+                
+                <code>ki build samplepage/1.0 samplepage2/1.0 -t 20121221</code><br>
+                打包多个page<br><br>
+                
+                <code>ki build samplepage/1.0</code><br>
+                不指定timestamp 将���打包到最近的一次打包目录<br><br>
+                
+                <code>ki build samplepage/1.0 -t 20121221 -w</code><br>
+                加参数<code>-w</code> 或 <code>--watch</code> 可以监视目录变更，　代码有更新会自动打包<br><br>
+                
+                <code>ki build common</code><br>
+                打包Common目录<br><br>
             </td>
         </tr>
 
