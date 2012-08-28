@@ -59,13 +59,13 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
     <tbody>
         <tr>
             <td>init</td>
-            <td>初始化， 请在应用Assets根目录下执行。</td>
+            <td>初始化一个应用， 请在应用Assets根目录下执行。</td>
             <td><code>ki init</code></td>
         </tr>
         <tr>
             <td>update</td>
-            <td>Kissy Pie 更新或修复你的当前应用</td>
-            <td></td>
+            <td>更新或修复你的当前应用</td>
+            <td><code>ki update</code></td>
         </tr>
         <tr>
             <td>web</td>
@@ -73,7 +73,7 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
                 可在一个可视化界面里面执行常用的操作，如打包，添加新的Page或Version等。 <br>
                 如果在应用目录下执行， 可直达当前应用。<br>
             </td>
-            <td><code>ki web</code>›</td>
+            <td><code>ki web</code></td>
         </tr>
         <tr>
             <td>add</td>
@@ -95,7 +95,7 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
                 打包多个page<br><br>
                 
                 <code>ki build samplepage/1.0</code><br>
-                不指定timestamp 将���打包到最近的一次打包目录<br><br>
+                不指定timestamp 打包到最近的一次打包使用的时间戳<br><br>
                 
                 <code>ki build samplepage/1.0 -t 20121221 -w</code><br>
                 加参数<code>-w</code> 或 <code>--watch</code> 可以监视目录变更，　代码有更新会自动打包<br><br>
@@ -109,8 +109,7 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
             <td>group</td>
 
             <td>
-                可以通过ki group build {groupname}方便执行批量操作 <br>
-                _注意_ 一个组里面只能包含一个Page的一个version；
+                将多个Page加入一个组可以方便的批量打包到一个时间戳。
             </td>
             
             <td>
