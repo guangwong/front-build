@@ -21,15 +21,13 @@ html
             tag: '#{pageConfig.timestampAppend}'
         });
   body
+    a(href='/',title='切换应用').logo
+        img(src='/images/logo-small.png');
     block content
-
     div.container
         .row-fluid
             .span12
                 .footer
-                    .logo
-                        a(href='/')
-                            img(src='/images/logo.png')
                     .links
                         i.icon-home
                         a(href='https://github.com/maxbbn/front-build') Github

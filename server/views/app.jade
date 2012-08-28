@@ -8,10 +8,12 @@ block content
           h1= title
           p.path= app.rootDir
         .fb-common
-            h3 common
+            .title common
             .options
-              span.status 
-              a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
+              .buildto-block
+                span.status 
+                a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
+
     .row-fluid.fb-pages
       .span8
         .pages
@@ -25,16 +27,17 @@ block content
                     .options
                       .version-check
                         input.j-version-checkbox(type='checkbox',value='#{page.name}/#{page.version}')
-        form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
-          input(type='hidden', value=app.rootDir, name='root')
-          input.input-medium(type='text', name='pagename', placeholder='pagename')
-          |&nbsp;
-          input.input-medium(type='text', name='version', placeholder='ver(eg. 1.0)')
-          |&nbsp;
-          button.j-group-build.btn(type='submit') ADD
+
       .span4
-        .form
-          - if (app.config.groups && app.config.groups.length)
+        .form.buildto-block
+          .input-prepend.input-append
+            span.add-on
+              i.icon-calendar
+            input.input-small.timestamp-input(type='text')
+            button.btn.fb-build-page(href=getUrl('/build-pages', {root: app.rootDir}), data-group-build='true')
+              |Build
+          span.status
+          - if (app.config.groups)
             h3 groups
             ul.groups.nav.nav-tabs.nav-stacked
               li.groups-item
@@ -42,18 +45,16 @@ block content
               - each group, groupname in app.config.groups
                 li.groups-item
                   a.j-select-group(href='#', title=group.join(","))= groupname
-          .input-prepend
-            
-            span.add-on
-              i.icon-calendar
-            input.input-small.timestamp-input(type='text')
-            |&nbsp;
-            a.btn.fb-build-page(href=getUrl('/build-pages', {root: app.rootDir}), data-group-build='true')
-              |Build
-            br
-            span.status
     .row-fluid
-      .span12
+      .span8
+        form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
+          input(type='hidden', value=app.rootDir, name='root')
+          input.input-medium(type='text', name='pagename', placeholder='pagename')
+          |&nbsp;
+          input.input-medium(type='text', name='version', placeholder='version (eg. 1.0)')
+          |&nbsp;
+          button.j-group-build.btn(type='submit') ADD
+        
   script.
     KISSY.use('page/index', function (S, Page) {
       var rootDir = '#{app.rootDir}';

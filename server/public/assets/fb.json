@@ -1,6 +1,12 @@
 {
     "charset": "utf8",
-    "groups": {},
+    "groups": {
+        "all": [
+            "fbapp/1.0",
+            "fbpage/1.0",
+            "fbindex/1.0"
+        ]
+    },
     "fbversion": "0.4.4",
     "packages": {
         "common-lib": {

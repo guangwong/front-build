@@ -22,9 +22,10 @@ KISSY.add(function (S) {
         $('body').delegate('click', '.fb-build-page', function (ev) {
             ev.preventDefault();
             var $btn = $(ev.target);
+            var $buildblock = $btn.parent('.buildto-block');
             var isGroupBuild = $btn.attr('data-group-build');
-            var $elStatus = $btn.siblings('.status');
-            var $input = $btn.siblings('input');
+            var $elStatus = $buildblock.one('.status');
+            var $input = $buildblock.one('input');
             $elStatus.html('building...');
             var pages = [];
             var timestamp = $input.val();
