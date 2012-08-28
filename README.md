@@ -84,16 +84,16 @@ B.　命令行
         <tr>
             <td>
                 打包Page
-                <pre>ki build　{pagename}/{version}[　{pagename}/{version}]　-t {timestamp}</pre>
+                <code>ki build　[{pagename}/{version}]...　-t {timestamp}</code><br>
                 打包Common目录
-                <pre>ki build　common</pre>
+                <code>ki build　common</code>
             </td>
             <td>打包一个版本到时间戳目录</td>
             <td>
-                <code><pre>ki build samplepage/1.0 -t 20121221</pre></code>
-                <code><pre>ki build samplepage/1.0 samplepage2/1.0 samplepage3/1.0 -t 20121221</pre></code>
-                <code><pre>ki build samplepage/1.0</pre></code>
-                <code><pre>ki build samplepage/1.0 -t 20121221 -w</pre></code>
+                <code>ki build samplepage/1.0 -t 20121221</code>
+                <code>ki build samplepage/1.0 samplepage2/1.0 samplepage3/1.0 -t 20121221</code>
+                <code>ki build samplepage/1.0</code>
+                <code>ki build samplepage/1.0 -t 20121221 -w</code>
             </td>
         </tr>
 
