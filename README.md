@@ -2,7 +2,7 @@
 
 ## 她是什么？
 
-KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见了！
+KissyPie是面向前端的自动化开发环境。
 
 - 能帮助你初始化，检查，打包，压缩你的前端代码（包括css, js, less)；
 - 基于一套目录结构规范, 特点是：
@@ -12,6 +12,8 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
     - 可复用,　应用的　Utils　目录提供跨Page的代码可复用，　CommonLib 提供跨应用的代码复用
     - 安全性，发布基于时间戳目录提供了与后端的解耦, 以Page为单位可隔离风险。
 - 友好的交互界面，　快速的打包
+
+是时候和Ant说再见了！
 
 [目录结构样例](https://github.com/maxbbn/front-build/tree/kissy-pie-m/sample-project)
 
