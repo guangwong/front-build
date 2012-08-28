@@ -46,6 +46,11 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
 
 你可以在命令行中使用 `ki web` 来启动基于浏览器的可视界面。
 
+![ 应用 ](http://img03.taobaocdn.com/tps/i3/T12XfJXhRXXXabiWZN-756-478.png)
+
+
+![ Page ](http://img02.taobaocdn.com/tps/i2/T1JqPIXbdgXXaXQrTX-769-519.png)
+
 ### 命令列表
 
 <table>
