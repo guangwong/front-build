@@ -46,7 +46,7 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
 
 你可以在命令行中使用 `ki web` 来启动基于浏览器的可视界面。
 
-### 命令行
+### 命令列表
 
 <table>
     <thead>
@@ -58,33 +58,32 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
     </thead>
     <tbody>
         <tr>
-            <td>ki init</td>
-            <td>初始化， 请在应用　Assets根目录下执行。</td>
-            <td></td>
+            <td>init</td>
+            <td>初始化， 请在应用Assets根目录下执行。</td>
+            <td><code>ki init</code></td>
         </tr>
         <tr>
-            <td>ki update</td>
+            <td>update</td>
             <td>Kissy Pie 更新或修复你的当前应用</td>
             <td></td>
         </tr>
         <tr>
-            <td>ki web</td>
+            <td>web</td>
             <td>开启本地Web服务器，从浏览器访问 http://127.0.0.1:8765<br>
-                如果在应用下执行， 可在界面中直达当前应用。<br>
-                强烈推荐！！可在一个可视化界面里面执行常用的操作，如打包，添加新的Page或Version等。 </td>
-            <td></td>
+                可在一个可视化界面里面执行常用的操作，如打包，添加新的Page或Version等。 <br>
+                如果在应用目录下执行， 可直达当前应用。<br>
+            </td>
+            <td><code>ki web</code>›</td>
         </tr>
         <tr>
-            <td>ki add</td>
+            <td>add</td>
             
             <td>创建一个Page或版本</td>
             
             <td><code>ki add home/1.0</code></td>
         </tr>
         <tr>
-            <td>
-                ki build
-            </td>
+            <td>build</td>
             
             <td>打包一个版本到时间戳目录</td>
             
@@ -96,7 +95,7 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
                 打包多个page<br><br>
                 
                 <code>ki build samplepage/1.0</code><br>
-                不指定timestamp 将���打包到最近的一次打包目录<br><br>
+                不指定timestamp 将���打包到最近的一次打包目录<br><br>
                 
                 <code>ki build samplepage/1.0 -t 20121221 -w</code><br>
                 加参数<code>-w</code> 或 <code>--watch</code> 可以监视目录变更，　代码有更新会自动打包<br><br>
@@ -107,10 +106,7 @@ KissyPie是面向前端的自动化开发环境。是时候和　Ant 说再见�
         </tr>
 
         <tr>
-            <td>
-                ki group<br>
-                ki g
-            </td>
+            <td>group</td>
 
             <td>
                 可以通过ki group build {groupname}方便执行批量操作 <br>
