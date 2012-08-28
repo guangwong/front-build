@@ -3,6 +3,7 @@ var App = require('../../lib/app.js');
 var path = require('path');
 var _ = require('underscore');
 var util = require('util');
+var async = require('async');
 /*
  * GET home page.
  */
@@ -14,8 +15,9 @@ exports.index = function (req, res) {
             name: 'fbindex',
             version: '1.0',
             timestamp: '20120722',
-            tag: '20120722'
-        }
+            tag: '20120722',
+            ksDebug: ('ks-debug' in req.query)
+        },
     });
 };
 
@@ -39,6 +41,7 @@ exports.app = function (req, res, next) {
                 name: 'fbapp',
                 version: '1.0',
                 timestamp: '20120722',
+                ksDebug: ('ks-debug' in req.query),
                 tag: '20120722',
             },
             title: path.basename(app.rootDir),
@@ -72,6 +75,7 @@ exports.page = function (req, res, next) {
                 name: 'fbpage',
                 version: '1.0',
                 timestamp: '20120722',
+                ksDebug: ('ks-debug' in req.query),
                 tag: '20120722'
             },
             page: fbpage,
@@ -83,13 +87,86 @@ exports.page = function (req, res, next) {
 
 };
 
+exports.buildPages = function (req, res, next) {
 
+    var pages = req.param('pages');
+    var timestamp = req.param('timestamp');
+
+    if (!pages) {
+        res.send({
+            err: {
+                message: 'no page to build'
+            }
+        });
+        return;
+    }
+
+    pages = pages.split(',');
+
+    async.forEach(pages, function (page, callback) {
+        var fbapp = req.fbapp;
+
+        if (!fbapp) {
+            return callback(new Error('no app'));
+        }
+
+        var p = Page.parsePageVersion(page);
+
+        if (!p) {
+            return callback(new Errow('pageVersion is not valid'));
+        }
+
+        var fbpage = fbapp.getPage(p.name);
+
+        fbpage.setVersion(p.version, function (err) {
+            if (err) {
+                return callback(err);
+            }
+
+            fbpage.build(timestamp, function (err, reports) {
+
+                if (err) {
+                    res.send({
+                        err: {
+                            message: err.message,
+                            text: JSON.stringify(err, null, 2),
+                            stack: err.stack
+                        }
+                    });
+                    return;
+                }
+                callback(null);
+            });
+
+        });
+    }, function (err) {
+
+        if (err) {
+            res.send({
+                err: {
+                    message: err.message,
+                    text: JSON.stringify(err, null, 2),
+                    stack: err.stack
+                }
+            });
+            return;
+        }
+        res.send({
+            err: null
+        });
+    });
+
+};
 
 exports.buildPage = function (req, res, next) {
     var fbapp = req.fbapp;
+
     if (!fbapp) {
         return next(new Error('no app'));
     }
+
+
+
     var fbpage = req.fbpage;
 
     if (!fbpage) {

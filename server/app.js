@@ -65,6 +65,7 @@ app.get('/', routes.index);
 app.get('/app', routes.app);
 app.get('/page/:pageVersion', routes.page);
 app.get('/build-page/:pageVersion', routes.buildPage);
+app.get('/build-pages', routes.buildPages);
 app.get('/build-common', routes.buildCommon);
 app.post('/build-common', routes.buildCommon);
 app.post('/add-page', routes.addPage);
