@@ -48,9 +48,9 @@ KissyPie是面向前端的自动化开发环境。
 
 你可以在命令行中使用 `ki web` 来启动基于浏览器的可视界面。
 
-![ 应用 ](http://img01.taobaocdn.com/tps/i1/T1qQjCXjdqXXaCH.LS-827-698.png)
+![ 应用视图 ](http://farm9.staticflickr.com/8454/7886120632_ca6762affa_b.jpg)
 
-![ Page ](http://img03.taobaocdn.com/tps/i3/T1RWbJXgpaXXaCH.LS-827-698.png)
+![ Page视图 ](http://farm9.staticflickr.com/8454/7886122594_1b457cc29c_b.jpg)
 
 ### 命令列表
 
