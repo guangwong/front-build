@@ -10,6 +10,7 @@ var argv = require('optimist')
 	.argv;
 
 var util = require('util');
+var ErrorHelper = require('../lib/error-helper')
 
 var cwd = process.cwd();
 
@@ -17,18 +18,13 @@ var commands = require('../lib/commands');
 
 function done(err, message) {
 	if(err) {
-		if (argv.debug) {
-			throw err;
-		} else {
-			if (typeof err === 'string') {
-				util.debug('Error: %s', err.message);
-			} else if (err.message) {
-				util.debug(err.stack);
-                // util.debug(util.inspect(err));
-                util.debug(JSON.stringify(err, null, 2));
-			}
-			console.log('fail');
+		if (typeof err === 'string') {
+			util.debug('Error: %s', err.message);
+		} else if (err.message) {
+			ErrorHelper.printError(err);
 		}
+		
+		console.log('fail');
 		process.exit(1);
 		return;
 	}
