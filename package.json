@@ -26,9 +26,9 @@
     "iconv-lite": "~0.2.1",
     "underscore": "~1.3.3",
     "css-combo": "~0.2.4",
-    "mkdirp": "~0.3.3",
     "jade": "*",
-    "express": "3.0.0beta7"
+    "express": "3.0.0beta7",
+    "mkdirp": "~0.3.4"
   },
   "devDependencies": {
     "should": "~0.6.3"
