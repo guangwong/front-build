@@ -320,6 +320,32 @@ describe('app#getPages Test', function() {
 
 });
 
+describe("App build multi pages", function () {
+    var rootDir = path.resolve('sample-project');
+    var app = new App({
+        rootDir: rootDir
+    });
+    var timestamp = '20111111';
+    var pages = ['page1/1.0', 'page2/1.0'];
+    var pubs = ['page1/'+timestamp, 'page2/'+timestamp];
+
+    after(function () {
+        pubs.forEach(function (pub) {
+            fu.rmTreeSync(path.resolve(rootDir, pub));
+        });
+    });
+
+    it('should build multipage with no error', function (done) {
+        app.buildPages(pages, timestamp, function (err) {
+            should.not.exist(err);
+            async.forEach(pubs, function (pub, callback) {
+                fs.existsSync(path.resolve(rootDir, pub)).should.be.true;
+            });
+            done();
+        });
+    });
+});
+
 
 describe('APP#getGlobalConfig', function () {
     var oConfig;

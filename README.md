@@ -37,7 +37,7 @@ KissyPie是面向前端的自动化开发环境。
 
 ### 更新 Kissy Pie
 
-1. npm update front-build -g
+1. npm update kissy-pie -g
 2. done!
 
 
