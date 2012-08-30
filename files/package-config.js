@@ -12,7 +12,7 @@
          *  @param path     url of you fbapp root
          *  @param charset 
          *  @param tag      timestamp appended
-         *  @param debug    debug mod stat
+         *  @param debug    debug mode switch
          */
         config: function (config) {
             if (!config.path) {
