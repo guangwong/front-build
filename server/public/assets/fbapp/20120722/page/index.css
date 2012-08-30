@@ -82,7 +82,6 @@
 }
 .version {
   border-bottom: #999 1px solid;
-  margin-top: -2px;
   position: relative;
 }
 .version .version_no {
