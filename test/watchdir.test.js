@@ -1,15 +1,17 @@
 var fs = require('fs');
 var path = require('path');
-var watchDir = require('../lib/watchdir');
+var WatchDir = require('../lib/watchdir');
 var fu = require('../lib/fileutil');
 var should = require('should');
 
-describe('watchDir', function () {
+describe('WatchDir', function () {
 	var rootDir = path.resolve('watch_dir_test');
-	var filePath = path.resolve(rootDir, 'a.js');
+	var rootFile = path.resolve(rootDir, 'a.js');
 	var subDir = path.resolve(rootDir, 'subDir');
 	var subFile = path.resolve(subDir, 'subFile.js');
 	var watcher;
+	var eventList = [];
+	var expectedEvent = [];
 	var config = {
 			exludes: [
 				'.svn',
@@ -27,89 +29,78 @@ describe('watchDir', function () {
 			if (err) {
 				return done(err);
 			}
-			watcher = watchDir(rootDir);
-			watcher.once('init', done);
-		// 	watcher.on('rename', function (file) {
-		// 		console.log('rename: %s', file.filename);
-		// 	});
+			watcher = new WatchDir(rootDir);
 
-		// 	wather.on('update', function () {
-		// 		console.log('update: %s', file.filename);
-		// 	});
+			watcher.on('change', function (ev) {
+				eventList.push(['change',ev.path]);
+			});
+
+			watcher.on('rename', function (ev) {
+				eventList.push(['rename',ev.path]);
+			});
+
+			watcher.once('init', done);
 		});
 
 	});
 
 	after(function (done){
 		watcher.stop();
+		console.log('eventList:')
+
+		var out = eventList.map(function (ev) {
+			return ev.join(': ');
+		}).join('\n');
+
+		var eventTypes = eventList.map(function (ev) {
+			return ev[0];
+		});
+
+		var expectedTypes = expectedEvent.map(function (ev) {
+			return ev[0];
+		});
+		eventTypes.should.eql(expectedTypes);
+
+		console.log(out);
 		fu.rmTree(rootDir, done);
 	});
 
 	it('should emit rename when file added', function (done) {
-		// console.log('----add  file filePath');
-		watcher.on('rename', function (file) {
-			// console.log('rename: %s', file.filename);
-			if (rootDir === file.filename) {
-				watcher.removeAllListeners('rename');
-				done();
-			}
-		});
-
-
-		fs.writeFile(filePath, 'hello');
+		expectedEvent.push(['rename'])
+		fs.writeFile(rootFile, 'hello');
+		setTimeout(done, 200);
 
 	});
 
 	it('should emit change when file updated', function (done) {
-		// console.log('----update file filePath');
-		watcher.on('change', function (file) {
-			// console.log('change: %s', file.filename);
-			if (file.filename === filePath) {
-				watcher.removeAllListeners('change');
-				done();
-			}
-		});
-		fs.writeFile(filePath, 'hello2');
+		expectedEvent.push(['change'])
+		fs.writeFile(rootFile, 'hello2');
+		setTimeout(done, 200);
 
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		// console.log('----add subDir');
-		watcher.on('rename', function (file) {
-			// console.log('reanme: %s', file.filename);
-			if (file.filename === rootDir) {
-				watcher.removeAllListeners('rename');
-				done();
-			}
-		});
+		expectedEvent.push(['rename'])
 		fs.mkdir(subDir);
+		setTimeout(done, 200);
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		// console.log('----add subFile.js');
-		watcher.on('rename', function (file) {
-			// console.log('reanme: %s', file.filename);
-			if (file.filename === subDir) {
-				watcher.removeAllListeners('rename');
-				done();
-			}
-		});
-
+		expectedEvent.push(['rename']);
 		fs.writeFile(subFile, 'subFile.js');
+		setTimeout(done, 200);
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		// console.log('----update subFile.js');
+		expectedEvent.push(['change']);
+		fs.writeFile(subFile, 'subFile.js update');
+		setTimeout(done, 200);
+	});
 
-		watcher.on('change', function (file) {
-			// console.log('change: %s', file.filename);
-			if (file.filename === subFile) {
-				watcher.removeAllListeners('change');
-				done();
-			}
-		});
-
-		fs.writeFile(subFile, 'subFile.js' + 'update');
+	it('should emit events when subfile removed', function (done) {
+		expectedEvent.push(['rename']);
+		fs.unlink(subFile);
+		setTimeout(done, 200);
 	});
 
 });
