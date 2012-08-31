@@ -366,11 +366,11 @@ describe('APP#getGlobalConfig', function () {
         oConfig.packages.should.be.a('object');
     });
 
-    it ('should read json from default user fb.default.json file', function () {
-        should.exist(oConfig.packages['common-lib']);
-        oConfig.packages['common-lib'].should.be.a('object');
-        oConfig.packages['common-lib'].should.have.property('path');
-    });
+    // it ('should read json from default user fb.default.json file', function () {
+    //     should.exist(oConfig.packages['common-lib']);
+    //     oConfig.packages['common-lib'].should.be.a('object');
+    //     oConfig.packages['common-lib'].should.have.property('path');
+    // });
 });
 
 describe('test App#buildCommon', function () {
