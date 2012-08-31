@@ -26,13 +26,13 @@ KissyPie是面向前端的自动化开发环境。
 
 ### 安装 Kissy Pie
 
-1. 首先安装 nodejs 环境 (and npm) http://nodejs.org/#download
-2. npm install kissy-pie -g
+1. 首先安装或升级 Node.js (0.8.x) http://nodejs.org/
+2. 命令行执行 `npm install kissy-pie -g`　安装
 3. done!
 
 ### 使用 Kissy Pie
-1. 进入你应用的assets目录，　执行命令 `ki init`
-2. 执行 `ki web`　打开可视化界面
+1. 进入你应用的　Assets目录，　执行命令 `ki init`
+2. 命令行执行 `ki web`　打开可视化界面，　或使用命令行工具
 3. enjoy!
 
 ### 更新 Kissy Pie
