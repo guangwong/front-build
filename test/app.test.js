@@ -120,7 +120,7 @@ describe('app#getCurrent', function () {
     });
 
     it('should get current PageName and version', function(){
-        var pageName = 'page1/1.0';
+        var pageName = path.join('page1','1.0');
 
         var app = new App({
             rootDir: rootDir,
@@ -134,7 +134,7 @@ describe('app#getCurrent', function () {
     });
 
     it('should get current PageName and version', function(){
-        var pageName = 'page1/1.0/mods';
+        var pageName = path.join('page1','1.0','mods');
 
         var app = new App({
             rootDir: rootDir,
