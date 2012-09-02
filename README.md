@@ -1,5 +1,8 @@
 # Kissy Pie (ki)
 
++[![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
+
+
 ## 她是什么？
 
 KissyPie是面向前端的自动化开发环境。
