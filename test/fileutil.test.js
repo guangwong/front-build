@@ -236,7 +236,15 @@ describe('test findInDir of fileutil', function(){
             list.indexOf(path.join('sub2', 'find.js')).should.not.eql(-1);
             done();
         });
-
+    });
+    it('should ignore file in .svn directory', function (done) {
+        fu.findInDir(src, /svn[\/\\]file$/i, function(err, list){
+            if (err) {
+                return done(err);
+            }
+            list.length.should.eql(0);
+            done();
+        });
     });
 });
 
@@ -308,5 +316,23 @@ describe('test fileutil.iconv', function(){
     it('should not conv files that match excludes tests', function(){
         var p = path.resolve(dst, 'sub1/iconv.gbk-min.txt');
         path.existsSync(p).should.be.false;
+    });
+});
+
+describe('fileutil.getUserHome test', function () {
+    var userhome;
+    before(function () {
+        userhome = fu.getUserHome()
+    })
+    it('should return a string', function () {
+        should.exist(userhome);
+        userhome.should.be.a('string');
+        userhome.should.be.ok;
+    });
+    it('should be exist', function (done) {
+        fs.exists(userhome, function (exist) {
+            exist.should.be.true;
+            done();
+        });
     });
 });

@@ -4,11 +4,14 @@ block content
   .container
     .row-fluid
       .span12
-        .modal
-          .modal-header
-            h3= title
-          .modal-body
-            form.well(action='/app',method='GET')
-              label path
-              input.span9(type='text',name='root')
-              button.btn.btn-primary(type='submit') Submit
+        .fb-logo
+          a(href='/')
+            img(src='/images/logo.png')
+        form.ki-modal(action='/app',method='GET')
+          label 本地应用路径：
+          .input-append
+            input.input-xxlarge(type='text',name='root')
+            button.btn(type='submit') Open
+          div#app-history.app-history
+  script.
+    KISSY.use('page/index');

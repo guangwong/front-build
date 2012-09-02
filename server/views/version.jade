@@ -4,6 +4,9 @@ block content
   .container
     .row-fluid
       .span12
+        .fb-logo
+          a(href='/')
+            img(src='/images/logo.png')
         .fb-title
           h1 
             a(href='/app?root=#{app.rootDir}')= app.name
@@ -13,22 +16,26 @@ block content
             sapn= page.version
           p.path= page.rootDir
 
-          .buildto.form-inline
+          .buildto.form-inline.buildto-version
             .input-prepend
               |&nbsp;
+              span.status
               span.add-on
                 i.icon-calendar
               input.timestamp-input(type='text')
               |&nbsp;
               a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
                 |Build            
-              span.status
 
         #reports
         ul.timestamps
           - each ts in timestamps
             li 
-              span.timestamp #{ts.timestamp}
-              span.build-version [#{ts.build ? ts.build.build_version : 'noversion'}]
+              span.build-timestamp.timestamp #{ts.timestamp}
+              - if(ts.build)
+                span.build-version from #{ts.build.build_version}
+                span.build-time
+                  i.icon-time
+                  | #{ts.build.build_used_time}ms
   script
     KISSY.use('page/index');

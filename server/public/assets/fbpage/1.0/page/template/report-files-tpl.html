@@ -1,0 +1,14 @@
+<h4>处理文件列表:</h4>
+{{#if !files.length}}
+    <div>
+        没有文件
+    </div>
+{{#else}}
+    <ul class="plugin-file-list">
+        {{#each files as file}}
+            <li>
+                <i class="icon-file"></i> {{file}}
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}

@@ -19,12 +19,17 @@ KISSY.add(function (S) {
                 },
                 dataType: 'json',
                 success: function (data) {
+
                     if (data.err) {
                         var err = data.err;
                         $elStatus
-                            .html('Error:' + err.message)
+                            .html('Error:' + err.message);
+                        self.fire('error', {
+                            error: data.err
+                        });
                         return;
                     }
+
                     $elStatus.html('success!');
 
                     setTimeout(function () {

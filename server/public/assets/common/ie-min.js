@@ -1,0 +1,1 @@
+KISSY.add("common/../common_temp_src/ie",function(a){var b=a.all;a.ready(function(){b('<div class="alert alert-error">\u5f3a\u70c8\u5efa\u8bae\u60a8\u4f7f\u7528Chrome\uff0c Firefox\uff0c Safari\uff0c \u6216\u8005 IE9+ \u6253\u5f00 Kissy Pie\u3002</div>').insertBefore(b(".container").children()[0])})}); 

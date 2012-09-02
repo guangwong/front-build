@@ -279,17 +279,82 @@ describe('page build test', function(){
         var pluginsReports = buildReports.plugins;
         var fbReports = buildReports.fb;
 
-        console.log(pluginsReports[0]);
 
         fbReports.should.be.a('object')
-            .and.have.property('build_version')
+
         fbReports
             .should.have.property('build_start_time')
+
         fbReports
-            .should.have.property('build_used_time')
-        pluginsReports.should.be.a('object');
+            .should.have.property('build_version')
+            
+        fbReports
+            .should.have.property('build_used_time');
+
+        pluginsReports.forEach(function (report) {
+            report.should.have.property('name');
+            report.should.have.property('used_time');
+        });
+
     });
 
+});
+
+describe('page build test with error', function(){
+    var pageName = 'page3';
+
+    var app = new App({
+        rootDir: path.resolve('sample-project')
+    });
+
+    var rootDir = path.resolve('sample-project', pageName);
+
+    var version = '1.0';
+    var timestamp = '20121212';
+    var thepage;
+    var buildReports;
+
+    before(function (done) {
+        app.getConfig(function(err, config){
+            if (err) {
+                return done(err);
+            }
+
+            thepage = new Page({
+                rootDir: rootDir,
+                name: pageName,
+                app: app
+            });
+            
+            thepage.setVersion(
+                version, 
+                function (err) {
+                    if (err) {
+                        return done(err);
+                    }
+                    done();
+                    
+                }
+            );
+        });
+
+    });
+
+    after(function (done) {
+        fu.rmTreeSync(path.resolve(rootDir, timestamp));
+        fu.rmTreeSync(path.resolve(rootDir, 'page_build_temp'));
+        fu.rmTreeSync(path.resolve(rootDir, 'page_src_temp'));
+        done();
+    });
+
+    it('should get an error when build page3/1.0', function (done) {
+
+        thepage.build(timestamp, function (err, reports) {
+            should.exist(err);
+            done();
+        });
+
+    });
 });
 
 describe('page add version test', function(){
@@ -410,7 +475,6 @@ describe('page#getTimestamps', function () {
 
     it('should get a blank array with no pub directories', function (done) {
         page1.getTimestamps(function(err, timestamps) {
-            console.log(timestamps);
             should.not.exist(err);
             timestamps.should.be.an.array;
             timestamps.length.should.eql(0);
@@ -420,7 +484,7 @@ describe('page#getTimestamps', function () {
 
     it('should get all the pub timestamps', function (done) {
         page2.getTimestamps(function(err, timestamps) {
-            console.log(timestamps);
+
             should.not.exist(err);
             timestamps.should.be.ok;
             // timestamps.should.include('20120901')

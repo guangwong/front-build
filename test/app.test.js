@@ -238,7 +238,102 @@ describe('app#addPage test', function () {
     });
 });
 
-describe('test app buildCommon', function(){
+
+
+describe('app#update test', function() {
+    var app;
+    var rootDir = path.resolve('sample-project');
+
+    before(function (done) {
+        fu.rmTreeSync(path.resolve(rootDir, 'tools'));
+        app = new App({
+            rootDir: rootDir
+        });
+
+        app.update(done);
+    });
+
+    it('should create the missing tools directory', function (done) {
+        fs.exists(path.resolve(rootDir, 'tools'), function (exist) {
+            exist.should.be.true;
+            done();
+        });
+    });
+    it('should create the missing tools files', function (done) {
+        var file = path.resolve(rootDir, 'tools', 'web-client.sh');
+        fs.stat(file, function (err, stat) {
+            if (err) {
+                return done(err);
+            }
+            stat.isFile().should.be.true;
+            fs.readFile(file, function (err, content) {
+                if (err) {
+                    return done(err);
+                }
+                content.length.should.above(0);
+                done();
+            });
+        });
+    });
+});
+
+describe('app#getPages Test', function() {
+    var app;
+    var rootDir = path.resolve('sample-project');
+
+    before(function (done) {
+        app = new App({
+            rootDir: rootDir
+        });
+        done();
+    });
+
+    it('should get all pages', function (done) {
+        app.getPages(function (err, pages) {
+            if (err) {
+                return done(err);
+            }
+            pages.length.should.eql(4);
+            pages.forEach(function (page) {
+                should.exist(page.name);
+                should.exist(page.version);
+
+            });
+            done();
+        });
+    });
+
+
+});
+
+
+describe('APP#getGlobalConfig', function () {
+    var oConfig;
+
+    before(function (done) {
+        App.getGlobalConfig(function (json) {
+            oConfig = json;
+            done();
+        });
+    });
+
+    it ('should return a Object', function () {
+        should.exist(oConfig);
+        oConfig.should.be.a('object');
+    });
+
+    it ('should extends the default Configs', function () {
+        oConfig.packages.should.be.a('object');
+    });
+
+    it ('should read json from default user fb.default.json file', function () {
+        should.exist(oConfig.packages['common-lib']);
+        oConfig.packages['common-lib'].should.be.a('object');
+        oConfig.packages['common-lib'].should.have.property('path');
+    });
+});
+
+describe('test App#buildCommon', function () {
     var app;
     var rootDir = path.resolve('sample-project');
 
@@ -263,7 +358,7 @@ describe('test app buildCommon', function(){
 
     });
 
-    after(function (done){
+    after(function (done) {
         async.forEach(minFiles, function (file, callback){
             fs.unlink(path.resolve(rootDir, 'common', file), callback);
         }, done);
@@ -283,47 +378,4 @@ describe('test app buildCommon', function(){
             done();
         })
     });
-});
-
-describe('app#update test', function() {
-    var app;
-    var rootDir = path.resolve('sample-project');
-
-    before(function (done) {
-        app = new App({
-            rootDir: rootDir
-        });
-
-        app.update(done);
-    });
-});
-
-describe('app#getPages Test', function() {
-    var app;
-    var rootDir = path.resolve('sample-project');
-
-    before(function (done) {
-        app = new App({
-            rootDir: rootDir
-        });
-        done();
-    });
-
-    it('should get all pages', function (done) {
-        app.getPages(function (err, pages) {
-            console.log('----', err, pages);
-            if (err) {
-                return done(err);
-            }
-            pages.length.should.eql(3);
-            pages.forEach(function (page) {
-                page.name.should.be.ok;
-                page.version.should.be.ok;
-
-            });
-            done();
-        });
-    });
-
-
 });

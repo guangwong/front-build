@@ -6,30 +6,28 @@
          * Config Kissy 1.2 packages
          * of a FrontBuild Page
          * @param {Object} config
-         *  @param name
-         *  @param version
-         *  @param pub timestamp of published directory
-         *  @param path
-         *  @param charset
-         *  @param tag
+         *  @param name     name of FrontBuild
+         *  @param version  version of you app
+         *  @param pub      timestamp of published directory
+         *  @param path     url of you fbapp root
+         *  @param charset 
+         *  @param tag      timestamp appended
          */
         config: function (config) {
             if (!config.path) {
                 config.path = '';
             }
             config.path = config.path.replace(/\/$/, '');
+
             var pkgs = [],
                 packageConfig = {},
                 pagePath = S.substitute('{path}/{name}/{version}/', config),
                 //switch dev or production env
                 debug = KISSY.Config.debug,
                 pagePathBuild = S.substitute('{path}/{name}/{pub}/', config);
-            //kissy config
-            S.each(['charset', 'tag'], function (key) {
-                if (config[key]) {
-                    packageConfig[key] = config[key];
-                }
-            });
+
+            //package config
+            S.mix(packageConfig, config, true, ['charset', 'tag']);
 
             //common package
             pkgs.push(S.merge(packageConfig, {

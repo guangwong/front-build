@@ -1,3 +1,0 @@
-KISSY.add(function(){
-    return {"html":"<div class=\"report-fb\">\r\n    <div class=\"row-fluid\">\r\n        <dl class='span4'>\r\n            <dt>版本</dt>\r\n            <dd>{{build_version}}</dd>\r\n        </dl>\r\n        <dl class='span4'>\r\n            <dt>打包时间戳</dt>\r\n            <dd>{{build_timestamp}}</dd>\r\n        </dl>\r\n        <dl class='span4'>\r\n            <dt>用时</dt>\r\n            <dd>{{build_used_time}}ms</dd>\r\n        </dl>\r\n    </div>\r\n</div>"};
-});

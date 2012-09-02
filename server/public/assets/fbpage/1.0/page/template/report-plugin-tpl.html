@@ -1,0 +1,30 @@
+<div class="report-plugin-item">
+    <div class="report-plugin-item-hd{{#if content}} report-plugin-hd-has-content{{/if}}">
+        <h4>{{name}} 
+        {{#if typeof report.count === 'number'}}
+        <span class='plugin-bdg'>
+            <span class="badge">{{report.count}}</span>
+        </span>
+        {{/if}}
+        {{#if typeof report.warningCount === 'number' && report.warningCount > 0}}
+        <span class='plugin-bdg'>
+            <span class="badge badge-warning">{{report.warningCount}}</span>
+        </span>
+        {{/if}}
+        {{#if typeof report.errorCount === 'number' && report.errorCount > 0}}
+        <span class='plugin-bdg'>
+            <span class="badge badge-important">{{report.errorCount}}</span>
+        </span>
+        {{/if}}
+        </h4>
+    </div>
+    {{#if content}}
+    <div class='report-plugin-item-bd'>{{content}}</div>
+    {{/if}}
+    <div class="report-plugin-item-ft">
+        <ul>
+            <li class='used-time'><i class='icon-time'></i> {{report.used_time}} ms
+            </li>
+        </ul>
+    </div>
+</div>

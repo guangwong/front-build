@@ -17,3 +17,7 @@ html
         })
   body
     block content
+    script.
+      if (KISSY.UA.ie && KISSY.UA.ie < 9) {
+        KISSY.use('common/ie');
+      }

@@ -2,6 +2,7 @@ var Page = require('../../lib/page.js');
 var App = require('../../lib/app.js');
 var path = require('path');
 var _ = require('underscore');
+var util = require('util');
 /*
  * GET home page.
  */
@@ -98,10 +99,17 @@ exports.buildPage = function (req, res, next) {
     var timestamp = req.param('timestamp');
 
     fbpage.build(timestamp, function (err, reports) {
+        if (err) {
+            res.send({
+                err: {
+                    message: err.message,
+                    text: JSON.stringify(err, null, 2),
+                    stack: err.stack
+                }
+            });
+            return;
+        }
         res.send({
-            err: err ? {
-                message: err.message
-            } : null,
             reports: reports
         });
     });
@@ -119,6 +127,7 @@ exports.addPage = function (req, res, next) {
         next(error);
         return;
     }
+
     fbapp.addPage(pageName + '/' + version, function (err) {
         if (err) {
             return next(err);
