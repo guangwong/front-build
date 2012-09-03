@@ -54,11 +54,15 @@ block content
           input.input-medium(type='text', name='version', placeholder='version (eg. 1.0)')
           |&nbsp;
           button.j-group-build.btn(type='submit') ADD
-        
+  input#rootDir(value=app.rootDir);
   script.
     KISSY.use('page/index', function (S, Page) {
-      var rootDir = '#{app.rootDir}';
+      var el = S.one('#rootDir');
+      
+      var rootDir = el?el.val():'';
+
       if (Page.appHistory && rootDir) {
         Page.appHistory.push(rootDir);
       }
+
     });

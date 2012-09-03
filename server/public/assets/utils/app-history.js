@@ -26,6 +26,7 @@ KISSY.add(function (S) {
 
     return {
         push: function (path) {
+            console.log('path', path);
             var list = getList();
 
             list = S.filter(list, function (item) {
