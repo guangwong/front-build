@@ -7,7 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http')
   , App = require('../lib/app')
-  , Page = require('../lib/page')
+  , Page = require('../lib/page');
 
 var app = express();
 
@@ -82,7 +82,8 @@ app.locals({
       query: obj,
       pathname: path
     });
-  }
+  },
+  version: require('../package.json').version
 });
 
 http.createServer(app).listen(app.get('port'), function(){
