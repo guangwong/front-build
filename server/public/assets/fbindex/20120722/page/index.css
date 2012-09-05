@@ -12,7 +12,7 @@
 }
 .footer {
   text-align: center;
-  margin-top: 150px;
+  margin-top: 30px;
 }
 .footer a {
   color: black;
@@ -29,10 +29,28 @@
 .ki-modal {
   margin: 50px 100px;
 }
-.app-history a {
+.app-history .his-item {
+  position: relative;
+}
+.app-history .his-item:hover {
+  background: #f2f2f2;
+}
+.app-history .his-title {
   display: block;
   padding: 5px;
 }
-.app-history a:hover {
-  background: #f2f2f2;
+.app-history .his-delete {
+  position: absolute;
+  font-size: 16px;
+  top: 0px;
+  right: 0px;
+  line-height: 30px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+}
+.app-history .his-delete:hover {
+  color: #fff;
+  background: #f99;
 }

@@ -164,13 +164,38 @@ KISSY.add('utils/build-page',function (S) {
     var $ = S.all;
     return {
         init: function (config) {
-            var hideTimeout;
+
+            $(config.triggers).attr('data-cal-trigger', '1');
 
             var popup = new Overlay.Popup({
                 width:192
             });
 
             popup.render();
+            function bodyOnClick (ev) {
+                var $et = $(ev.target);
+                if(popup.get('el').contains($et)) {
+                    return;
+                }
+                if ($et.attr('data-cal-trigger')) {
+                    return;
+                }
+                if ( $et.parent('.ks-cal-box')) {
+                    return;
+                }
+                popup.hide();
+            }
+
+            popup
+                .on('hide', function () {
+                    $(document.body).detach('click', bodyOnClick);
+                })
+                .on('show', function () {
+                    $(document.body).on('click', bodyOnClick);
+                })
+
+
+
 
             var cal = new Calendar(popup.get('contentEl'));
 
@@ -178,22 +203,29 @@ KISSY.add('utils/build-page',function (S) {
                 if (this.targetInput) {
                     $(this.targetInput).val(S.Date.format(e.date, 'yyyymmdd'));
                 }
+
                 popup.hide();
             });
 
+
             $(config.triggers)
                 .on('click', function (ev) {
-                    clearTimeout(hideTimeout);
                     popup.show();
-                    var et = $(ev.target);
-                    popup.align(et, ['bl', 'tl']);
-                    cal.targetInput = et;
+                    var $et = $(ev.target);
+                    popup.align($et, ['bl', 'tl']);
+                    cal.targetInput = $et;
+                    var val = $et.val();
+                    if (val) {
+                        var m = val.match(/^(\d{2,4})(\d\d)(\d\d)$/);
+                        console.log(m);
+                        var selectedDate = S.Date.parse(m.slice(1).join('-'));
+                        cal.render({
+                            date: selectedDate,
+                            selected: selectedDate
+                        })
+                    }
                 })
-                .on('blur', function (ev) {
-                    hideTimeout = setTimeout(function () {
-                        popup.hide();
-                    }, 300);
-                });
+
         }
     }
 }, {
@@ -247,31 +279,44 @@ KISSY.add('utils/build-page',function (S) {
                 return item != path
             });
             saveList(list);
+            return true;
         }
     }
 });KISSY.add('page/mods/group-select',function (S) {
     var $ = S.all;
+    var sel_checkbox = '.j-version-checkbox';
     S.ready(function () {
-        var checkboxs = $('.j-version-checkbox');
-
-        $('body').delegate('click', '.j-select-group', function (ev) {
-            var $et = $(ev.target);
-            ev.preventDefault();
-            var versions = $et.attr('title');
-            if (versions) {
-                versions = versions.split(',');
-            } else {
-                versions = [];
-            }
-
-            checkboxs.each(function (el) {
-                if (S.indexOf(el.val(), versions) > -1) {
-                    el.prop('checked', true);
+        $('body')
+            .delegate('click', '.j-select-group', function (ev) {
+                var $et = $(ev.target);
+                ev.preventDefault();
+                var versions = $et.attr('title');
+                if (versions) {
+                    versions = versions.split(',');
                 } else {
-                    el.prop('checked', false);
+                    versions = [];
                 }
+
+                $(sel_checkbox).each(function (el) {
+                    if (S.indexOf(el.val(), versions) > -1) {
+                        el.prop('checked', true);
+                    } else {
+                        el.prop('checked', false);
+                    }
+                })
             })
-        });
+            .delegate('click', '.j-version-checkbox', function (ev) {
+                var $et = $(ev.target);
+                var val = $et.val();
+                var pagename = val.split('/')[0];
+
+                $(sel_checkbox).each(function (el) {
+                    var elval = el.val();
+                    if (elval !== val && el.val().split('/')[0] === pagename) {
+                        el.prop('checked', false);
+                    }
+                });
+            })
     });
 });KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar, appHistory) {
     var $ = S.all;

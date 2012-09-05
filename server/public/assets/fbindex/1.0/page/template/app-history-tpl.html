@@ -1,6 +1,7 @@
 <h3>历史记录：</h3>
-{{#each his as item}}
-<div class='history-item'>
-    <a href="/app?root={{item}}"> {{item}} </a>
+{{#each his as item index}}
+<div class="his-item">
+    <a class="his-title" href="/app?root={{item}}">{{item}}</a>
+    <a class="his-delete" title="delete" data-index="{{index}}" href="#">&times;</a>
 </div>
 {{/each}}

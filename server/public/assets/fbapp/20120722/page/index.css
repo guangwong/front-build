@@ -12,7 +12,7 @@
 }
 .footer {
   text-align: center;
-  margin-top: 150px;
+  margin-top: 30px;
 }
 .footer a {
   color: black;
@@ -115,11 +115,13 @@
 .version-check {
   height: 40px;
   line-height: 40px;
-  padding: 0 10px;
+  padding: 0;
   background: #fff;
 }
-.version-check input.verion-checkbox {
+.version-check input.version-checkbox {
   vertical-align: middle;
+  height: 30px;
+  width: 30px;
 }
 .groups-item a {
   background: #fff;

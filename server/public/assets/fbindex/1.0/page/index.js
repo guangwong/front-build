@@ -10,6 +10,17 @@ KISSY.add(function (S, Template, appHistory, app_history_tpl) {
                     his: his
                 }));
             }
+
+            $('body').delegate('click', '.his-delete', function (ev) {
+                debugger;
+                ev.preventDefault();
+                var elItem = $(ev.target).parent('.his-item');
+                var path = S.trim(elItem.one('.his-title').text());
+
+                if (appHistory.rm(path)) {
+                    $(ev.target).parent('.his-item').fadeOut(.2);
+                }
+            });
         });
     }
 }, {

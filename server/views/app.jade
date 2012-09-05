@@ -26,7 +26,7 @@ block content
                     a.version_no(href='/page/#{page.name}@#{page.version}?root=#{app.rootDir}') #{pageName}/#{page.version}
                     .options
                       .version-check
-                        input.j-version-checkbox(type='checkbox',value='#{page.name}/#{page.version}')
+                        input.j-version-checkbox.version-checkbox(type='checkbox',value='#{page.name}/#{page.version}')
 
       .span4
         .form.buildto-block

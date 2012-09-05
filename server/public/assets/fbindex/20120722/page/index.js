@@ -55,10 +55,11 @@ KISSY.add('utils/app-history',function (S) {
                 return item != path
             });
             saveList(list);
+            return true;
         }
     }
 });KISSY.add('page/template/app-history-tpl',function(){
-    return {"html":"<h3>历史记录：</h3>\n{{#each his as item}}\n<div class='history-item'>\n    <a href=\"/app?root={{item}}\"> {{item}} </a>\n</div>\n{{/each}}\n"};
+    return {"html":"<h3>历史记录：</h3>\r\n{{#each his as item index}}\r\n<div class=\"his-item\">\r\n    <a class=\"his-title\" href=\"/app?root={{item}}\">{{item}}</a>\r\n    <a class=\"his-delete\" title=\"delete\" data-index=\"{{index}}\" href=\"#\">&times;</a>\r\n</div>\r\n{{/each}}\r\n"};
 });KISSY.add('page/index',function (S, Template, appHistory, app_history_tpl) {
     var $ = S.all;
     if (appHistory) {
@@ -71,6 +72,17 @@ KISSY.add('utils/app-history',function (S) {
                     his: his
                 }));
             }
+
+            $('body').delegate('click', '.his-delete', function (ev) {
+                debugger;
+                ev.preventDefault();
+                var elItem = $(ev.target).parent('.his-item');
+                var path = S.trim(elItem.one('.his-title').text());
+
+                if (appHistory.rm(path)) {
+                    $(ev.target).parent('.his-item').fadeOut(.2);
+                }
+            });
         });
     }
 }, {
