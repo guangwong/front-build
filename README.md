@@ -1,6 +1,6 @@
 # Kissy Pie (ki)
 
-+[![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
+[![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
 
 
 ## 她是什么？
@@ -153,6 +153,7 @@ KissyPie是面向前端的自动化开发环境。
 ## 相关资料
 -　[《使用Kissy Pie快速构建—kissy1.2最佳实践探索》](http://www.36ria.com/5536)
 -  [ KissyPie 使用教程（视频） ](http://v.youku.com/v_show/id_XNDQ3NjQ4MDA0.html) 
+
 ## 依赖
 
 - css-combo https://github.com/daxingplay/css-combo
