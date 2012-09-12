@@ -74,7 +74,6 @@ KISSY.add('utils/app-history',function (S) {
             }
 
             $('body').delegate('click', '.his-delete', function (ev) {
-                debugger;
                 ev.preventDefault();
                 var elItem = $(ev.target).parent('.his-item');
                 var path = S.trim(elItem.one('.his-title').text());

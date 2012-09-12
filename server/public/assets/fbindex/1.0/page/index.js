@@ -12,7 +12,6 @@ KISSY.add(function (S, Template, appHistory, app_history_tpl) {
             }
 
             $('body').delegate('click', '.his-delete', function (ev) {
-                debugger;
                 ev.preventDefault();
                 var elItem = $(ev.target).parent('.his-item');
                 var path = S.trim(elItem.one('.his-title').text());

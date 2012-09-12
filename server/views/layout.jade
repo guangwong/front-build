@@ -37,8 +37,18 @@ html
                         |&nbsp;
                         i.icon-leaf
                         a(href='https://github.com/maxbbn/front-build/issues/11') Wishlist
-                        |&nbsp;
-                        span.fbversion  [ver: #{version}]
+                    p
+                        |[
+                        - if (currentStable() === 'error')
+                            i.icon-info-sign(title='在线版本检查出错，请检查网络')
+                        - else if (currentStable() === '...')
+                            i.icon-time(title='checking...')
+                        - else if (currentStable() === version)
+                            i.icon-ok
+                        - else if (currentStable() > version)
+                            i.icon-circle-arrow-up(title='升级到 [#{currentStable()}]: npm install kissy-pie -g')
+                        span.fbversion  #{version}
+                        |]
     script.
       if (KISSY.UA.ie && KISSY.UA.ie < 9) {
         KISSY.use('common/ie');

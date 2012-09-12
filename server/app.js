@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , http = require('http')
   , App = require('../lib/app')
-  , Page = require('../lib/page');
+  , Page = require('../lib/page')
+  , kissyPieVersion = '...';
 
 var app = express();
 
@@ -83,9 +84,23 @@ app.locals({
       pathname: path
     });
   },
-  version: require('../package.json').version
+  version: require('../package.json').version,
+  currentStable: function () {
+    return kissyPieVersion;
+  }
 });
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
+});
+http.get('http://a.tbcdn.cn/mods/front-build/current-kissy-pie-version.js?t='+(new Date().getTime()), function (res) {
+  res.setEncoding('utf8');
+  res.on('data', function (d) {
+    kissyPieVersion = d;
+    console.log('current installed:', require('../package.json').version);
+    console.log('latest stable:', d);
+  });
+  //kissyPieVersion = res;
+}).on('error', function (err) {
+  kissyPieVersion = 'error';
 });
