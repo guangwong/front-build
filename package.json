@@ -27,8 +27,9 @@
     "css-combo": "~0.2.4",
     "jade": "*",
     "express": "3.0.0beta7",
-    "mkdirp": "~0.3.4",
-    "module-compiler": "0.0.1"
+    "mkdirp": ">=0.3.4",
+    "module-compiler": "0.0.1",
+    "clean-css": "~0.6.0"
   },
   "devDependencies": {
     "mocha": "~1.4.1",
