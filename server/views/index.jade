@@ -4,11 +4,9 @@ block content
   .container
     .row
       .span12
-        form.ki-modal(action='/app',method='GET')
-          label 本地应用路径：
-          .input-append
-            input.input-xlarge(type='text',name='root')
-            button.btn(type='submit') Open
+        .ki-modal
+          .help-block
+            p 在命令行进入你的应用， 执行 <code>ki web</code> 可直接打开此应用的管理界面。
           div#app-history.app-history
   script.
     KISSY.use('page/index');

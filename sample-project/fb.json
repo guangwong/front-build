@@ -1,6 +1,6 @@
 {
     "charset": "gbk",
-    "fbversion": "0.4.5",
+    "fbversion": "0.4.6",
     "packages": {
         "common-lib": {
             "path": "~/lab/common-lib"
