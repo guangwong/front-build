@@ -104,9 +104,6 @@ KissyPie是面向前端的自动化开发环境。
                 <code>ki build samplepage/1.0 samplepage2/1.0 -t 20121221</code><br>
                 打包多个page<br><br>
                 
-                <code>ki build samplepage/1.0</code><br>
-                不指定timestamp 打包到最近的一次打包使用的时间戳<br><br>
-                
                 <code>ki build samplepage/1.0 -t 20121221 -w</code><br>
                 加参数<code>-w</code> 或 <code>--watch</code> 可以监视目录变更，　代码有更新会自动打包<br><br>
                 
