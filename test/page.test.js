@@ -252,6 +252,18 @@ describe('page build test', function(){
         
     });
 
+    it('should support gbk utils directory with css-combo', function (done) {
+        var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css')
+        fs.readFile(minIndexCss, 'utf8', function(err, data) {
+            if (err) {
+                return done(err);
+            }
+            data.should.include('.gbkmod');
+            data.should.include('宋体');
+            done();
+        });
+    });
+
     it('should compress js to -min.js', function(done) {
         var minIndexJS = path.resolve(rootDir, timestamp, 'page/index-min.js');
         var minConcatJS = path.resolve(rootDir, timestamp, 'page/concat-min.js');
@@ -300,8 +312,66 @@ describe('page build test', function(){
 
 });
 
+describe('gbk page build test', function () {
+    var pageName = 'page1';
+    var version = '2.0';
+    var timestamp = '000000';
+    var buildReports;
+    var thepage;
+    var rootDir = 'sample-project';
+    var pageRootDir = path.join(rootDir, pageName);
+    var app = new App({
+        rootDir: rootDir
+    });
+
+    after(function () {
+        fu.rmTreeSync(path.join(pageRootDir, timestamp));
+    });
+
+    before(function (done) {
+        app.getConfig(function(err, config){
+            if (err) {
+                return done(err);
+            }
+
+            thepage = app.getPage(pageName);
+            
+            thepage.setVersion(
+                version, 
+                function(err){
+                    if (err) {
+                        return done(err);
+                    }
+                    thepage.build(timestamp, function (err, reports) {
+                        if (err) {
+                            return done(err);
+                        }
+
+                        buildReports = reports;
+                        done();
+                    });
+                }
+            );
+        });
+    });
+
+    it('should conv the right with css-combo', function (done) {
+        var timestampPath = path.join(pageRootDir, timestamp);
+        fs.readFile(path.join(timestampPath, 'page/index.css'), function (err, buf) {
+            var iconv = require('iconv-lite');
+            if (err) {
+                return done(err);
+            }
+            var cnt = iconv.decode(buf, 'gbk');
+            cnt.should.include('index楷体');
+            cnt.should.include('黑体');
+            done();
+        });
+    });
+});
+
 describe('page build test with error', function(){
-    var pageName = 'page3';
+    var pageName = 'page_with_error';
 
     var app = new App({
         rootDir: path.resolve('sample-project')
@@ -347,7 +417,7 @@ describe('page build test with error', function(){
         done();
     });
 
-    it('should get an error when build page3/1.0', function (done) {
+    it('should get an error when build page_with_error/1.0', function (done) {
 
         thepage.build(timestamp, function (err, reports) {
             should.exist(err);
@@ -466,9 +536,9 @@ describe('page#getTimestamps', function () {
         rootDir: rootDir1
     });
 
-    var pageName2 = 'page2';
+    var pageName2 = 'page_with_timestamp';
     var rootDir2 = path.resolve('sample-project', pageName2);
-    var page2 = new Page({
+    var page_with_timestamp = new Page({
         name: pageName2,
         rootDir: rootDir2
     });
@@ -483,7 +553,7 @@ describe('page#getTimestamps', function () {
     });
 
     it('should get all the pub timestamps', function (done) {
-        page2.getTimestamps(function(err, timestamps) {
+        page_with_timestamp.getTimestamps(function(err, timestamps) {
 
             should.not.exist(err);
             timestamps.should.be.ok;

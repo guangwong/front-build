@@ -158,18 +158,18 @@ describe('App Group function', function () {
     });
 
     it('should setGroup without any error', function (done) {
-        app.setGroup('test_group1', ['page1/1.0/', 'page2@2.0', 'page3\\1.0'], done);
+        app.setGroup('test_group1', ['page1/1.0/', 'page_with_timestamp@2.0', 'page_with_error\\1.0'], done);
     });
 
     it('should setGroup fail if has two version of the same page name', function (done) {
-        app.setGroup('test_group2', ['page1/1.0/', 'page2@2.0', 'page3\\1.0', 'page3\\2.0'], function (err) {
+        app.setGroup('test_group2', ['page1/1.0/', 'page_with_timestamp@2.0', 'page_with_error\\1.0', 'page_with_error\\2.0'], function (err) {
             should.exist(err);
             done();
         });
     });
 
     it('should fail when set Group with wrong pagenames', function (done) {
-        app.setGroup('test_group2', ['page1/1.0/', 'page2-2.0'], function (err) {
+        app.setGroup('test_group2', ['page1/1.0/', 'page_with_timestamp-2.0'], function (err) {
             should.exist(err);
             done();
         });
@@ -182,7 +182,7 @@ describe('App Group function', function () {
             }
             should.exist(groups['test_group1']);
 
-            groups['test_group1'].should.be.eql(['page1/1.0', 'page2/2.0', 'page3/1.0']);
+            groups['test_group1'].should.be.eql(['page1/1.0', 'page_with_timestamp/2.0', 'page_with_error/1.0']);
             done();
         });
     });
@@ -192,7 +192,7 @@ describe('App Group function', function () {
             if (err) {
                 return done(err);
             }
-            pages.should.be.eql(['page1/1.0', 'page2/2.0', 'page3/1.0']);
+            pages.should.be.eql(['page1/1.0', 'page_with_timestamp/2.0', 'page_with_error/1.0']);
             done();
         });
     });
@@ -307,7 +307,7 @@ describe('app#getPages Test', function() {
             if (err) {
                 return done(err);
             }
-            pages.length.should.eql(4);
+            pages.length.should.eql(5);
             pages.forEach(function (page) {
                 should.exist(page.name);
                 should.exist(page.version);
@@ -326,8 +326,8 @@ describe("App build multi pages", function () {
         rootDir: rootDir
     });
     var timestamp = '20111111';
-    var pages = ['page1/1.0', 'page2/1.0'];
-    var pubs = ['page1/'+timestamp, 'page2/'+timestamp];
+    var pages = ['page1/1.0', 'page_with_timestamp/1.0'];
+    var pubs = ['page1/'+timestamp, 'page_with_timestamp/'+timestamp];
 
     after(function () {
         pubs.forEach(function (pub) {
