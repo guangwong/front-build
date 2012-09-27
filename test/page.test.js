@@ -223,6 +223,7 @@ describe('page build test', function(){
             data.should.include("KISSY.add('page/mods/mod2',");
             data.should.include("KISSY.add('page/index',");
             data.should.include("KISSY.add('page/mods/submod1',");
+            data.should.include("KISSY.add('page/mods/submod2',");
             //utils
             data.should.include("utils-sample-index.js");
             done();
@@ -266,7 +267,6 @@ describe('page build test', function(){
 
     it('should compress js to -min.js', function(done) {
         var minIndexJS = path.resolve(rootDir, timestamp, 'page/index-min.js');
-        var minConcatJS = path.resolve(rootDir, timestamp, 'page/concat-min.js');
 
         fs.readFile(minIndexJS, 'utf8', function (err, data) {
             if (err) {
@@ -275,16 +275,24 @@ describe('page build test', function(){
             data.should.include('mods:mod1');
             data.should.include('mods:mod2');
             data.should.include('mods:submod1');
-            fs.readFile(minConcatJS, 'utf8', function (err, data) {
-                if (err) {
-                    return done(err);
-                }
-                data.should.include('mods:mod1');
-                data.should.include('mods:mod2');
-                data.should.include('mods/submod1');
-                done();
-            });
+            data.should.include('mods:submod2');
+            done();
         });
+    });
+
+    it('should compress concated js to -min.js', function(done) {
+
+        var minConcatJS = path.resolve(rootDir, timestamp, 'page/concat-min.js');
+
+        fs.readFile(minConcatJS, 'utf8', function (err, data) {
+            if (err) {
+                return done(err);
+            }
+            data.should.include('mods:mod1');
+            data.should.include('mods:mod2');
+            done();
+        });
+
     });
 
     it('should produce reports', function () {
