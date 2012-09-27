@@ -126,14 +126,7 @@ exports.buildPages = function (req, res, next) {
             fbpage.build(timestamp, function (err, reports) {
 
                 if (err) {
-                    res.send({
-                        err: {
-                            message: err.message,
-                            text: JSON.stringify(err, null, 2),
-                            stack: err.stack
-                        }
-                    });
-                    return;
+                    return callback(err);
                 }
                 callback(null);
             });
