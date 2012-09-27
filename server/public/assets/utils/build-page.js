@@ -37,6 +37,11 @@ KISSY.add(function (S) {
                     }
                 });
 
+                self.fire('group-build', {
+                    pages: pages,
+                    timestamp: timestamp
+                });
+
                 buildPages($btn.attr('href'),
                     {
                         timestamp: timestamp,

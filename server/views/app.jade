@@ -33,7 +33,7 @@ block content
           .input-prepend.input-append
             span.add-on
               i.icon-calendar
-            input.input-small.timestamp-input(type='text')
+            input#batchbuild-timestamp.input-small.timestamp-input(type='text')
             button.btn.fb-build-page(href=getUrl('/build-pages', {root: app.rootDir}), data-group-build='true')
               |Build
           span.status

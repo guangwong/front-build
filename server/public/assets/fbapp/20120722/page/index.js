@@ -5,6 +5,7 @@ utils/build-page
 utils/build-common
 utils/calendar-init
 utils/app-history
+page/mods/app-cache
 page/mods/group-select
 page/index
 
@@ -46,6 +47,11 @@ KISSY.add('utils/build-page',function (S) {
                     if ($input.prop('checked') && $input.val()) {
                         pages.push($input.val());
                     }
+                });
+
+                self.fire('group-build', {
+                    pages: pages,
+                    timestamp: timestamp
                 });
 
                 buildPages($btn.attr('href'),
@@ -127,7 +133,8 @@ KISSY.add('utils/build-page',function (S) {
     S.extend(PageBuilder, S.Base);
 
     return new PageBuilder();
-});KISSY.add('utils/build-common',function (S) {
+});
+KISSY.add('utils/build-common',function (S) {
     var $ = S.all;
 
     return {
@@ -160,7 +167,8 @@ KISSY.add('utils/build-page',function (S) {
             
         }
     };
-});KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
+});
+KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
     var $ = S.all;
     return {
         init: function (config) {
@@ -230,7 +238,8 @@ KISSY.add('utils/build-page',function (S) {
     }
 }, {
     requires: ['calendar', 'overlay', 'calendar/assets/base.css']
-});KISSY.add('utils/app-history',function (S) {
+});
+KISSY.add('utils/app-history',function (S) {
     if (!window.localStorage) {
         return null;
     }
@@ -282,7 +291,59 @@ KISSY.add('utils/build-page',function (S) {
             return true;
         }
     }
-});KISSY.add('page/mods/group-select',function (S) {
+});
+KISSY.add('page/mods/app-cache',function (S) {
+    function AppCache (root) {
+        if (!root || typeof root !== 'string') {
+            throw new Error('NoApp');
+        }
+        var self = this;
+        self.root = root;
+        self.KEY = 'app-cache:' + self.root;
+    }
+
+    S.augment(AppCache, {
+        set: function(k, v) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            obj[k] = v;
+            self.save();
+        },
+
+        save: function() {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            localStorage.setItem(KEY, JSON.stringify(obj));
+        },
+
+        get: function(k) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            return obj[k];
+        },
+
+        getAll: function() {
+            var self = this;
+            var KEY = self.KEY;
+            if (self._cache) {
+                return self._cache;
+            }
+            var str = localStorage.getItem(KEY);
+            if (!str) {
+                self._cache = {};
+            } else {
+                self._cache = JSON.parse(str) || {};
+            }
+            return self.getAll();
+        }
+    });
+
+    return AppCache;
+});
+KISSY.add('page/mods/group-select',function (S) {
     var $ = S.all;
     var sel_checkbox = '.j-version-checkbox';
     S.ready(function () {
@@ -318,17 +379,32 @@ KISSY.add('utils/build-page',function (S) {
                 });
             })
     });
-});KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar, appHistory) {
+});
+KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar, appHistory, AppCache) {
     var $ = S.all;
+    var search = location.search.substr(1);
+    var query = S.unparam(search);
+    var root = query.root;
 
-    //buildCommon
+    var appCache = new AppCache(root);
     S.ready(function () {
         Calendar.init({
             triggers: 'input.timestamp-input'
         });
         buildCommon.init();
-        var search = location.search.substr(1);
-        var query = S.unparam(search);
+        
+        pageBuilder.on('group-build', function(ev) {
+            appCache.set('timestamp', ev.timestamp);
+            appCache.set('pages', ev.pages);
+        });
+
+        $('#batchbuild-timestamp').val(appCache.get('timestamp'));
+        var cachepages = appCache.get('pages');
+        if (cachepages) {
+            $('input.j-version-checkbox').filter(function (el) {
+                return S.indexOf(el.value, cachepages) > -1
+            }).prop('checked', true);
+        }
     });
 
     return {
@@ -336,5 +412,12 @@ KISSY.add('utils/build-page',function (S) {
     }
     
 }, {
-    requires: ['utils/build-page', 'utils/build-common', 'utils/calendar-init', 'utils/app-history', './mods/group-select']
+    requires: [
+        'utils/build-page',
+        'utils/build-common',
+        'utils/calendar-init',
+        'utils/app-history',
+        './mods/app-cache',
+        './mods/group-select'
+    ]
 });

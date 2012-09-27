@@ -58,9 +58,11 @@ KISSY.add('utils/app-history',function (S) {
             return true;
         }
     }
-});KISSY.add('page/template/app-history-tpl',function(){
+});
+KISSY.add('page/template/app-history-tpl',function(){
     return {"html":"<h3>历史记录：</h3>\r\n{{#each his as item index}}\r\n<div class=\"his-item\">\r\n    <a class=\"his-title\" href=\"/app?root={{item}}\">{{item}}\t</a>\r\n    <a class=\"his-delete\" title=\"delete\" data-index=\"{{index}}\" href=\"#\">&times;</a>\r\n</div>\r\n{{/each}}\r\n"};
-});KISSY.add('page/index',function (S, Template, appHistory, app_history_tpl) {
+});
+KISSY.add('page/index',function (S, Template, appHistory, app_history_tpl) {
     var $ = S.all;
     if (appHistory) {
         S.ready(function () {
