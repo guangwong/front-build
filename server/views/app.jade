@@ -48,12 +48,13 @@ block content
     .row-fluid
       .span8
         form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
-          input(type='hidden', value=app.rootDir, name='root')
-          input.input-medium(type='text', name='pagename', placeholder='pagename')
-          |&nbsp;
-          input.input-medium(type='text', name='version', placeholder='version (eg. 1.0)')
-          |&nbsp;
-          button.j-group-build.btn(type='submit') ADD
+          fieldset
+            input(type='hidden', value=app.rootDir, name='root')
+            input.input-medium(type='text', name='pagename', title='Your Pagename')
+            |&nbsp; / &nbsp;
+            input.input-small(type='text', name='version', value='1.0', title='version (eg. 1.0)')
+            |&nbsp;&nbsp;
+            button.j-group-build.btn(type='submit') Add Page
   input#rootDir(value=app.rootDir,style='display:none',type='hidden')
   script.
     KISSY.use('page/index', function (S, Page) {
