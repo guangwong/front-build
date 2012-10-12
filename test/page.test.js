@@ -152,6 +152,7 @@ describe('page build test', function(){
 
     after(function (done) {
         fu.rmTreeSync(path.resolve(rootDir, timestamp));
+        fs.unlinkSync(path.resolve(rootDir, version, 'page/tpl/foo-tpl.js'))
         done();
     });
 
@@ -224,6 +225,8 @@ describe('page build test', function(){
             data.should.include("KISSY.add('page/index',");
             data.should.include("KISSY.add('page/mods/submod1',");
             data.should.include("KISSY.add('page/mods/submod2',");
+            data.should.include("KISSY.add('page/tpl/foo-tpl',");
+            data.should.include("KISSY.add('utils/sample/index',");
             //utils
             data.should.include("utils-sample-index.js");
             done();
