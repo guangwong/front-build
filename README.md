@@ -37,7 +37,6 @@ KissyPie是面向前端的自动化开发环境。
 1. 进入你应用的　Assets目录，　执行命令 `ki init`
 2. 命令行执行 `ki web`　打开可视化界面，　或使用命令行工具
 3. enjoy!
-4. 
 
 ### 更新 Kissy Pie
 
