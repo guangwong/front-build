@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 var argv = require('optimist')
 	.string('timestamp')
+	.string('t')
     .string('version')
+    .string('v')
     .string('_')
     .alias('t', 'timestamp')
     .alias('v', 'version')

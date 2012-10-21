@@ -5,14 +5,11 @@ KISSY.add(function (S) {
 
         S.ajax({
             url: url,
-
             data: data,
-
             cache: false,
             dataType: 'json',
             success: function (data) {
                 callback(null, data);
-                
             }
         });
     }

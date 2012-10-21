@@ -12,6 +12,7 @@ page/template/report-csslint-tpl
 page/template/report-files-tpl
 page/template/report-concat-tpl
 page/template/report-css-combo-tpl
+page/template/report-module-compiler-tpl
 page/mods/timestamp
 page/index
 
@@ -23,14 +24,11 @@ KISSY.add('utils/build-page',function (S) {
 
         S.ajax({
             url: url,
-
             data: data,
-
             cache: false,
             dataType: 'json',
             success: function (data) {
                 callback(null, data);
-                
             }
         });
     }
@@ -211,7 +209,16 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
 }, {
     requires: ['calendar', 'overlay', 'calendar/assets/base.css']
 });
-KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, csslint_tpl, files_tpl, concat_tpl, css_combo_tpl) {
+KISSY.add('page/mods/reporter',function (S, Template,
+    fb_tpl,
+    wrap_tpl,
+    error_wrap_tpl,
+    plugin_tpl,
+    csslint_tpl, 
+    files_tpl, 
+    concat_tpl, 
+    css_combo_tpl,
+    module_compiler_tpl) {
     var $ = S.all;
 
     var Reporter = function (container) {
@@ -236,7 +243,7 @@ KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, error_wr
                 if (bd) {
                     bd.toggle();
                 }
-            })
+            });
         },
 
         addError: function (error) {
@@ -283,7 +290,8 @@ KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, error_wr
             'cssmin': 'files_tpl',
             'concat': 'concat_tpl',
             'lesscss': 'files_tpl',
-            'css-combo': 'css_combo_tpl'
+            'css-combo': 'css_combo_tpl',
+            'module-compiler': 'module_compiler_tpl'
         },
 
         parserPluginReports: function (reports) {
@@ -301,6 +309,7 @@ KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, error_wr
                     case 'uglifyjs':
                     case 'kissy-template':
                     case 'lesscss':
+                    case 'module-compiler':
                         report.count = report.files.length;
                         break;
                 }
@@ -345,20 +354,22 @@ KISSY.add('page/mods/reporter',function (S, Template, fb_tpl, wrap_tpl, error_wr
         'csslint_tpl': Template(csslint_tpl.html),
         'files_tpl': Template(files_tpl.html),
         'concat_tpl': Template(concat_tpl.html),
-        'css_combo_tpl': Template(css_combo_tpl.html)
+        'css_combo_tpl': Template(css_combo_tpl.html),
+        'module_compiler_tpl': Template(module_compiler_tpl.html)
     });
     return Reporter;
 }, {
     requires: [
         'template',
-        'page/template/report-fb-tpl',
-        'page/template/report-wrap-tpl',
-        'page/template/report-error-wrap-tpl',
-        'page/template/report-plugin-tpl',
-        'page/template/report-csslint-tpl',
-        'page/template/report-files-tpl',
-        'page/template/report-concat-tpl',
-        'page/template/report-css-combo-tpl'
+        '../template/report-fb-tpl',
+        '../template/report-wrap-tpl',
+        '../template/report-error-wrap-tpl',
+        '../template/report-plugin-tpl',
+        '../template/report-csslint-tpl',
+        '../template/report-files-tpl',
+        '../template/report-concat-tpl',
+        '../template/report-css-combo-tpl',
+        '../template/report-module-compiler-tpl'
 
     ]
 });
@@ -372,10 +383,10 @@ KISSY.add('page/template/report-error-wrap-tpl',function(){
     return {"html":"<div class=\"report\" style='display:none'>\n    <div class=\"report-bd\">\n        <div class=\"alert alert-error\">\n            <h2> {{message}} </h2>\n            <h4>error</h4>\n            <pre>{{text}}</pre>\n            <h4>stack</h4>\n            <pre>{{stack}}</pre>\n        </div>\n    </div>\n</div>"};
 });
 KISSY.add('page/template/report-plugin-tpl',function(){
-    return {"html":"<div class=\"report-plugin-item\">\n    <div class=\"report-plugin-item-hd{{#if content}} report-plugin-hd-has-content{{/if}}\">\n        <h4>{{name}} \n        {{#if typeof report.count === 'number'}}\n        <span class='plugin-bdg'>\n            <span class=\"badge\">{{report.count}}</span>\n        </span>\n        {{/if}}\n        {{#if typeof report.warningCount === 'number' && report.warningCount > 0}}\n        <span class='plugin-bdg'>\n            <span class=\"badge badge-warning\">{{report.warningCount}}</span>\n        </span>\n        {{/if}}\n        {{#if typeof report.errorCount === 'number' && report.errorCount > 0}}\n        <span class='plugin-bdg'>\n            <span class=\"badge badge-important\">{{report.errorCount}}</span>\n        </span>\n        {{/if}}\n        </h4>\n    </div>\n    {{#if content}}\n    <div class='report-plugin-item-bd'>{{content}}</div>\n    {{/if}}\n    <div class=\"report-plugin-item-ft\">\n        <ul>\n            <li class='used-time'><i class='icon-time'></i> {{report.used_time}} ms\n            </li>\n        </ul>\n    </div>\n</div>"};
+    return {"html":"<div class=\"report-plugin-item\">\n    <div class=\"report-plugin-item-hd{{#if content}} report-plugin-hd-has-content{{/if}}\">\n        <h4>{{name}} \n        {{#if typeof report.count === 'number'}}\n        <span class='plugin-bdg'>\n            <span title='Execed' class=\"badge\">{{report.count}}</span>\n        </span>\n        {{/if}}\n        {{#if typeof report.warningCount === 'number' && report.warningCount > 0}}\n        <span class='plugin-bdg'>\n            <span title='Warning' class=\"badge badge-warning\">{{report.warningCount}}</span>\n        </span>\n        {{/if}}\n        {{#if typeof report.errorCount === 'number' && report.errorCount > 0}}\n        <span class='plugin-bdg'>\n            <span title='Error'  class=\"badge badge-important\">{{report.errorCount}}</span>\n        </span>\n        {{/if}}\n        </h4>\n    </div>\n    {{#if content}}\n    <div class='report-plugin-item-bd'>{{content}}</div>\n    {{/if}}\n    <div class=\"report-plugin-item-ft\">\n        <ul>\n            <li class='used-time'><i class='icon-time'></i> {{report.used_time}} ms\n            </li>\n        </ul>\n    </div>\n</div>"};
 });
 KISSY.add('page/template/report-csslint-tpl',function(){
-    return {"html":"<div class=\"csslint-list\">\n    {{#if lintReport&&lintReport.length}}\n        {{#each lintReport as item}}\n            <div class='csslint-list-item'>\n                <h4 class='csslint-file'>{{item.file}}</h4>\n                <p>{{item.fullpath}}</p>\n                <pre>{{item.output}}</pre>\n            </div>\n        {{/each}}\n    {{#else}}\n        没有CSS文件\n    {{/if}}\n</div>\n"};
+    return {"html":"<div class=\"csslint-list\">\n    {{#if lintReport&&lintReport.length}}\n        {{#each lintReport as item}}\n            <div class='csslint-list-item'>\n                <h4 class='csslint-file'>{{item.file}}</h4>\n                <!-- <p>{{item.fullpath}}</p> -->\n                <pre>{{item.output}}</pre>\n            </div>\n        {{/each}}\n    {{#else}}\n        没有CSS文件\n    {{/if}}\n</div>\n"};
 });
 KISSY.add('page/template/report-files-tpl',function(){
     return {"html":"<h4>处理文件列表:</h4>\n{{#if !files.length}}\n    <div>\n        没有文件\n    </div>\n{{#else}}\n    <ul class=\"plugin-file-list\">\n        {{#each files as file}}\n            <li>\n                <i class=\"icon-file\"></i> {{file}}\n            </li>\n        {{/each}}\n    </ul>\n{{/if}}\n"};
@@ -384,7 +395,10 @@ KISSY.add('page/template/report-concat-tpl',function(){
     return {"html":"<h4>处理文件列表:</h4>\r\n{{#if !jobs.length}}\r\n    <div>\r\n        没有文件\r\n    </div>\r\n{{#else}}\r\n    <ul >\r\n        {{#each jobs as job}}\r\n            <li>\r\n                <h4><i class=\"icon-file\"></i> {{job.filename}}</h4>\r\n                <ul class=\"plugin-file-list\">\r\n                    {{#each job.files as file}}\r\n                        <li title='{{file.path}}'>{{file.filename}}</li>\r\n                    {{/each}}\r\n                </ul>\r\n            </li>\r\n        {{/each}}\r\n    </ul>\r\n{{/if}}\r\n"};
 });
 KISSY.add('page/template/report-css-combo-tpl',function(){
-    return {"html":"<h4>处理文件列表:</h4>\r\n{{#if !jobs.length}}\r\n    <div>\r\n        没有文件\r\n    </div>\r\n{{#else}}\r\n    <ul >\r\n        {{#each jobs as job}}\r\n            <li>\r\n                <h4><i class=\"icon-file\"></i> {{job.filename}} </h4>\r\n                <ul class=\"plugin-file-list\">\r\n                    {{#each job.imports as file}}\r\n                        <li>\r\n                            <i class=\"icon-bookmark\"></i>  \r\n                            {{file}}\r\n                        </li>\r\n                    {{/each}}\r\n                </ul>\r\n            </li>\r\n        {{/each}}\r\n    </ul>\r\n{{/if}}\r\n"};
+    return {"html":"<h4>处理文件列表:</h4>\r\n{{#if !jobs.length}}\r\n    <div>\r\n        没有文件\r\n    </div>\r\n{{#else}}\r\n    <ul class=\"plugin-file-list\">\r\n        {{#each jobs as job}}\r\n            <li>\r\n                <h5><i class=\"icon-file\"></i> {{job.filename}} </h5>\r\n                <ul class=\"plugin-file-list\">\r\n                    {{#each job.imports as file}}\r\n                        <li>\r\n                            <i class=\"icon-bookmark\"></i>  \r\n                            {{file}}\r\n                        </li>\r\n                    {{/each}}\r\n                </ul>\r\n            </li>\r\n        {{/each}}\r\n    </ul>\r\n{{/if}}\r\n"};
+});
+KISSY.add('page/template/report-module-compiler-tpl',function(){
+    return {"html":"<h4>Module Compiler:</h4>\n{{#if !files.length}}\n    <div>\n        没有找到Kissy模块\n    </div>\n{{#else}}\n    <ul class=\"plugin-file-list\">\n        {{#each files as file}}\n            <li>\n                <h5 class=\"ks-module status-{{file.status}}\">\n                    <strong title='{{file.path}}'>{{file.name}}</strong>\n                    <span>{{file.status}}</span>\n                    {{#if file.status !== 'ok'}}\n                        <span class=\"status\">[{{file.status}}]</span>\n                    {{/if}}\n                </h5>\n                {{#if file.submods.length}}\n                    <ul class=\"submods\">\n                        {{#each file.submods as mod}}\n                        <li class='status-{{mod.status}}'>\n                            <strong title='{{mod.path}}'>{{mod.name}}</strong>\n                            {{#if mod.status !== 'ok'}}\n                            <span class=\"status\">[{{mod.status}}]</span>\n                            {{/if}}\n                        </li>\n                        {{/each}}\n                    </ul>\n                {{#else}}\n                    \n                {{/if}}\n            </li>\n        {{/each}}\n    </ul>\n{{/if}}"};
 });
 KISSY.add('page/mods/timestamp',function (S) {
 
