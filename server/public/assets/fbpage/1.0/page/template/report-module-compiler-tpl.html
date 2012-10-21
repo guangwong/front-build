@@ -1,0 +1,34 @@
+<h4>Module Compiler:</h4>
+{{#if !files.length}}
+    <div>
+        没有找到Kissy模块
+    </div>
+{{#else}}
+    <ul class="plugin-file-list">
+        {{#each files as file}}
+            <li>
+                <h5 class="ks-module status-{{file.status}}">
+                    <strong title='{{file.path}}'>{{file.name}}</strong>
+                    <span>{{file.status}}</span>
+                    {{#if file.status !== 'ok'}}
+                        <span class="status">[{{file.status}}]</span>
+                    {{/if}}
+                </h5>
+                {{#if file.submods.length}}
+                    <ul class="submods">
+                        {{#each file.submods as mod}}
+                        <li class='status-{{mod.status}}'>
+                            <strong title='{{mod.path}}'>{{mod.name}}</strong>
+                            {{#if mod.status !== 'ok'}}
+                            <span class="status">[{{mod.status}}]</span>
+                            {{/if}}
+                        </li>
+                        {{/each}}
+                    </ul>
+                {{#else}}
+                    
+                {{/if}}
+            </li>
+        {{/each}}
+    </ul>
+{{/if}}
