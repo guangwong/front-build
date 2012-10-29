@@ -217,13 +217,14 @@ describe('app#addPage test', function () {
     var version = '10.11';
     var rootDir = path.resolve('./sample-project');
     var page;
-    var pageVersion =  pageName + '/' + version;
+    var newPage =  pageName + '/' + version;
+
     before(function (done) {
         app = new App({
             rootDir: rootDir
         });
         
-        app.addPage(pageVersion, done);
+        app.addPage(newPage, done);
     });
 
     after(function (done) {
@@ -320,7 +321,7 @@ describe('app#getPages Test', function() {
 
 });
 
-describe("App build multi pages", function () {
+describe("build multi pages", function () {
     var rootDir = path.resolve('sample-project');
     var app = new App({
         rootDir: rootDir

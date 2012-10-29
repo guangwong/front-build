@@ -89,7 +89,7 @@ describe('Page parser test', function(){
                 name: 'abcdefghijklmnopqrstuvwxyz',
                 version: '1.0'
             }
-        },
+        }
     ];
 
     it('should parsed all the tests', function(){
@@ -113,7 +113,7 @@ describe('page build test', function(){
     var rootDir = path.resolve('sample-project', pageName);
     var version = '1.0';
     var timestamp = '20121212';
-    var thepage;
+    var page;
     var buildReports;
 
     before(function (done) {
@@ -123,28 +123,22 @@ describe('page build test', function(){
             }
 
 
-            thepage = new Page({
+            page = new Page({
                 rootDir: rootDir,
                 name: pageName,
-                app: app
+                app: app,
+                version: version
             });
             
-            thepage.setVersion(
-                version, 
-                function(err){
-                    if (err) {
-                        return done(err);
-                    }
-                    thepage.build(timestamp, function (err, reports) {
-                        if (err) {
-                            return done(err);
-                        }
-
-                        buildReports = reports;
-                        done();
-                    });
+            page.build(timestamp, function (err, reports) {
+                if (err) {
+                    return done(err);
                 }
-            );
+
+                buildReports = reports;
+                done();
+            });
+
         });
 
 
@@ -157,11 +151,11 @@ describe('page build test', function(){
     });
 
     it('should be a Page object', function () {
-        thepage.name.should.be.eql(pageName);
-        thepage.rootDir.should.eql(rootDir);
-        thepage.config.should.be.a('object');
-        should.exist(thepage.srcDir);
-        should.exist(thepage.destDir);
+        page.name.should.be.eql(pageName);
+        page.rootDir.should.eql(rootDir);
+        page.config.should.be.a('object');
+        should.exist(page.srcDir);
+        should.exist(page.destDir);
     });
 
     it('should create timestamp directory under rootDir', function(done){
@@ -235,6 +229,7 @@ describe('page build test', function(){
     });
 
     it('should compress css to -min.css', function(done) {
+
         var minLessCss = path.resolve(rootDir, timestamp, 'page/lessfile-min.css');
         var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css')
 
@@ -257,7 +252,7 @@ describe('page build test', function(){
     });
 
     it('should support gbk utils directory with css-combo', function (done) {
-        var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css')
+        var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css');
         fs.readFile(minIndexCss, 'utf8', function(err, data) {
             if (err) {
                 return done(err);
@@ -345,24 +340,16 @@ describe('gbk page build test', function () {
                 return done(err);
             }
 
-            thepage = app.getPage(pageName);
+            thepage = app.getPage(pageName, version);
             
-            thepage.setVersion(
-                version, 
-                function(err){
-                    if (err) {
-                        return done(err);
-                    }
-                    thepage.build(timestamp, function (err, reports) {
-                        if (err) {
-                            return done(err);
-                        }
-
-                        buildReports = reports;
-                        done();
-                    });
+            thepage.build(timestamp, function (err, reports) {
+                if (err) {
+                    return done(err);
                 }
-            );
+
+                buildReports = reports;
+                done();
+            });
         });
     });
 
@@ -404,19 +391,10 @@ describe('page build test with error', function(){
             thepage = new Page({
                 rootDir: rootDir,
                 name: pageName,
-                app: app
+                app: app,
+                version: version
             });
-            
-            thepage.setVersion(
-                version, 
-                function (err) {
-                    if (err) {
-                        return done(err);
-                    }
-                    done();
-                    
-                }
-            );
+            done();
         });
 
     });
@@ -441,11 +419,14 @@ describe('page build test with error', function(){
 describe('page add version test', function(){
     var rootDir = path.resolve('sample-project', 'page1');
     var version = '10.0';
-    var thepage;
+    var page;
 
     before(function (done) {
-        thepage = new Page({rootDir: rootDir});
-        thepage.addVersion(version, done);
+        page = new Page({
+            rootDir: rootDir,
+            version: version
+        });
+        page.initVersion(done);
     });
 
     after(function (done) {
@@ -502,7 +483,7 @@ describe('page add version test', function(){
 });
 
 
-describe('page addVersion test', function(){
+describe('page initVersion test', function(){
 
     var pageName = 'page1';
     var rootDir = path.resolve('sample-project', pageName);
@@ -512,10 +493,11 @@ describe('page addVersion test', function(){
     before(function (done) {
         thepage = new Page({
             rootDir: rootDir,
-            name: pageName
+            name: pageName,
+            version: version
         });
 
-        thepage.addVersion(version, done);
+        thepage.initVersion(done);
 
     });
 

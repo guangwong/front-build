@@ -55,7 +55,7 @@ if (argv._[0]) {
 		case 'a':
 		case 'add':
 		case 'addpage':
-			command = 'addpage';
+			command = 'addPage';
 			break;
 
 		case 'v':
