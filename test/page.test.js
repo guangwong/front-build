@@ -555,3 +555,38 @@ describe('page#getTimestamps', function () {
     });
 
 });
+
+describe('page anytics test',function(){
+    var appRoot = './sample-project/';
+    var pageName = 'page1';
+    var version = '1.0';
+    var analyzeResult, sampleApp, page;
+
+    before(function(done){
+        App.getApp(appRoot, function(err, app){
+            if (err) {
+                return done(err);
+            }
+            sampleApp = app;
+            page = sampleApp.getPage(pageName, version);
+
+            page.analyze(function (err, result) {
+                if (err) {
+                    return done(err);
+                }
+                analyzeResult = result;
+                done(null);
+            });
+        });
+    });
+
+    it('should produce a report on modules', function () {
+        analyzeResult.should.be.a('object');
+        analyzeResult.modules.length.should.eql(3, '3 kissy enter point');
+        analyzeResult.modules.forEach(function(m){
+//            console.log(m);
+//            console.log('----')
+        });
+
+    });
+});

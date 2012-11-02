@@ -54,7 +54,6 @@ if (argv._[0]) {
 
 		case 'a':
 		case 'add':
-		case 'addpage':
 			command = 'addPage';
 			break;
 
@@ -78,7 +77,11 @@ if (argv._[0]) {
 		case 'web':
 			command = 'web';
 			break;
-	};
+        case 'analyze':
+        case 'fenxi':
+            command = 'analyze';
+            break;
+	}
 }
 
 if (commands && commands[command]) {

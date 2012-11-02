@@ -4,12 +4,13 @@ var should = require('should');
 var async = require('async');
 var fu = require('../lib/fileutil');
 var App = require('../lib/app');
+var Page = require('../lib/page');
 
-describe('app init', function (){
-    var rootDir = path.resolve('tmp_project_dir');
+describe('app init', function () {
+    var rootDir = 'tmp_project_dir';
 
     before(function (done){
-        if(path.existsSync(rootDir)) {
+        if(fs.existsSync(rootDir)) {
             fu.rmTreeSync(rootDir);
         }
 
@@ -27,7 +28,8 @@ describe('app init', function (){
     });
 
     it('should create a config file in rootDir', function (done) {
-    	var fb_json_file = path.resolve(rootDir, 'fb.json');
+    	var fb_json_file = path.join(rootDir, 'fb.json');
+
 
         fu.readJSON(fb_json_file, function (err, json){
             if (err) {
@@ -40,7 +42,7 @@ describe('app init', function (){
     });
 
     it('should create common directories', function (done) {
-        var dir = path.resolve(rootDir, 'common');
+        var dir = path.join(rootDir, 'common');
         fs.stat(dir, function (err, stat) {
             if (err) {
                 return done(err);
@@ -52,7 +54,7 @@ describe('app init', function (){
     });
 
     it('should create a "utils" directories', function (done) {
-        var dir = path.resolve(rootDir, 'utils');
+        var dir = path.join(rootDir, 'utils');
         fs.stat(dir, function (err, stat) {
             if (err) {
                 return done(err);
@@ -63,7 +65,7 @@ describe('app init', function (){
     });
 
     it('should create a "common" directories', function (done) {
-        var dir = path.resolve(rootDir, 'tools');
+        var dir = path.join(rootDir, 'tools');
 
         fs.stat(dir, function (err, stat) {
             if (err) {
@@ -73,25 +75,34 @@ describe('app init', function (){
             done();
         });
     });
+});
 
-    // it('should return an error when groupName is not valid', function (done) {
-    //     app.setGroup('-notvalid', 'page@1.0', function(err) {
-    //         err.should.be.ok;
-    //         done();
-    //     });
-    // });
-
-    // it('should return an error when pageName is not valid', function (done) {
-    //     app.setGroup('-notvalid', 'page-1.0', function(err) {
-    //         err.should.be.ok;
-    //         done();
-    //     });
-    // });
+describe("App Config", function () {
+    var app;
+    var rootDir ='sample-project';
+    before(function() {
+        app = new App({
+            rootDir: rootDir
+        });
+    });
+    it('should read config from fb.json', function (done) {
+        app.getConfig(function(err, cfg){
+            if (err) {
+                return done(err);
+            }
+            cfg.charset.should.eql('gbk', 'charset of project');
+            cfg.fbversion.should.eql('0.4.9', 'version of kissypie');
+            done();
+        });
+    });
+    it("should get the right charset", function () {
+        app.getCharset().should.eql('gbk');
+    });
 });
 
 describe('app#getCurrent', function () {
     var app;
-    var rootDir = path.resolve('sample-project');
+    var rootDir ='sample-project';
 
     before(function (){
     });
@@ -151,7 +162,7 @@ describe('app#getCurrent', function () {
 
 describe('App Group function', function () {
     var app;
-    var rootDir = path.resolve('sample-project');
+    var rootDir = 'sample-project';
 
     before(function (){
         app = new App({rootDir: rootDir});
@@ -215,7 +226,7 @@ describe('app#addPage test', function () {
     var app;
     var pageName = '_testaddpage';
     var version = '10.11';
-    var rootDir = path.resolve('./sample-project');
+    var rootDir = './sample-project';
     var page;
     var newPage =  pageName + '/' + version;
 
@@ -228,12 +239,12 @@ describe('app#addPage test', function () {
     });
 
     after(function (done) {
-        fu.rmTreeSync(path.resolve(rootDir, pageName));
+        fu.rmTreeSync(path.join(rootDir, pageName));
         done();
     });
     
     it('should create a version directory', function (done) {
-        fs.stat(path.resolve(rootDir, pageName), function(err, stat){
+        fs.stat(path.join(rootDir, pageName), function(err, stat){
             if (err) {
                 return done(err);
             }
@@ -243,7 +254,7 @@ describe('app#addPage test', function () {
     });
 
     it('should create a fb.page.json', function (done) {
-        fu.readJSON(path.resolve(rootDir, pageName, version, 'fb.page.json'), function(err, json){
+        fu.readJSON(path.join(rootDir, pageName, version, 'fb.page.json'), function(err, json){
             if (err) {
                 return done(err);
             }
@@ -257,10 +268,10 @@ describe('app#addPage test', function () {
 
 describe('app#update test', function() {
     var app;
-    var rootDir = path.resolve('sample-project');
+    var rootDir = 'sample-project';
 
     before(function (done) {
-        fu.rmTreeSync(path.resolve(rootDir, 'tools'));
+        fu.rmTreeSync(path.join(rootDir, 'tools'));
         app = new App({
             rootDir: rootDir
         });
@@ -269,13 +280,13 @@ describe('app#update test', function() {
     });
 
     it('should create the missing tools directory', function (done) {
-        fs.exists(path.resolve(rootDir, 'tools'), function (exist) {
+        fs.exists(path.join(rootDir, 'tools'), function (exist) {
             exist.should.be.true;
             done();
         });
     });
     it('should create the missing tools files', function (done) {
-        var file = path.resolve(rootDir, 'tools', 'web-client.sh');
+        var file = path.join(rootDir, 'tools', 'web-client.sh');
         fs.stat(file, function (err, stat) {
             if (err) {
                 return done(err);
@@ -294,7 +305,7 @@ describe('app#update test', function() {
 
 describe('app#getPages Test', function() {
     var app;
-    var rootDir = path.resolve('sample-project');
+    var rootDir = 'sample-project';
 
     before(function (done) {
         app = new App({
@@ -309,20 +320,33 @@ describe('app#getPages Test', function() {
                 return done(err);
             }
             pages.length.should.eql(5);
-            pages.forEach(function (page) {
-                should.exist(page.name);
-                should.exist(page.version);
-
+            pages.should.includeEql({
+                name: 'page1',
+                version: '1.0'
+            });
+            pages.should.includeEql({
+                name: 'page1',
+                version: '2.0'
+            });
+            pages.should.includeEql({
+                name: 'page_with_error',
+                version: '1.0'
+            });
+            pages.should.includeEql({
+                name: 'page_with_timestamp',
+                version: '1.0'
+            });
+            pages.should.includeEql({
+                name: 'page_with_timestamp',
+                version: '2.0'
             });
             done();
         });
     });
-
-
 });
 
 describe("build multi pages", function () {
-    var rootDir = path.resolve('sample-project');
+    var rootDir = 'sample-project';
     var app = new App({
         rootDir: rootDir
     });
@@ -332,7 +356,7 @@ describe("build multi pages", function () {
 
     after(function () {
         pubs.forEach(function (pub) {
-            fu.rmTreeSync(path.resolve(rootDir, pub));
+            fu.rmTreeSync(path.join(rootDir, pub));
         });
     });
 
@@ -340,7 +364,7 @@ describe("build multi pages", function () {
         app.buildPages(pages, timestamp, function (err) {
             should.not.exist(err);
             async.forEach(pubs, function (pub, callback) {
-                fs.existsSync(path.resolve(rootDir, pub)).should.be.true;
+                fs.existsSync(path.join(rootDir, pub)).should.be.true;
             });
             done();
         });
@@ -376,7 +400,7 @@ describe('APP#getGlobalConfig', function () {
 
 describe('test App#buildCommon', function () {
     var app;
-    var rootDir = path.resolve('sample-project');
+    var rootDir = 'sample-project';
 
     var files = [
         'index.js',
@@ -401,13 +425,13 @@ describe('test App#buildCommon', function () {
 
     after(function (done) {
         async.forEach(minFiles, function (file, callback){
-            fs.unlink(path.resolve(rootDir, 'common', file), callback);
+            fs.unlink(path.join(rootDir, 'common', file), callback);
         }, done);
     });
 
     it('should build files to -min', function(done) {
         async.map(minFiles, function (file, callback) {
-            fs.stat(path.resolve(rootDir, 'common', file), callback);
+            fs.stat(path.join(rootDir, 'common', file), callback);
         }, function (err, stats){
             if (err) {
                 return done(err);
