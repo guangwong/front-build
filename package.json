@@ -28,8 +28,9 @@
     "jade": "*",
     "express": "3.0.0beta7",
     "mkdirp": ">=0.3.4",
-    "module-compiler": "0.0.3",
-    "clean-css": "~0.6.0"
+    "module-compiler": ">=0.0.3",
+    "clean-css": "~0.6.0",
+    "colors": "~0.6.0-1"
   },
   "devDependencies": {
     "mocha": "~1.4.1",

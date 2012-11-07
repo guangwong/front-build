@@ -1,25 +1,33 @@
-KISSY.add(function (S, pageBuilder, Calendar, Reporter) {
+KISSY.add(function (S, pageBuilder, Calendar, Reporter, Timestamp, Analyze) {
     var $ = S.all;
 
     //buildCommon
-    S.ready(function () {
-        // buildPage.init();
-        var reporter = new Reporter('#reports');
+    function init (config) {
+        S.ready(function () {
+            // buildPage.init();
+            var reporter = new Reporter('#reports');
 
-        pageBuilder.on('report', function (ev) {
-            reporter.addReport(ev.reports);
+            pageBuilder.on('report', function (ev) {
+                reporter.addReport(ev.reports);
+            });
+
+            pageBuilder.on('error', function (ev) {
+                reporter.addError(ev.error);
+            });
+
+            Calendar.init({
+                triggers: 'input.timestamp-input'
+            });
+
+            Analyze(config.pageVersion, config.rootDir)
+
         });
+    }
 
-        pageBuilder.on('error', function (ev) {
-            reporter.addError(ev.error);
-        });
-
-        Calendar.init({
-            triggers: 'input.timestamp-input'
-        });
-
-    });
+    return {
+        init: init
+    };
     
 }, {
-    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp']
+    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp', './mods/analyze']
 });

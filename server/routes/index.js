@@ -116,22 +116,15 @@ exports.buildPages = function (req, res, next) {
             return callback(new Errow('pageVersion is not valid'));
         }
 
-        var fbpage = fbapp.getPage(p.name);
+        var fbpage = fbapp.getPage(p.name, p.version);
 
-        fbpage.setVersion(p.version, function (err) {
+        fbpage.build(timestamp, function (err, reports) {
             if (err) {
                 return callback(err);
             }
-
-            fbpage.build(timestamp, function (err, reports) {
-
-                if (err) {
-                    return callback(err);
-                }
-                callback(null);
-            });
-
+            callback(null);
         });
+
     }, function (err) {
 
         if (err) {
@@ -179,6 +172,7 @@ exports.buildPage = function (req, res, next) {
             });
             return;
         }
+
         res.send({
             reports: reports
         });
@@ -203,5 +197,16 @@ exports.addPage = function (req, res, next) {
             return next(err);
         }
         res.redirect('back');
+    });
+};
+
+exports.analyzePage = function (req, res, next) {
+    var app = req.fbapp;
+    var page = req.fbpage;
+    page.analyze(function (err, report) {
+        if (err) {
+            return next(err);
+        }
+        res.send(report);
     });
 };

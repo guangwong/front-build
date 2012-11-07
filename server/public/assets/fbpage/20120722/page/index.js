@@ -14,6 +14,8 @@ page/template/report-concat-tpl
 page/template/report-css-combo-tpl
 page/template/report-module-compiler-tpl
 page/mods/timestamp
+page/mods/analyze
+page/template/page-analyze-tpl
 page/index
 
 */
@@ -429,29 +431,64 @@ KISSY.add('page/mods/timestamp',function (S) {
         })
     })
 });
-KISSY.add('page/index',function (S, pageBuilder, Calendar, Reporter) {
+/**
+ * @fileOverview analyze for page
+ * @author qipbbn
+ */
+KISSY.add('page/mods/analyze',function (S, Template, tpl) {
+    var $ = S.all;
+    var tpl =  new Template(tpl.html);
+    function analyze(pageVersion, root) {
+        S.io({
+            url: '/analyze-page/' + pageVersion,
+            data: {
+                root: root
+            },
+            dataType: 'json',
+            success: function (data) {
+                $(tpl.render(data)).appendTo($('#reports'));
+            }
+        });
+    }
+
+    return analyze;
+}, {
+    requires: ['template', '../template/page-analyze-tpl']
+});
+KISSY.add('page/template/page-analyze-tpl',function(){
+    return {"html":"<div class=\"report\">\n    <div class=\"report-hd\">\n        模块依赖分析\n    </div>\n    <div class=\"report-bd\">\n        <div class=\"analyze-report\">\n            {{#each modules as mod}}\n            <h4>{{mod.name}}</h4>\n            <p>{{mod.file}}</p>\n            <ul>\n                {{#each mod.mods as submod}}\n                <li class=\"status-{{submod.status}}\">{{submod.name}}</li>\n                {{/each}}\n            </ul>\n            {{/each}}\n        </div>\n    </div>\n</div>\n"};
+});
+KISSY.add('page/index',function (S, pageBuilder, Calendar, Reporter, Timestamp, Analyze) {
     var $ = S.all;
 
     //buildCommon
-    S.ready(function () {
-        // buildPage.init();
-        var reporter = new Reporter('#reports');
+    function init (config) {
+        S.ready(function () {
+            // buildPage.init();
+            var reporter = new Reporter('#reports');
 
-        pageBuilder.on('report', function (ev) {
-            reporter.addReport(ev.reports);
+            pageBuilder.on('report', function (ev) {
+                reporter.addReport(ev.reports);
+            });
+
+            pageBuilder.on('error', function (ev) {
+                reporter.addError(ev.error);
+            });
+
+            Calendar.init({
+                triggers: 'input.timestamp-input'
+            });
+
+            Analyze(config.pageVersion, config.rootDir)
+
         });
+    }
 
-        pageBuilder.on('error', function (ev) {
-            reporter.addError(ev.error);
-        });
-
-        Calendar.init({
-            triggers: 'input.timestamp-input'
-        });
-
-    });
+    return {
+        init: init
+    };
     
 }, {
-    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp']
+    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp', './mods/analyze']
 });
 

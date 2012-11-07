@@ -1,0 +1,18 @@
+<div class="report">
+    <div class="report-hd">
+        模块依赖分析
+    </div>
+    <div class="report-bd">
+        <div class="analyze-report">
+            {{#each modules as mod}}
+            <h4>{{mod.name}}</h4>
+            <p>{{mod.file}}</p>
+            <ul>
+                {{#each mod.mods as submod}}
+                <li class="status-{{submod.status}}">{{submod.name}}</li>
+                {{/each}}
+            </ul>
+            {{/each}}
+        </div>
+    </div>
+</div>

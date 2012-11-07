@@ -1,0 +1,3 @@
+KISSY.add(function(){
+    return {"html":"<div class=\"report\">\n    <div class=\"report-hd\">\n        模块依赖分析\n    </div>\n    <div class=\"report-bd\">\n        <div class=\"analyze-report\">\n            {{#each modules as mod}}\n            <h4>{{mod.name}}</h4>\n            <p>{{mod.file}}</p>\n            <ul>\n                {{#each mod.mods as submod}}\n                <li class=\"status-{{submod.status}}\">{{submod.name}}</li>\n                {{/each}}\n            </ul>\n            {{/each}}\n        </div>\n    </div>\n</div>\n"};
+});

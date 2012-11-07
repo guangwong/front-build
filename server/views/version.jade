@@ -22,7 +22,6 @@ block content
               a.btn.fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
                 |Build            
               span.status
-
         #reports
         ul.timestamps
           - each ts in timestamps
@@ -35,4 +34,9 @@ block content
                   | &nbsp;
                   | #{ts.build.build_used_time}ms
   script
-    KISSY.use('page/index');
+    KISSY.use('page/index', function (S, Page) {
+      Page.init({
+        pageVersion: '#{page.name}@#{page.version}',
+        rootDir: '#{app.rootDir}'
+      });
+    });

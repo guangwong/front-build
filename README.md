@@ -2,23 +2,21 @@
 
 [![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
 
-
 ## 她是什么？
 
-KissyPie是面向前端的自动化开发环境。
+KissyPie 是面向前端的自动化开发环境。
 
-- 能帮助你初始化，检查，打包，压缩你的前端代码（包括css, js, less)；
-- 基于一套目录结构规范, 特点是：
+- 能帮助你初始化，检查，打包，压缩你的应用的前端代码（包括css, js, less)；
+- 基于一套目录结构约定, 特点是：
     - 模块化（Kissy Module Compile, Css-Combo，　Less　的引入, 提供高度模块化支持）
     - 可括展性 (将应用拆分为Page，　方便应用的扩展)
     - 适度灵活 (Common目录可直接引用)
     - 可复用,　应用的　Utils　目录提供跨Page的代码可复用，　CommonLib 提供跨应用的代码复用
     - 安全性，发布基于时间戳目录提供了与后端的解耦, 以Page为单位可隔离风险。
-- 友好的交互界面，　快速的打包
+- 友好的交互界面，支持命令行及图形界面
 
-是时候和Ant说再见了！
 
-[目录结构样例](https://github.com/maxbbn/front-build/tree/kissy-pie-m/sample-project)
+[目录结构样例] (https://github.com/maxbbn/front-build/tree/kissy-pie-m/sample-project)
 
 ## 适用场景
 
@@ -58,6 +56,7 @@ KissyPie是面向前端的自动化开发环境。
 ### 命令列表
 
 <table>
+
     <thead>
         <tr>
             <td>命令</td>
@@ -65,17 +64,20 @@ KissyPie是面向前端的自动化开发环境。
             <td>示例</td>
         </tr>
     </thead>
+
     <tbody>
         <tr>
             <td>init</td>
             <td>初始化一个应用， 请在应用Assets根目录下执行。</td>
             <td><code>ki init</code></td>
         </tr>
+
         <tr>
-            <td>update</td>
+            <td>update (up)</td>
             <td>更新或修复你的当前应用</td>
             <td><code>ki update</code></td>
         </tr>
+
         <tr>
             <td>web</td>
             <td>开启本地Web服务器，从浏览器访问 http://127.0.0.1:8765<br>
@@ -84,15 +86,17 @@ KissyPie是面向前端的自动化开发环境。
             </td>
             <td><code>ki web</code></td>
         </tr>
+
         <tr>
-            <td>add</td>
+            <td>add (a)</td>
             
-            <td>创建一个Page或版本</td>
+            <td>创建一个Page或版本 <br> (a)</td>
             
             <td><code>ki add home/1.0</code></td>
         </tr>
+
         <tr>
-            <td>build</td>
+            <td>build (b)</td>
             
             <td>打包一个版本到时间戳目录</td>
             
@@ -112,7 +116,20 @@ KissyPie是面向前端的自动化开发环境。
         </tr>
 
         <tr>
-            <td>group</td>
+                <td>analyze (fenxi, fx)</td>
+
+                <td>
+                    查看应用的模块信赖关系
+                </td>
+
+                <td>
+                    <code>ki analyze</code><br>
+                    设置一个 'front' 组<br><br>
+                </td>
+        </tr>
+
+        <tr>
+            <td>group (g)</td>
 
             <td>
                 将多个Page加入一个组可以方便的批量打包到一个时间戳。

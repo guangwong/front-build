@@ -79,6 +79,7 @@ if (argv._[0]) {
 			break;
         case 'analyze':
         case 'fenxi':
+        case 'fx':
             command = 'analyze';
             break;
 	}

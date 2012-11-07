@@ -74,6 +74,8 @@
   background: linear-gradient(to bottom, #4c839d 0%, #081c26 100%);
   /* W3C */
 
+  font-size: 20px;
+  color: #fff;
   position: relative;
   padding: 10px;
 }
@@ -155,6 +157,9 @@
 .plugin-file-list {
   list-style: none;
 }
+.analyze-report {
+  padding: 10px;
+}
 .timestamps {
   list-style: none;
   margin: 20px 0;
@@ -186,6 +191,9 @@
 .timestamp:hover {
   background: #ffff99;
 }
-li.status-ok {
+.status-ok {
   color: green;
+}
+.status-missing {
+  color: red;
 }
