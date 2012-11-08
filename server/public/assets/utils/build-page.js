@@ -1,121 +1,84 @@
 KISSY.add(function (S) {
     var $ = S.all;
 
-    function buildPages(url, data, callback) {
-
-        S.ajax({
-            url: url,
-            data: data,
-            cache: false,
-            dataType: 'json',
-            success: function (data) {
-                callback(null, data);
-            }
-        });
-    }
-
     function PageBuilder () {
         var self = this;
-        $('body').delegate('click', '.fb-build-page', function (ev) {
-            ev.preventDefault();
-            var $btn = $(ev.target);
-            var $buildblock = $btn.parent('.buildto-block');
-            var isGroupBuild = $btn.attr('data-group-build');
-            var $elStatus = $buildblock.one('.status');
-            var $input = $buildblock.one('input');
-            $elStatus.html('building...');
-            var pages = [];
-            var timestamp = $input.val();
-
-            if (isGroupBuild) {
-                $('input.j-version-checkbox').each(function ($input) {
-                    if ($input.prop('checked') && $input.val()) {
-                        pages.push($input.val());
-                    }
-                });
-
-                self.fire('group-build', {
-                    pages: pages,
-                    timestamp: timestamp
-                });
-
-                buildPages($btn.attr('href'),
-                    {
-                        timestamp: timestamp,
-                        pages: pages.join(',')
-                    },
-
-                    function (err, data) {
-                        if (err) {
-                            return S.error(err);
-                        }
-
-                        if (data.err) {
-                            var err = data.err;
-
-                            $elStatus
-                                .html('Error:' + err.message);
-
-                            self.fire('error', {
-                                error: data.err
-                            });
-
-                            return;
-                        }
-
-                        $elStatus.html('success!');
-
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000);
-                    });
-
-            } else {
-                buildPages($btn.attr('href'), 
-                    {
-                        timestamp: timestamp
-                    },
-                    function (err, data) {
-                        if (err) {
-                            return S.error(err);
-                        }
-
-                        if (data.err) {
-                            var err = data.err;
-
-                            $elStatus
-                                .html('Error:' + err.message);
-
-                            self.fire('error', {
-                                error: data.err
-                            });
-
-                            return;
-                        }
-
-                        $elStatus.html('success!');
-
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000);
-
-                        if (data.reports) {
-                            self.fire('report', {
-                                reports: data.reports
-                            });
-                        }
-                    });
-                if ($btn.attr('data-page')) {
-                    pages.push($btn.attr('data-page'));
-                }
-            }
-
-
-            
-        });
+        PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base);
+    S.extend(PageBuilder, S.Base, {
+        /**
+         * exec build pages
+         * @param pages {Array|String} pages to build
+         * @param timestamp {String} timestamp build to
+         */
+        build: function(pages, timestamp) {
+            var self = this;
+            if (!pages || !pages.length) {
+                self.fire(PageBuilder.EV.ERROR, {
+                    message: '请指定Page'
+                });
+                return;
+            }
 
-    return new PageBuilder();
+            if (!S.trim(timestamp)) {
+                self.fire(PageBuilder.EV.ERROR, {
+                    message: '请指定时间戳'
+                });
+                return;
+            }
+
+            if (S.isString(pages)) {
+                pages = pages.split(',');
+            }
+
+            S.ajax({
+                url: self.get('url'),
+                data: {
+                    timestamp: timestamp,
+                    pages: pages.join(','),
+                    root: self.get('rootDir')
+                },
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.err) {
+                        self.fire(PageBuilder.EV.BUILD_ERROR, data.err);
+                        return;
+                    }
+
+                    self.fire(PageBuilder.EV.SUCCESS, {
+                        pages: pages,
+                        timestamp: timestamp
+                    });
+
+                    if (data.reports) {
+                        self.fire(PageBuilder.EV.REPORT, {
+                            reports: data.reports
+                        });
+                    }
+                }
+            });
+
+        }
+    }, {
+        EV: {
+            GROUP_BUILD: 'group-build',
+            ERROR: 'error',
+            REPORT: 'report',
+            SUCCESS: 'success',
+            BUILD_ERROR: 'build-error'
+        },
+        ATTRS : {
+            url: {
+                value: '/build-pages'
+            },
+            rootDir: {
+                value: ''
+            }
+        }
+    });
+
+    return PageBuilder;
 });

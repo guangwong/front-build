@@ -29,14 +29,14 @@ block content
                         input.j-version-checkbox.version-checkbox(type='checkbox',value='#{page.name}/#{page.version}')
 
       .span4
-        .form.buildto-block
+        .buildto-block
           .input-prepend.input-append
             span.add-on
               i.icon-calendar
-            input#batchbuild-timestamp.input-small.timestamp-input(type='text')
-            button.btn.fb-build-page(href=getUrl('/build-pages', {root: app.rootDir}), data-group-build='true')
+            input#batch-build-timestamp.input-small.timestamp-input(type='text')
+            button#batch-build.btn
               |Build
-          span.status
+          div#batch-build-status.status
           - if (app.config.groups)
             h3 groups
             ul.groups.nav.nav-tabs.nav-stacked
@@ -55,15 +55,9 @@ block content
             input.input-small(type='text', name='version', value='1.0', title='version (eg. 1.0)')
             |&nbsp;&nbsp;
             button.j-group-build.btn(type='submit') Add Page
-  input#rootDir(value=app.rootDir,style='display:none',type='hidden')
   script.
     KISSY.use('page/index', function (S, Page) {
-      var el = S.one('#rootDir');
-
-      var rootDir = el?el.val():'';
-
-      if (Page.appHistory && rootDir) {
-        Page.appHistory.push(rootDir);
-      }
-
+      Page.init({
+        rootDir: '#{app.rootDir}'
+      });
     });

@@ -60,6 +60,7 @@ KISSY.add(function (S, Template,
         },
 
         appendReportEl: function (el) {
+            el.hide();
             var self = this;
             var reports = self.$el.all('.report');
 

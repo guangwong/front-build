@@ -26,9 +26,14 @@ KissyPie 是面向前端的自动化开发环境。
 ## 快速开始
 
 ### 安装 Kissy Pie
-
+#### Npm 安装
 1. 首先安装或升级 Node.js (0.8.x) http://nodejs.org/
 2. 命令行执行 `npm install kissy-pie -g`　安装
+3. done!
+
+#### 源码安装
+1. `git checkout https://github.com/maxbbn/front-build.git` 检出代码库
+2. `git install -g`
 3. done!
 
 ### 使用 Kissy Pie

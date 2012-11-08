@@ -3,6 +3,7 @@ combined files :
 
 utils/build-page
 utils/calendar-init
+utils/local-cache
 page/mods/reporter
 page/template/report-fb-tpl
 page/template/report-wrap-tpl
@@ -14,7 +15,7 @@ page/template/report-concat-tpl
 page/template/report-css-combo-tpl
 page/template/report-module-compiler-tpl
 page/mods/timestamp
-page/mods/analyze
+page/mods/analyzer
 page/template/page-analyze-tpl
 page/index
 
@@ -22,124 +23,88 @@ page/index
 KISSY.add('utils/build-page',function (S) {
     var $ = S.all;
 
-    function buildPages(url, data, callback) {
-
-        S.ajax({
-            url: url,
-            data: data,
-            cache: false,
-            dataType: 'json',
-            success: function (data) {
-                callback(null, data);
-            }
-        });
-    }
-
     function PageBuilder () {
         var self = this;
-        $('body').delegate('click', '.fb-build-page', function (ev) {
-            ev.preventDefault();
-            var $btn = $(ev.target);
-            var $buildblock = $btn.parent('.buildto-block');
-            var isGroupBuild = $btn.attr('data-group-build');
-            var $elStatus = $buildblock.one('.status');
-            var $input = $buildblock.one('input');
-            $elStatus.html('building...');
-            var pages = [];
-            var timestamp = $input.val();
-
-            if (isGroupBuild) {
-                $('input.j-version-checkbox').each(function ($input) {
-                    if ($input.prop('checked') && $input.val()) {
-                        pages.push($input.val());
-                    }
-                });
-
-                self.fire('group-build', {
-                    pages: pages,
-                    timestamp: timestamp
-                });
-
-                buildPages($btn.attr('href'),
-                    {
-                        timestamp: timestamp,
-                        pages: pages.join(',')
-                    },
-
-                    function (err, data) {
-                        if (err) {
-                            return S.error(err);
-                        }
-
-                        if (data.err) {
-                            var err = data.err;
-
-                            $elStatus
-                                .html('Error:' + err.message);
-
-                            self.fire('error', {
-                                error: data.err
-                            });
-
-                            return;
-                        }
-
-                        $elStatus.html('success!');
-
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000);
-                    });
-
-            } else {
-                buildPages($btn.attr('href'), 
-                    {
-                        timestamp: timestamp
-                    },
-                    function (err, data) {
-                        if (err) {
-                            return S.error(err);
-                        }
-
-                        if (data.err) {
-                            var err = data.err;
-
-                            $elStatus
-                                .html('Error:' + err.message);
-
-                            self.fire('error', {
-                                error: data.err
-                            });
-
-                            return;
-                        }
-
-                        $elStatus.html('success!');
-
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000);
-
-                        if (data.reports) {
-                            self.fire('report', {
-                                reports: data.reports
-                            });
-                        }
-                    });
-                if ($btn.attr('data-page')) {
-                    pages.push($btn.attr('data-page'));
-                }
-            }
-
-
-            
-        });
+        PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base);
+    S.extend(PageBuilder, S.Base, {
+        /**
+         * exec build pages
+         * @param pages {Array|String} pages to build
+         * @param timestamp {String} timestamp build to
+         */
+        build: function(pages, timestamp) {
+            var self = this;
+            if (!pages || !pages.length) {
+                self.fire(PageBuilder.EV.ERROR, {
+                    message: '请指定Page'
+                });
+                return;
+            }
 
-    return new PageBuilder();
+            if (!S.trim(timestamp)) {
+                self.fire(PageBuilder.EV.ERROR, {
+                    message: '请指定时间戳'
+                });
+                return;
+            }
+
+            if (S.isString(pages)) {
+                pages = pages.split(',');
+            }
+
+            S.ajax({
+                url: self.get('url'),
+                data: {
+                    timestamp: timestamp,
+                    pages: pages.join(','),
+                    root: self.get('rootDir')
+                },
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.err) {
+                        self.fire(PageBuilder.EV.BUILD_ERROR, data.err);
+                        return;
+                    }
+
+                    self.fire(PageBuilder.EV.SUCCESS, {
+                        pages: pages,
+                        timestamp: timestamp
+                    });
+
+                    if (data.reports) {
+                        self.fire(PageBuilder.EV.REPORT, {
+                            reports: data.reports
+                        });
+                    }
+                }
+            });
+
+        }
+    }, {
+        EV: {
+            GROUP_BUILD: 'group-build',
+            ERROR: 'error',
+            REPORT: 'report',
+            SUCCESS: 'success',
+            BUILD_ERROR: 'build-error'
+        },
+        ATTRS : {
+            url: {
+                value: '/build-pages'
+            },
+            rootDir: {
+                value: ''
+            }
+        }
+    });
+
+    return PageBuilder;
 });
+
 KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
     var $ = S.all;
     return {
@@ -211,6 +176,109 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
 }, {
     requires: ['calendar', 'overlay', 'calendar/assets/base.css']
 });
+KISSY.add('utils/local-cache',function (S) {
+    /**
+     * Local Storage
+     * @param key
+     * @constructor
+     */
+    function PageCache (key) {
+        var self = this;
+        self.KEY = key;
+    }
+
+    S.augment(PageCache, {
+        set: function(k, v) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            obj[k] = v;
+            self.save();
+        },
+
+        save: function() {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            localStorage.setItem(KEY, JSON.stringify(obj));
+        },
+
+        get: function(k) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            return obj[k];
+        },
+
+        getAll: function() {
+            var self = this;
+            var KEY = self.KEY;
+            if (self._cache) {
+                return self._cache;
+            }
+            var str = localStorage.getItem(KEY);
+            if (!str) {
+                self._cache = {};
+            } else {
+                self._cache = JSON.parse(str) || {};
+            }
+            return self.getAll();
+        }
+    });
+
+    return PageCache;
+});KISSY.add(function (S) {
+    /**
+     * Local Storage
+     * @param key
+     * @constructor
+     */
+    function PageCache (key) {
+        var self = this;
+        self.KEY = key;
+    }
+
+    S.augment(PageCache, {
+        set: function(k, v) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            obj[k] = v;
+            self.save();
+        },
+
+        save: function() {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            localStorage.setItem(KEY, JSON.stringify(obj));
+        },
+
+        get: function(k) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            return obj[k];
+        },
+
+        getAll: function() {
+            var self = this;
+            var KEY = self.KEY;
+            if (self._cache) {
+                return self._cache;
+            }
+            var str = localStorage.getItem(KEY);
+            if (!str) {
+                self._cache = {};
+            } else {
+                self._cache = JSON.parse(str) || {};
+            }
+            return self.getAll();
+        }
+    });
+
+    return PageCache;
+});
 KISSY.add('page/mods/reporter',function (S, Template,
     fb_tpl,
     wrap_tpl,
@@ -273,6 +341,7 @@ KISSY.add('page/mods/reporter',function (S, Template,
         },
 
         appendReportEl: function (el) {
+            el.hide();
             var self = this;
             var reports = self.$el.all('.report');
 
@@ -435,51 +504,123 @@ KISSY.add('page/mods/timestamp',function (S) {
  * @fileOverview analyze for page
  * @author qipbbn
  */
-KISSY.add('page/mods/analyze',function (S, Template, tpl) {
+KISSY.add('page/mods/analyzer',function (S, Template, tpl) {
     var $ = S.all;
-    var tpl =  new Template(tpl.html);
-    function analyze(pageVersion, root) {
-        S.io({
-            url: '/analyze-page/' + pageVersion,
-            data: {
-                root: root
-            },
-            dataType: 'json',
-            success: function (data) {
-                $(tpl.render(data)).appendTo($('#reports'));
-            }
-        });
+
+    /**
+     *
+     * @param config
+     * @param config.rootDir
+     * @param config.pageVersion
+     * @constructor
+     */
+    function Analyzer(config) {
+        var self = this;
+        Analyzer.superclass.constructor.apply(self, arguments);
+        self.tpl =  new Template(tpl.html);
     }
 
-    return analyze;
+    S.extend(Analyzer, S.Base, {
+        /**
+         * analyze a page
+         * @return {Promise}
+         */
+        analyze: function () {
+            var self = this;
+            var def = new S.Defer();
+            S.io({
+                url: '/analyze-page/' + self.get('pageVersion'),
+                data: {
+                    root: self.get('rootDir')
+                },
+                dataType: 'json',
+                success: function (data) {
+                    def.resolve({
+                        html: self.tpl.render(data)
+                    });
+                },
+                error: function () {
+                    def.reject('net work error');
+                }
+            });
+            return def.promise;
+        }
+    });
+
+    return Analyzer;
 }, {
     requires: ['template', '../template/page-analyze-tpl']
 });
 KISSY.add('page/template/page-analyze-tpl',function(){
-    return {"html":"<div class=\"report\">\n    <div class=\"report-hd\">\n        模块依赖分析\n    </div>\n    <div class=\"report-bd\">\n        <div class=\"analyze-report\">\n            <table class='table'>\n                <thead>\n                <tr>\n                    <th>入口模块</th>\n                    <th>子模块</th>\n                </tr>\n                </thead>\n                <tbody>\n                    {{#each modules as mod}}\n                    <tr>\n\n                        <td><a target='missingIframe' href=\"/openfile?path={{mod.file}}\">{{mod.name}}</a></td>\n                        <td>\n                            <ul>\n                                {{#each mod.mods as submod}}\n                                <li class=\"status-{{submod.status}}\">{{submod.name}}</li>\n                                {{/each}}\n                            </ul>\n                        </td>\n                    </tr>\n                    {{/each}}\n\n                </tbody>\n            </table>\n        </div>\n    </div>\n</div>\n"};
+    return {"html":"<div class=\"report\">\n    <div class=\"report-hd\">\n        模块依赖分析\n    </div>\n    <div class=\"report-bd\">\n        <div class=\"analyze-report\">\n            {{#if modules.length}}\n                <table class='table'>\n                    <thead>\n                    <tr>\n                        <th>入口模块</th>\n                        <th>子模块</th>\n                    </tr>\n                    </thead>\n                    <tbody>\n                    {{#each modules as mod}}\n                    <tr>\n                        <td><a target='hiddenIframe' href=\"/openfile?path={{mod.file}}\">{{mod.name}}</a></td>\n                        <td>\n                            {{#if mod.mods.length}}\n                            <ul>\n                                {{#each mod.mods as submod}}\n                                {{#if submod.status === 'ok'}}\n                                <li class=\"status-ok\"><a target='hiddenIframe' href=\"/openfile?path={{submod.file}}\">{{submod.name}}</a></li>\n                                {{#else}}\n\n                                <li class=\"status-warning\">{{submod.name}} <span class=\"label label-warning\">{{submod.status}}</span></li>\n                                {{/if}}\n\n                                {{/each}}\n                            </ul>\n                            {{#else}}\n                            没有子模块\n                            {{/if}}\n                        </td>\n                    </tr>\n                    {{/each}}\n\n                    </tbody>\n                </table>\n            {{#else}}\n                没有找到入口模块\n            {{/if}}\n        </div>\n    </div>\n</div>\n"};
 });
-KISSY.add('page/index',function (S, pageBuilder, Calendar, Reporter, Timestamp, Analyze) {
+KISSY.add('page/index',function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, Analyzer) {
     var $ = S.all;
 
-    //buildCommon
+    function initAnalyze(config, reporter) {
+        var analyzer = new Analyzer(config);
+        $('#analyze-modules').on('click', function(){
+            analyzer.analyze().then(function (data) {
+                reporter.appendReportEl($(data.html));
+            });
+        });
+    }
+
+    /**
+     * Page init script
+     * @param config obj of config
+     * @param config.rootDir App Root
+     * @param config.pageVersion App Root
+     */
     function init (config) {
+
         S.ready(function () {
-            // buildPage.init();
+            var pageCache = new LocalCache('page-cache:' + config.rootDir);
+
+            var pb = new PageBuilder({
+                rootDir: config.rootDir
+            });
+
+            var btn =  $('#fb-build-page');
+            var timestamp =  $('#fb-build-timestamp');
+            var $status = $('#fb-build-status');
+            btn.on('click', function(ev) {
+                ev.preventDefault();
+                $status.html('building...');
+                pb.build(config.pageVersion, timestamp.val());
+            });
+
+            timestamp.val(pageCache.get('timestamp'));
+
             var reporter = new Reporter('#reports');
 
-            pageBuilder.on('report', function (ev) {
-                reporter.addReport(ev.reports);
-            });
+            pb.on('success', function (ev) {
+                    pageCache.set('timestamp', ev.timestamp);
+                    $status.html('success!').show();
+                    setTimeout(function () {
+                        $status.hide();
+                    }, 2000);
+                })
+                .on('error', function (error) {
+                    $status.html("error: " + error.message).show();
+                })
+                .on('report', function (ev) {
 
-            pageBuilder.on('error', function (ev) {
-                reporter.addError(ev.error);
-            });
+                    S.each(ev.reports, function (report) {
+                        reporter.addReport(report);
+                    });
+
+                })
+                .on('build-error', function (error) {
+                    reporter.addError(error);
+                });
+            initAnalyze(config, reporter);
 
             Calendar.init({
                 triggers: 'input.timestamp-input'
             });
 
-            Analyze(config.pageVersion, config.rootDir)
+
 
         });
     }
@@ -488,6 +629,12 @@ KISSY.add('page/index',function (S, pageBuilder, Calendar, Reporter, Timestamp, 
         init: init
     };
 }, {
-    requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp', './mods/analyze']
+    requires: [
+        'utils/build-page',
+        'utils/calendar-init',
+        'utils/local-cache',
+        './mods/reporter',
+        './mods/timestamp',
+        './mods/analyzer']
 });
 

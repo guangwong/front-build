@@ -5,23 +5,27 @@ block content
     .row-fluid
       .span12
         .fb-title
-          h1 
+          h1
             a(href='/app?root=#{app.rootDir}')= app.name
-            |/ 
+            |/
             span= page.name
             |/
             sapn= page.version
           p.path= page.rootDir
 
           .buildto.form-inline.buildto-version.buildto-block
+            button.btn#analyze-modules
+              i.icon-search
+              | 分析
+            |&nbsp;
             .input-prepend.input-append
               span.add-on
                 i.icon-calendar
-              input.input-small.timestamp-input(type='text')
+              input#fb-build-timestamp.input-small.timestamp-input(type='text')
               |&nbsp;
-              a.btn.fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
-                |Build            
-              span.status
+              a.btn#fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
+                |Build
+            span.status#fb-build-status
         #reports
         ul.timestamps
           - each ts in timestamps
@@ -33,7 +37,7 @@ block content
                   i.icon-time(title='用时')
                   | &nbsp;
                   | #{ts.build.build_used_time}ms
-  iframe#missingIframe(src='about:blank', style='width:0;height:0;position:absolute;left:0;top:0;');
+  iframe#hiddenIframe(name='hiddenIframe',src='about:blank', style='width:0;height:0;position:absolute;left:0;top:0;');
   script
     KISSY.use('page/index', function (S, Page) {
       Page.init({

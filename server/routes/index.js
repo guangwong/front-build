@@ -103,7 +103,7 @@ exports.buildPages = function (req, res, next) {
 
     pages = pages.split(',');
 
-    async.forEach(pages, function (page, callback) {
+    async.map(pages, function (page, callback) {
         var fbapp = req.fbapp;
 
         if (!fbapp) {
@@ -122,10 +122,10 @@ exports.buildPages = function (req, res, next) {
             if (err) {
                 return callback(err);
             }
-            callback(null);
+            callback(null, reports);
         });
 
-    }, function (err) {
+    }, function (err, reports) {
 
         if (err) {
             res.send({
@@ -138,43 +138,9 @@ exports.buildPages = function (req, res, next) {
             return;
         }
         res.send({
-            err: null
-        });
-    });
-
-};
-
-exports.buildPage = function (req, res, next) {
-    var fbapp = req.fbapp;
-
-    if (!fbapp) {
-        return next(new Error('no app'));
-    }
-
-
-
-    var fbpage = req.fbpage;
-
-    if (!fbpage) {
-        return next(new Error('no page'));
-    }
-
-    var timestamp = req.param('timestamp');
-
-    fbpage.build(timestamp, function (err, reports) {
-        if (err) {
-            res.send({
-                err: {
-                    message: err.message,
-                    text: JSON.stringify(err, null, 2),
-                    stack: err.stack
-                }
-            });
-            return;
-        }
-
-        res.send({
-            reports: reports
+            err: null,
+            reports: reports,
+            pages: pages
         });
     });
 

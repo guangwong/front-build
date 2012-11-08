@@ -5,7 +5,7 @@ utils/build-page
 utils/build-common
 utils/calendar-init
 utils/app-history
-page/mods/app-cache
+utils/local-cache
 page/mods/group-select
 page/index
 
@@ -13,124 +13,88 @@ page/index
 KISSY.add('utils/build-page',function (S) {
     var $ = S.all;
 
-    function buildPages(url, data, callback) {
-
-        S.ajax({
-            url: url,
-            data: data,
-            cache: false,
-            dataType: 'json',
-            success: function (data) {
-                callback(null, data);
-            }
-        });
-    }
-
     function PageBuilder () {
         var self = this;
-        $('body').delegate('click', '.fb-build-page', function (ev) {
-            ev.preventDefault();
-            var $btn = $(ev.target);
-            var $buildblock = $btn.parent('.buildto-block');
-            var isGroupBuild = $btn.attr('data-group-build');
-            var $elStatus = $buildblock.one('.status');
-            var $input = $buildblock.one('input');
-            $elStatus.html('building...');
-            var pages = [];
-            var timestamp = $input.val();
-
-            if (isGroupBuild) {
-                $('input.j-version-checkbox').each(function ($input) {
-                    if ($input.prop('checked') && $input.val()) {
-                        pages.push($input.val());
-                    }
-                });
-
-                self.fire('group-build', {
-                    pages: pages,
-                    timestamp: timestamp
-                });
-
-                buildPages($btn.attr('href'),
-                    {
-                        timestamp: timestamp,
-                        pages: pages.join(',')
-                    },
-
-                    function (err, data) {
-                        if (err) {
-                            return S.error(err);
-                        }
-
-                        if (data.err) {
-                            var err = data.err;
-
-                            $elStatus
-                                .html('Error:' + err.message);
-
-                            self.fire('error', {
-                                error: data.err
-                            });
-
-                            return;
-                        }
-
-                        $elStatus.html('success!');
-
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000);
-                    });
-
-            } else {
-                buildPages($btn.attr('href'), 
-                    {
-                        timestamp: timestamp
-                    },
-                    function (err, data) {
-                        if (err) {
-                            return S.error(err);
-                        }
-
-                        if (data.err) {
-                            var err = data.err;
-
-                            $elStatus
-                                .html('Error:' + err.message);
-
-                            self.fire('error', {
-                                error: data.err
-                            });
-
-                            return;
-                        }
-
-                        $elStatus.html('success!');
-
-                        setTimeout(function () {
-                            $elStatus.html('')
-                        }, 2000);
-
-                        if (data.reports) {
-                            self.fire('report', {
-                                reports: data.reports
-                            });
-                        }
-                    });
-                if ($btn.attr('data-page')) {
-                    pages.push($btn.attr('data-page'));
-                }
-            }
-
-
-            
-        });
+        PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base);
+    S.extend(PageBuilder, S.Base, {
+        /**
+         * exec build pages
+         * @param pages {Array|String} pages to build
+         * @param timestamp {String} timestamp build to
+         */
+        build: function(pages, timestamp) {
+            var self = this;
+            if (!pages || !pages.length) {
+                self.fire(PageBuilder.EV.ERROR, {
+                    message: '请指定Page'
+                });
+                return;
+            }
 
-    return new PageBuilder();
+            if (!S.trim(timestamp)) {
+                self.fire(PageBuilder.EV.ERROR, {
+                    message: '请指定时间戳'
+                });
+                return;
+            }
+
+            if (S.isString(pages)) {
+                pages = pages.split(',');
+            }
+
+            S.ajax({
+                url: self.get('url'),
+                data: {
+                    timestamp: timestamp,
+                    pages: pages.join(','),
+                    root: self.get('rootDir')
+                },
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.err) {
+                        self.fire(PageBuilder.EV.BUILD_ERROR, data.err);
+                        return;
+                    }
+
+                    self.fire(PageBuilder.EV.SUCCESS, {
+                        pages: pages,
+                        timestamp: timestamp
+                    });
+
+                    if (data.reports) {
+                        self.fire(PageBuilder.EV.REPORT, {
+                            reports: data.reports
+                        });
+                    }
+                }
+            });
+
+        }
+    }, {
+        EV: {
+            GROUP_BUILD: 'group-build',
+            ERROR: 'error',
+            REPORT: 'report',
+            SUCCESS: 'success',
+            BUILD_ERROR: 'build-error'
+        },
+        ATTRS : {
+            url: {
+                value: '/build-pages'
+            },
+            rootDir: {
+                value: ''
+            }
+        }
+    });
+
+    return PageBuilder;
 });
+
 KISSY.add('utils/build-common',function (S) {
     var $ = S.all;
 
@@ -289,17 +253,18 @@ KISSY.add('utils/app-history',function (S) {
         }
     }
 });
-KISSY.add('page/mods/app-cache',function (S) {
-    function AppCache (root) {
-        if (!root || typeof root !== 'string') {
-            throw new Error('NoApp');
-        }
+KISSY.add('utils/local-cache',function (S) {
+    /**
+     * Local Storage
+     * @param key
+     * @constructor
+     */
+    function PageCache (key) {
         var self = this;
-        self.root = root;
-        self.KEY = 'app-cache:' + self.root;
+        self.KEY = key;
     }
 
-    S.augment(AppCache, {
+    S.augment(PageCache, {
         set: function(k, v) {
             var self = this;
             var KEY = self.KEY;
@@ -338,7 +303,58 @@ KISSY.add('page/mods/app-cache',function (S) {
         }
     });
 
-    return AppCache;
+    return PageCache;
+});KISSY.add(function (S) {
+    /**
+     * Local Storage
+     * @param key
+     * @constructor
+     */
+    function PageCache (key) {
+        var self = this;
+        self.KEY = key;
+    }
+
+    S.augment(PageCache, {
+        set: function(k, v) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            obj[k] = v;
+            self.save();
+        },
+
+        save: function() {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            localStorage.setItem(KEY, JSON.stringify(obj));
+        },
+
+        get: function(k) {
+            var self = this;
+            var KEY = self.KEY;
+            var obj = self.getAll();
+            return obj[k];
+        },
+
+        getAll: function() {
+            var self = this;
+            var KEY = self.KEY;
+            if (self._cache) {
+                return self._cache;
+            }
+            var str = localStorage.getItem(KEY);
+            if (!str) {
+                self._cache = {};
+            } else {
+                self._cache = JSON.parse(str) || {};
+            }
+            return self.getAll();
+        }
+    });
+
+    return PageCache;
 });
 KISSY.add('page/mods/group-select',function (S) {
     var $ = S.all;
@@ -377,44 +393,96 @@ KISSY.add('page/mods/group-select',function (S) {
             })
     });
 });
-KISSY.add('page/index',function (S, pageBuilder, buildCommon, Calendar, appHistory, AppCache) {
+KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
     var $ = S.all;
-    var search = location.search.substr(1);
-    var query = S.unparam(search);
-    var root = query.root;
 
-    var appCache = new AppCache(root);
-    S.ready(function () {
-        Calendar.init({
-            triggers: 'input.timestamp-input'
-        });
-        buildCommon.init();
-        
-        pageBuilder.on('group-build', function(ev) {
-            appCache.set('timestamp', ev.timestamp);
-            appCache.set('pages', ev.pages);
-        });
+    function restoreConfig(appCache) {
 
-        $('#batchbuild-timestamp').val(appCache.get('timestamp'));
-        var cachepages = appCache.get('pages');
-        if (cachepages) {
-            $('input.j-version-checkbox').filter(function (el) {
-                return S.indexOf(el.value, cachepages) > -1
-            }).prop('checked', true);
+        $('#batch-build-timestamp').val(appCache.get('timestamp'));
+
+        var pages = appCache.get('pages');
+        if (pages) {
+            $('input.j-version-checkbox')
+                .filter(function (el) {
+                    return S.indexOf(el.value, pages) > -1;
+                })
+                .prop('checked', true);
         }
-    });
+    }
+
+    /**
+     * init the builder
+     * @param config
+     * @param config.rootDir
+     * @param appCache appCache
+     */
+    function initBuilder (config, appCache) {
+        var pageBuilder = new PageBuilder({
+            rootDir: config.rootDir
+        });
+        var $timestamp = $('#batch-build-timestamp');
+        var $status = $('#batch-build-status')
+        var $btn = $('#batch-build');
+        $btn
+            .on('click', function (ev) {
+                ev.preventDefault();
+                var timestamp = $timestamp.val();
+                var pages = [];
+                $('input.j-version-checkbox').each(function ($input) {
+                    if ($input.prop('checked') && $input.val()) {
+                        pages.push($input.val());
+                    }
+                });
+                pageBuilder.build(pages, timestamp);
+            });
+
+        pageBuilder
+            .on('error', function (err) {
+                $status.html(err.message).show();
+            })
+            .on('success', function (ev) {
+                appCache.set('timestamp', ev.timestamp);
+                appCache.set('pages', ev.pages);
+                $status.html('success');
+                setTimeout(function () {
+                    $status.hide();
+                }, 1500);
+            })
+    }
+    /**
+     * app page init
+     * @param config
+     * @param config.rootDir
+     */
+    function init (config) {
+        var appCache = new localCache('app-cache:' + config.rootDir);
+
+        S.ready(function () {
+            Calendar.init({
+                triggers: 'input.timestamp-input'
+            });
+            buildCommon.init();
+
+            initBuilder(config, appCache);
+
+            appHistory.push(config.rootDir);
+
+            restoreConfig(appCache);
+        });
+    }
+
 
     return {
-        appHistory: appHistory
+        init: init
     }
-    
+
 }, {
     requires: [
         'utils/build-page',
         'utils/build-common',
         'utils/calendar-init',
         'utils/app-history',
-        './mods/app-cache',
+        'utils/local-cache',
         './mods/group-select'
     ]
 });
