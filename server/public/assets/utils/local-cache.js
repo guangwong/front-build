@@ -1,14 +1,19 @@
 KISSY.add(function (S) {
-    function AppCache (root) {
+    /**
+     * Local Storage
+     * @param key
+     * @constructor
+     */
+    function PageCache (key) {
         if (!root || typeof root !== 'string') {
             throw new Error('NoApp');
         }
         var self = this;
         self.root = root;
-        self.KEY = 'app-cache:' + self.root;
+        self.KEY = key;
     }
 
-    S.augment(AppCache, {
+    S.augment(PageCache, {
         set: function(k, v) {
             var self = this;
             var KEY = self.KEY;
@@ -47,5 +52,5 @@ KISSY.add(function (S) {
         }
     });
 
-    return AppCache;
+    return PageCache;
 });
