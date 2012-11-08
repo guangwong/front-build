@@ -67,6 +67,7 @@ app.get('/build-pages', routes.buildPages);
 app.get('/build-common', routes.buildCommon);
 app.post('/build-common', routes.buildCommon);
 app.post('/add-page', routes.addPage);
+app.get('/openfile', routes.openFile);
 app.get('/pid', function (req, res) {
     res.end(process.pid.toString());
 });

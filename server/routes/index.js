@@ -210,3 +210,16 @@ exports.analyzePage = function (req, res, next) {
         res.send(report);
     });
 };
+
+exports.openFile = function(req, res, next) {
+    var p = req.query.path;
+    var commandOpen = require('../../lib/command-open');
+
+    commandOpen(p, function(err) {
+        if (err) {
+            res.end('can not open');
+            return;
+        }
+        res.end('open success!');
+    });
+};

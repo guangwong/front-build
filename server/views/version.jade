@@ -33,6 +33,7 @@ block content
                   i.icon-time(title='用时')
                   | &nbsp;
                   | #{ts.build.build_used_time}ms
+  iframe#missingIframe(src='about:blank', style='width:0;height:0;position:absolute;left:0;top:0;');
   script
     KISSY.use('page/index', function (S, Page) {
       Page.init({

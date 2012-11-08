@@ -27,7 +27,6 @@ KISSY.add(function (S, pageBuilder, Calendar, Reporter, Timestamp, Analyze) {
     return {
         init: init
     };
-    
 }, {
     requires: ['utils/build-page', 'utils/calendar-init', './mods/reporter', './mods/timestamp', './mods/analyze']
 });

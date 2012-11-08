@@ -160,6 +160,10 @@
 .analyze-report {
   padding: 10px;
 }
+.analyze-report ul {
+  list-style: none;
+  margin: 0;
+}
 .timestamps {
   list-style: none;
   margin: 20px 0;
@@ -192,7 +196,7 @@
   background: #ffff99;
 }
 .status-ok {
-  color: green;
+  color: #00bb00;
 }
 .status-missing {
   color: red;

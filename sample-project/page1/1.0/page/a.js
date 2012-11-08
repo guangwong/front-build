@@ -1,5 +1,5 @@
 KISSY.add(function(){
     
 }, {
-    requires: ['./mods/b', './mods/missing']
+    requires: ['./mods/b', './mods/missing_mods']
 });
