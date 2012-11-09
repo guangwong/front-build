@@ -10,6 +10,51 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
         });
     }
 
+    function initBuilder(config, pageCache, reporter) {
+        var pb = new PageBuilder({
+            rootDir: config.rootDir
+        });
+
+        var btn =  $('#fb-build-page');
+        var timestamp =  $('#fb-build-timestamp');
+        var $status = $('#fb-build-status');
+
+        timestamp.val(pageCache.get('timestamp'));
+
+        btn.on('click', function(ev) {
+            ev.preventDefault();
+            $status.html('building...');
+            pb.build(config.pageVersion, timestamp.val());
+        });
+
+        pb
+            .on('build', function (ev) {
+                pageCache.set('timestamp', ev.timestamp);
+            })
+            .on('success', function (ev) {
+                $status.html('success!').show();
+                setTimeout(function () {
+                    $status.hide();
+                }, 2000);
+            })
+            .on('error', function (ev) {
+                if (ev.fromBuild) {
+                    reporter.addError(ev.error);
+                    $status.html("打包失败！ ").show();
+                    return;
+                }
+                $status.html("error: " + ev.error.message).show();
+            })
+            .on('report', function (ev) {
+
+                S.each(ev.reports, function (report) {
+                    reporter.addReport(report);
+                });
+
+            });
+        return pb;
+    }
+
     /**
      * Page init script
      * @param config obj of config
@@ -21,43 +66,17 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
         S.ready(function () {
             var pageCache = new LocalCache('page-cache:' + config.rootDir);
 
-            var pb = new PageBuilder({
-                rootDir: config.rootDir
-            });
 
-            var btn =  $('#fb-build-page');
-            var timestamp =  $('#fb-build-timestamp');
-            var $status = $('#fb-build-status');
-            btn.on('click', function(ev) {
-                ev.preventDefault();
-                $status.html('building...');
-                pb.build(config.pageVersion, timestamp.val());
-            });
 
-            timestamp.val(pageCache.get('timestamp'));
+
+
+
 
             var reporter = new Reporter('#reports');
 
-            pb.on('success', function (ev) {
-                    pageCache.set('timestamp', ev.timestamp);
-                    $status.html('success!').show();
-                    setTimeout(function () {
-                        $status.hide();
-                    }, 2000);
-                })
-                .on('error', function (error) {
-                    $status.html("error: " + error.message).show();
-                })
-                .on('report', function (ev) {
+            initBuilder(config, pageCache, reporter);
 
-                    S.each(ev.reports, function (report) {
-                        reporter.addReport(report);
-                    });
 
-                })
-                .on('build-error', function (error) {
-                    reporter.addError(error);
-                });
             initAnalyze(config, reporter);
 
             Calendar.init({

@@ -128,11 +128,15 @@ exports.buildPages = function (req, res, next) {
     }, function (err, reports) {
 
         if (err) {
+            var stack = err.stack;
+
+            err.stack = null;
+            delete err.stack;
             res.send({
                 err: {
                     message: err.message,
                     text: JSON.stringify(err, null, 2),
-                    stack: err.stack
+                    stack: stack
                 }
             });
             return;

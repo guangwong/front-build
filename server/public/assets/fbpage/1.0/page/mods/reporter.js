@@ -35,13 +35,10 @@ KISSY.add(function (S, Template,
             });
         },
 
-        addError: function (error) {
+        addError: function (err) {
             var self = this;
-            var html = Reporter.error_wrap_tpl.render(error);
-            
+            var html = Reporter.error_wrap_tpl.render(err);
             self.appendReportEl($(html));
-
-
         },
 
         addReport: function (reports) {
@@ -62,7 +59,7 @@ KISSY.add(function (S, Template,
         appendReportEl: function (el) {
             el.hide();
             var self = this;
-            var reports = self.$el.all('.report');
+            var reports = self.$el.children();
 
             if (reports.length > 0) {
                 el.insertBefore(reports[0]);

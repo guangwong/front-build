@@ -28,9 +28,9 @@ KISSY.add('utils/build-page',function (S) {
         PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base, {
+    S.extend(PageBuilder, S.Base, /**@lends PageBuilder.prototype */{
         /**
-         * exec build pages
+         * build pages to a timestamp
          * @param pages {Array|String} pages to build
          * @param timestamp {String} timestamp build to
          */
@@ -54,6 +54,11 @@ KISSY.add('utils/build-page',function (S) {
                 pages = pages.split(',');
             }
 
+            self.fire(PageBuilder.EV.BUILD, {
+                pages: pages,
+                timestamp: timestamp
+            });
+
             S.ajax({
                 url: self.get('url'),
                 data: {
@@ -66,7 +71,10 @@ KISSY.add('utils/build-page',function (S) {
                 success: function (data) {
 
                     if (data.err) {
-                        self.fire(PageBuilder.EV.BUILD_ERROR, data.err);
+                        self.fire(PageBuilder.EV.ERROR, {
+                            fromBuild: true,
+                            error: data.err
+                        });
                         return;
                     }
 
@@ -84,13 +92,14 @@ KISSY.add('utils/build-page',function (S) {
             });
 
         }
-    }, {
+    }, /**@lends PageBuilder */{
         EV: {
             GROUP_BUILD: 'group-build',
             ERROR: 'error',
             REPORT: 'report',
             SUCCESS: 'success',
-            BUILD_ERROR: 'build-error'
+            BUILD_ERROR: 'build-error',
+            BUILD: 'build'
         },
         ATTRS : {
             url: {
@@ -316,13 +325,10 @@ KISSY.add('page/mods/reporter',function (S, Template,
             });
         },
 
-        addError: function (error) {
+        addError: function (err) {
             var self = this;
-            var html = Reporter.error_wrap_tpl.render(error);
-            
+            var html = Reporter.error_wrap_tpl.render(err);
             self.appendReportEl($(html));
-
-
         },
 
         addReport: function (reports) {
@@ -343,7 +349,7 @@ KISSY.add('page/mods/reporter',function (S, Template,
         appendReportEl: function (el) {
             el.hide();
             var self = this;
-            var reports = self.$el.all('.report');
+            var reports = self.$el.children();
 
             if (reports.length > 0) {
                 el.insertBefore(reports[0]);
@@ -451,7 +457,7 @@ KISSY.add('page/template/report-wrap-tpl',function(){
     return {"html":"<div class=\"report\" style='display:none'>\n    <div class=\"report-hd\">{{fb}}</div>\n    <div class=\"report-bd\">{{plugins}}</div>\n</div>"};
 });
 KISSY.add('page/template/report-error-wrap-tpl',function(){
-    return {"html":"<div class=\"report\" style='display:none'>\n    <div class=\"report-bd\">\n        <div class=\"alert alert-error\">\n            <h2> {{message}} </h2>\n            <h4>error</h4>\n            <pre>{{text}}</pre>\n            <h4>stack</h4>\n            <pre>{{stack}}</pre>\n        </div>\n    </div>\n</div>"};
+    return {"html":"<div class=\"alert alert-error\">\n    <h3> {{message}} </h3>\n    <h4>error</h4>\n    <pre>{{text}}</pre>\n    <h4>stack</h4>\n    <pre>{{stack}}</pre>\n</div>\n"};
 });
 KISSY.add('page/template/report-plugin-tpl',function(){
     return {"html":"<div class=\"report-plugin-item\">\n    <div class=\"report-plugin-item-hd{{#if content}} report-plugin-hd-has-content{{/if}}\">\n        <h4>{{name}} \n        {{#if typeof report.count === 'number'}}\n        <span class='plugin-bdg'>\n            <span title='Execed' class=\"badge\">{{report.count}}</span>\n        </span>\n        {{/if}}\n        {{#if typeof report.warningCount === 'number' && report.warningCount > 0}}\n        <span class='plugin-bdg'>\n            <span title='Warning' class=\"badge badge-warning\">{{report.warningCount}}</span>\n        </span>\n        {{/if}}\n        {{#if typeof report.errorCount === 'number' && report.errorCount > 0}}\n        <span class='plugin-bdg'>\n            <span title='Error'  class=\"badge badge-important\">{{report.errorCount}}</span>\n        </span>\n        {{/if}}\n        </h4>\n    </div>\n    {{#if content}}\n    <div class='report-plugin-item-bd'>{{content}}</div>\n    {{/if}}\n    <div class=\"report-plugin-item-ft\">\n        <ul>\n            <li class='used-time'><i class='icon-time'></i> {{report.used_time}} ms\n            </li>\n        </ul>\n    </div>\n</div>"};
@@ -566,6 +572,51 @@ KISSY.add('page/index',function (S, PageBuilder, Calendar, LocalCache, Reporter,
         });
     }
 
+    function initBuilder(config, pageCache, reporter) {
+        var pb = new PageBuilder({
+            rootDir: config.rootDir
+        });
+
+        var btn =  $('#fb-build-page');
+        var timestamp =  $('#fb-build-timestamp');
+        var $status = $('#fb-build-status');
+
+        timestamp.val(pageCache.get('timestamp'));
+
+        btn.on('click', function(ev) {
+            ev.preventDefault();
+            $status.html('building...');
+            pb.build(config.pageVersion, timestamp.val());
+        });
+
+        pb
+            .on('build', function (ev) {
+                pageCache.set('timestamp', ev.timestamp);
+            })
+            .on('success', function (ev) {
+                $status.html('success!').show();
+                setTimeout(function () {
+                    $status.hide();
+                }, 2000);
+            })
+            .on('error', function (ev) {
+                if (ev.fromBuild) {
+                    reporter.addError(ev.error);
+                    $status.html("打包失败！ ").show();
+                    return;
+                }
+                $status.html("error: " + ev.error.message).show();
+            })
+            .on('report', function (ev) {
+
+                S.each(ev.reports, function (report) {
+                    reporter.addReport(report);
+                });
+
+            });
+        return pb;
+    }
+
     /**
      * Page init script
      * @param config obj of config
@@ -577,43 +628,17 @@ KISSY.add('page/index',function (S, PageBuilder, Calendar, LocalCache, Reporter,
         S.ready(function () {
             var pageCache = new LocalCache('page-cache:' + config.rootDir);
 
-            var pb = new PageBuilder({
-                rootDir: config.rootDir
-            });
 
-            var btn =  $('#fb-build-page');
-            var timestamp =  $('#fb-build-timestamp');
-            var $status = $('#fb-build-status');
-            btn.on('click', function(ev) {
-                ev.preventDefault();
-                $status.html('building...');
-                pb.build(config.pageVersion, timestamp.val());
-            });
 
-            timestamp.val(pageCache.get('timestamp'));
+
+
+
 
             var reporter = new Reporter('#reports');
 
-            pb.on('success', function (ev) {
-                    pageCache.set('timestamp', ev.timestamp);
-                    $status.html('success!').show();
-                    setTimeout(function () {
-                        $status.hide();
-                    }, 2000);
-                })
-                .on('error', function (error) {
-                    $status.html("error: " + error.message).show();
-                })
-                .on('report', function (ev) {
+            initBuilder(config, pageCache, reporter);
 
-                    S.each(ev.reports, function (report) {
-                        reporter.addReport(report);
-                    });
 
-                })
-                .on('build-error', function (error) {
-                    reporter.addError(error);
-                });
             initAnalyze(config, reporter);
 
             Calendar.init({

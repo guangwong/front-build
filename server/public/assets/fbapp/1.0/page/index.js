@@ -42,17 +42,25 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
             });
 
         pageBuilder
-            .on('error', function (err) {
+            .on('error', function (ev) {
+                var err = ev.error;
                 $status.html(err.message).show();
+                if (ev.fromBuild) {
+                    alert(err);
+                }
+
             })
-            .on('success', function (ev) {
+            .on('build', function(ev) {
                 appCache.set('timestamp', ev.timestamp);
                 appCache.set('pages', ev.pages);
+            })
+            .on('success', function (ev) {
                 $status.html('success');
                 setTimeout(function () {
                     $status.hide();
                 }, 1500);
-            })
+            });
+        return pageBuilder;
     }
     /**
      * app page init

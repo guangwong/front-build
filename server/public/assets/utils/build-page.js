@@ -6,9 +6,9 @@ KISSY.add(function (S) {
         PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base, {
+    S.extend(PageBuilder, S.Base, /**@lends PageBuilder.prototype */{
         /**
-         * exec build pages
+         * build pages to a timestamp
          * @param pages {Array|String} pages to build
          * @param timestamp {String} timestamp build to
          */
@@ -32,6 +32,11 @@ KISSY.add(function (S) {
                 pages = pages.split(',');
             }
 
+            self.fire(PageBuilder.EV.BUILD, {
+                pages: pages,
+                timestamp: timestamp
+            });
+
             S.ajax({
                 url: self.get('url'),
                 data: {
@@ -44,7 +49,10 @@ KISSY.add(function (S) {
                 success: function (data) {
 
                     if (data.err) {
-                        self.fire(PageBuilder.EV.BUILD_ERROR, data.err);
+                        self.fire(PageBuilder.EV.ERROR, {
+                            fromBuild: true,
+                            error: data.err
+                        });
                         return;
                     }
 
@@ -62,13 +70,14 @@ KISSY.add(function (S) {
             });
 
         }
-    }, {
+    }, /**@lends PageBuilder */{
         EV: {
             GROUP_BUILD: 'group-build',
             ERROR: 'error',
             REPORT: 'report',
             SUCCESS: 'success',
-            BUILD_ERROR: 'build-error'
+            BUILD_ERROR: 'build-error',
+            BUILD: 'build'
         },
         ATTRS : {
             url: {
