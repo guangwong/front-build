@@ -6,6 +6,22 @@ var fs = require('fs');
 var fu = require('../lib/fileutil');
 
 
+var clearUtilsDir = function () {
+    var utilsDir = path.join('sample-project', 'utils');
+    var files = [
+        'sample/utils-xtpl.js',
+        'sample/utils-tpl.js'
+    ];
+
+    files.forEach(function(file){
+
+        file = path.join(utilsDir, file);
+        if (fs.existsSync(file)) {
+            fs.unlinkSync(file);
+        }
+    });
+};
+
 describe('Page parser test', function(){
     var src = [
         {
@@ -106,13 +122,16 @@ describe('Page parser test', function(){
 
 describe('page build test', function(){
     var pageName = 'page1';
+    var appRoot = 'sample-project';
     var app = new App({
-        rootDir: path.resolve('sample-project')
+        rootDir: appRoot
     });
 
-    var rootDir = path.resolve('sample-project', pageName);
+    var rootDir = path.join(appRoot, pageName);
     var version = '1.0';
     var timestamp = '20121212';
+    var versionDir = path.join(rootDir, version);
+    var pubDir = path.join(rootDir, timestamp);
     var page;
     var buildReports;
 
@@ -146,34 +165,37 @@ describe('page build test', function(){
 
     after(function (done) {
         fu.rmTreeSync(path.resolve(rootDir, timestamp));
-        fs.unlinkSync(path.resolve(rootDir, version, 'page/tpl/foo-tpl.js'))
+
+        fs.unlinkSync(path.join(versionDir, 'page/tpl/foo-tpl.js'));
+        fs.unlinkSync(path.join(versionDir, 'page/tpl/foo-xtpl.js'));
+        clearUtilsDir();
         done();
     });
 
     it('should be a Page object', function () {
-        page.name.should.be.eql(pageName);
-        page.rootDir.should.eql(rootDir);
+        page.name.should.be.eql(pageName, 'pageName');
+        page.rootDir.should.eql(path.resolve(rootDir), 'rootDir should be resolved');
         page.config.should.be.a('object');
         should.exist(page.srcDir);
         should.exist(page.destDir);
     });
 
     it('should create timestamp directory under rootDir', function(done){
-        path.exists(path.resolve(rootDir, timestamp), function (exist) {
+        path.exists(pubDir, function (exist) {
             exist.should.be.true;
             done();
         });
     });
 
     it('should create page under timestamp directory', function(done){
-        path.exists(path.resolve(rootDir, timestamp, 'page'), function (exist) {
+        path.exists(path.join(pubDir, 'page'), function (exist) {
             exist.should.be.true;
             done();
         });
     });
 
     it('should create concat files list in fb.page.json', function(done){
-        fs.readFile(path.resolve(rootDir, timestamp, 'page/concat.js'), 'utf8', function (err, content) {
+        fs.readFile(path.join(pubDir, 'page/concat.js'), 'utf8', function (err, content) {
             if (err) {
                 return done(err);
             }
@@ -184,7 +206,7 @@ describe('page build test', function(){
     });
 
     it('should create concat css files list in fb.page.json', function(done){
-        fs.readFile(path.resolve(rootDir, timestamp, 'page/concat.css'), 'utf8', function (err, content) {
+        fs.readFile(path.join(pubDir, 'page/concat.css'), 'utf8', function (err, content) {
             if (err) {
                 return done(err);
             }
@@ -195,7 +217,7 @@ describe('page build test', function(){
     });
 
     it('should build less', function(done) {
-        var buildLessFile = path.resolve(rootDir, timestamp, 'page/lessfile.css');
+        var buildLessFile = path.join(pubDir, 'page/lessfile.css');
 
         fs.readFile(buildLessFile, 'utf8', function(err, data) {
             if (err) {
@@ -208,7 +230,7 @@ describe('page build test', function(){
     });
 
     it('should build kissy js file', function(done) {
-        var buildjsfile = path.resolve(rootDir, timestamp, 'page/index.js');
+        var buildjsfile = path.join(pubDir, 'page/index.js');
 
         fs.readFile(buildjsfile, 'utf8', function(err, data) {
             if (err) {
@@ -225,13 +247,36 @@ describe('page build test', function(){
             data.should.include("utils-sample-index.js");
             done();
         });
-        
+    });
+
+    it('should build xtemplate', function(done){
+        var x_tpl_file = path.join(versionDir, 'page/tpl/foo-xtpl.js');
+        fs.readFile(x_tpl_file, 'utf8', function(err, cnt){
+            if (err) {
+                return done(err);
+            }
+            cnt.should.include('KISSY.add( function(){');
+            cnt.should.include('文龙');
+            done();
+        })
+    });
+
+    it('should build kissy template', function(done){
+        var x_tpl_file = path.join(versionDir, 'page/tpl/foo-tpl.js');
+        fs.readFile(x_tpl_file, 'utf8', function(err, cnt){
+            if (err) {
+                return done(err);
+            }
+            cnt.should.include('KISSY.add(function(){');
+            cnt.should.include('中文');
+            done();
+        })
     });
 
     it('should compress css to -min.css', function(done) {
 
-        var minLessCss = path.resolve(rootDir, timestamp, 'page/lessfile-min.css');
-        var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css')
+        var minLessCss = path.join(pubDir, 'page/lessfile-min.css');
+        var minIndexCss = path.join(pubDir, 'page/index-min.css')
 
         fs.readFile(minLessCss, 'utf8', function(err, data) {
             if (err) {
@@ -252,7 +297,7 @@ describe('page build test', function(){
     });
 
     it('should support gbk utils directory with css-combo', function (done) {
-        var minIndexCss = path.resolve(rootDir, timestamp, 'page/index-min.css');
+        var minIndexCss = path.join(pubDir, 'page/index-min.css');
         fs.readFile(minIndexCss, 'utf8', function(err, data) {
             if (err) {
                 return done(err);
@@ -264,7 +309,7 @@ describe('page build test', function(){
     });
 
     it('should compress js to -min.js', function(done) {
-        var minIndexJS = path.resolve(rootDir, timestamp, 'page/index-min.js');
+        var minIndexJS = path.join(pubDir, 'page/index-min.js');
 
         fs.readFile(minIndexJS, 'utf8', function (err, data) {
             if (err) {
@@ -280,7 +325,7 @@ describe('page build test', function(){
 
     it('should compress concated js to -min.js', function(done) {
 
-        var minConcatJS = path.resolve(rootDir, timestamp, 'page/concat-min.js');
+        var minConcatJS = path.join(pubDir, 'page/concat-min.js');
 
         fs.readFile(minConcatJS, 'utf8', function (err, data) {
             if (err) {
@@ -323,15 +368,28 @@ describe('gbk page build test', function () {
     var version = '2.0';
     var timestamp = '000000';
     var buildReports;
-    var thepage;
+    var page;
     var rootDir = 'sample-project';
     var pageRootDir = path.join(rootDir, pageName);
     var app = new App({
         rootDir: rootDir
     });
 
+    var timestampDir = path.join(pageRootDir, timestamp);
+    var versionDir = path.join(pageRootDir, version);
+    var utilsDir = path.join(rootDir, 'utils');
+    var fooTpl = 'page/tpl/foo-tpl.js';
+    var fooXTpl = 'page/tpl/foo-xtpl.js';
+    var utilsXTpl = 'sample/utils-xtpl.js';
+    var utilsTpl = 'sample/utils-tpl.js';
+
     after(function () {
+        fs.unlinkSync(path.join(versionDir, fooTpl));
+        fs.unlinkSync(path.join(versionDir, fooXTpl));
+
         fu.rmTreeSync(path.join(pageRootDir, timestamp));
+
+        clearUtilsDir();
     });
 
     before(function (done) {
@@ -340,9 +398,9 @@ describe('gbk page build test', function () {
                 return done(err);
             }
 
-            thepage = app.getPage(pageName, version);
+            page = app.getPage(pageName, version);
             
-            thepage.build(timestamp, function (err, reports) {
+            page.build(timestamp, function (err, reports) {
                 if (err) {
                     return done(err);
                 }
@@ -354,8 +412,8 @@ describe('gbk page build test', function () {
     });
 
     it('should conv the right with css-combo', function (done) {
-        var timestampPath = path.join(pageRootDir, timestamp);
-        fs.readFile(path.join(timestampPath, 'page/index.css'), function (err, buf) {
+
+        fs.readFile(path.join(timestampDir, 'page/index.css'), function (err, buf) {
             var iconv = require('iconv-lite');
             if (err) {
                 return done(err);
@@ -366,6 +424,55 @@ describe('gbk page build test', function () {
             done();
         });
     });
+
+    it('should iconv right with kissy-template', function (done) {
+        fs.readFile(path.join(versionDir, fooTpl), function (err, buf) {
+            var iconv = require('iconv-lite');
+            if (err) {
+                return done(err);
+            }
+            var cnt = iconv.decode(buf, 'gbk');
+            cnt.should.include('中文');
+            done();
+        });
+    });
+
+    it('should iconv right with xtemplate', function (done) {
+        fs.readFile(path.join(versionDir, fooXTpl), function (err, buf) {
+            var iconv = require('iconv-lite');
+            if (err) {
+                return done(err);
+            }
+            var cnt = iconv.decode(buf, 'gbk');
+            cnt.should.include('文龙');
+            done();
+        });
+    });
+
+    it('should iconv right with xtemplate in utils', function (done) {
+        fs.readFile(path.join(utilsDir, utilsXTpl), function (err, buf) {
+            var iconv = require('iconv-lite');
+            if (err) {
+                return done(err);
+            }
+            var cnt = iconv.decode(buf, 'gbk');
+            cnt.should.include('中文xtemplate');
+            done();
+        });
+    });
+
+    it('should iconv right with kissy template in utils', function (done) {
+        fs.readFile(path.join(utilsDir, utilsTpl), function (err, buf) {
+            var iconv = require('iconv-lite');
+            if (err) {
+                return done(err);
+            }
+            var cnt = iconv.decode(buf, 'gbk');
+            cnt.should.include('中文template');
+            done();
+        });
+    });
+
 });
 
 describe('page build test with error', function(){
@@ -379,7 +486,7 @@ describe('page build test with error', function(){
 
     var version = '1.0';
     var timestamp = '20121212';
-    var thepage;
+    var tPage;
     var buildReports;
 
     before(function (done) {
@@ -388,7 +495,7 @@ describe('page build test with error', function(){
                 return done(err);
             }
 
-            thepage = new Page({
+            tPage = new Page({
                 rootDir: rootDir,
                 name: pageName,
                 app: app,
@@ -403,12 +510,13 @@ describe('page build test with error', function(){
         fu.rmTreeSync(path.resolve(rootDir, timestamp));
         fu.rmTreeSync(path.resolve(rootDir, 'page_build_temp'));
         fu.rmTreeSync(path.resolve(rootDir, 'page_src_temp'));
+        clearUtilsDir(rootDir);
         done();
     });
 
     it('should get an error when build page_with_error/1.0', function (done) {
 
-        thepage.build(timestamp, function (err, reports) {
+        tPage.build(timestamp, function (err, reports) {
             should.exist(err);
             done();
         });
@@ -452,7 +560,7 @@ describe('page add version test', function(){
                 if (err) {
                     done(err);
                 }
-                batfile.should.be.ok
+                batfile.should.be.ok;
 
                 done();
             });

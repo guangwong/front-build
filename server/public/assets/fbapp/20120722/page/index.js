@@ -402,6 +402,7 @@ KISSY.add('page/mods/group-select',function (S) {
             })
     });
 });
+//noinspection JSValidateTypes
 KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
     var $ = S.all;
 

@@ -1,3 +1,4 @@
+//noinspection JSValidateTypes
 KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
     var $ = S.all;
 

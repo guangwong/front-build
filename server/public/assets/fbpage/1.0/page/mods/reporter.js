@@ -1,3 +1,4 @@
+//noinspection JSValidateTypes
 KISSY.add(function (S, Template,
     fb_tpl,
     wrap_tpl,
@@ -78,11 +79,12 @@ KISSY.add(function (S, Template,
             'concat': 'concat_tpl',
             'lesscss': 'files_tpl',
             'css-combo': 'css_combo_tpl',
-            'module-compiler': 'module_compiler_tpl'
+            'module-compiler': 'module_compiler_tpl',
+            'xtemplate': 'files_tpl'
         },
 
         parserPluginReports: function (reports) {
-
+            console.log(reports);
             return S.map(reports, function (report) {
                 switch (report.name) {
                     case 'csslint': 
@@ -95,6 +97,7 @@ KISSY.add(function (S, Template,
                     case 'cssmin':
                     case 'uglifyjs':
                     case 'kissy-template':
+                    case 'xtemplate':
                     case 'lesscss':
                     case 'module-compiler':
                         report.count = report.files.length;
