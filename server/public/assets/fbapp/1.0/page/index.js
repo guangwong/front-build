@@ -47,7 +47,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
                 var err = ev.error;
                 $status.html(err.message).show();
                 if (ev.fromBuild) {
-                    alert(err);
+                    S.log(err);
                 }
 
             })

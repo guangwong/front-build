@@ -451,7 +451,7 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
                 var err = ev.error;
                 $status.html(err.message).show();
                 if (ev.fromBuild) {
-                    alert(err);
+                    S.log(err);
                 }
 
             })
