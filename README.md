@@ -20,12 +20,6 @@ KissyPie 是面向前端的自动化开发环境。
 - 基于 kissy1.2+ 的新项目或新应用
 - 将你的老应用迁移至 Kissy Pie
 
-## 帮助文档
-
-- [KissyPie 命令列表](https://github.com/maxbbn/front-build/wiki/Command)
-- [在VM模版中使用 KissyPie 详解](https://github.com/maxbbn/front-build/wiki/Command)
-- [一个基于KissyPie的应用样例] (https://github.com/maxbbn/front-build/tree/kissy-pie-m/server/public/assets/)
-
 ## 安装 Kissy Pie
 
 ### 方式一： 通过 npm 安装
@@ -59,10 +53,15 @@ KissyPie 是面向前端的自动化开发环境。
 
 ![ Page视图 ](http://farm9.staticflickr.com/8454/7886122594_1b457cc29c_b.jpg)
 
+## 帮助文档
+
+- [KissyPie 命令列表](https://github.com/maxbbn/front-build/wiki/Command)
+- [在VM模版中使用 KissyPie 详解](https://github.com/maxbbn/front-build/wiki/Command)
+- [一个基于KissyPie的应用样例] (https://github.com/maxbbn/front-build/tree/kissy-pie-m/server/public/assets/)
 
 ## 相关资料
--　[《使用Kissy Pie快速构建—kissy1.2最佳实践探索》](http://www.36ria.com/5536)
--  [ KissyPie 使用教程（视频） ](http://v.youku.com/v_show/id_XNDQ3NjQ4MDA0.html) 
+- [《使用Kissy Pie快速构建—kissy1.2最佳实践探索》](http://www.36ria.com/5536)
+- [ KissyPie 使用教程（视频） ](http://v.youku.com/v_show/id_XNDQ3NjQ4MDA0.html) 
 
 ## 依赖
 
