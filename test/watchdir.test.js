@@ -28,9 +28,9 @@ describe('WatchDir', function () {
 		fu.rmTree(rootDir, done);
 	});
 
-	it('should emit rename when file added', function (done) {
+	it('should emit change when file added', function (done) {
 		// expectedEvent.push(['rename'])
-		watcher.once('rename', function () {
+		watcher.once('change', function () {
 			setTimeout(done, 100);
 		});
 		fs.writeFile(rootFile, 'hello');
@@ -46,14 +46,14 @@ describe('WatchDir', function () {
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		watcher.once('rename', function () {
+		watcher.once('change', function () {
 			setTimeout(done, 100);
 		});
 		fs.mkdir(subDir);
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		watcher.once('rename', function () {
+		watcher.once('change', function () {
 			setTimeout(done, 100);
 		});
 		fs.writeFile(subFile, 'subFile.js');
@@ -67,7 +67,7 @@ describe('WatchDir', function () {
 	});
 
 	it('should emit events when subfile removed', function (done) {
-		watcher.once('rename', function () {
+		watcher.once('change', function () {
 			setTimeout(done, 100);
 		});
 		fs.unlink(subFile);
