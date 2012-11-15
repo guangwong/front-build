@@ -23,7 +23,7 @@ describe('WatchDir', function () {
 
 	});
 
-	after(function (done){
+	after(function (done) {
 		watcher.stop();
 		fu.rmTree(rootDir, done);
 	});
