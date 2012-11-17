@@ -64,14 +64,7 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
     function init (config) {
 
         S.ready(function () {
-            var pageCache = new LocalCache('page-cache:' + config.rootDir);
-
-
-
-
-
-
-
+            var pageCache = new LocalCache('page-cache:' + config.rootDir +  '/' +  config.pageVersion);
             var reporter = new Reporter('#reports');
 
             initBuilder(config, pageCache, reporter);

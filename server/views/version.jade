@@ -33,6 +33,7 @@ block content
               span.build-timestamp.timestamp #{ts.timestamp}
               - if(ts.build)
                 span.build-version from #{ts.build.build_version}
+                span.build (#{ts.build.build_start_time})
                 span.build-time
                   i.icon-time(title='用时')
                   | &nbsp;
