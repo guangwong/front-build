@@ -320,6 +320,7 @@ describe('app#getPages Test', function() {
                 return done(err);
             }
             pages.length.should.eql(5);
+
             pages.should.includeEql({
                 name: 'page1',
                 version: '1.0'
@@ -398,7 +399,7 @@ describe('APP#getGlobalConfig', function () {
     // });
 });
 
-describe('test App#buildCommon', function () {
+describe('test App build Common', function () {
     var app;
     var rootDir = 'sample-project';
 
@@ -413,6 +414,7 @@ describe('test App#buildCommon', function () {
         'main-min.css',
         'style-min.css'
     ];
+    var commonDir = path.join(rootDir, 'common');
 
     before(function (done) {
         app = new App({
@@ -424,9 +426,18 @@ describe('test App#buildCommon', function () {
     });
 
     after(function (done) {
-        async.forEach(minFiles, function (file, callback){
-            fs.unlink(path.join(rootDir, 'common', file), callback);
-        }, done);
+        fu.findInDir(commonDir, /(-min)\.(js|css)/i, function (err, files) {
+            files.map(function(file){
+                return path.join(commonDir, file)
+            }).forEach(fs.unlinkSync);
+
+            fu.findInDir(commonDir, /(-tpl|-xtpl)\.js$/i, function (err, files) {
+                files.map(function(file){
+                    return path.join(commonDir, file);
+                }).forEach(fs.unlinkSync);
+                done();
+            });
+        });
     });
 
     it('should build files to -min', function(done) {

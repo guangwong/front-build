@@ -233,16 +233,28 @@ describe('test findInDir of fileutil', function(){
                 return done(err);
             }
             list.length.should.eql(4);
-            list.indexOf(path.join('sub2', 'find.js')).should.not.eql(-1);
+            list.should.include(path.join('sub2', 'find.js'));
             done();
         });
     });
+
     it('should ignore file in .svn directory', function (done) {
         fu.findInDir(src, /svn[\/\\]file$/i, function(err, list){
             if (err) {
                 return done(err);
             }
             list.length.should.eql(0);
+            done();
+        });
+    });
+
+    it('should find all files in directory', function (done) {
+        fu.findInDir(src, function(err, list){
+            if (err) {
+                return done(err);
+            }
+            list.length.should.eql(9);
+            list.should.include(path.join('sub2','sub22', 'find1.js'));
             done();
         });
     });
