@@ -59,6 +59,6 @@ block content
   script.
     KISSY.use('page/index', function (S, Page) {
       Page.init({
-        rootDir: '#{app.rootDir}'
+        rootDir: '#{app.rootDir.replace(/\\/g, '\\\\')}'
       });
     });

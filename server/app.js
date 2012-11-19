@@ -82,7 +82,7 @@ app.locals({
         });
     },
     version:require('../package.json').version,
-    currentStable:function () {
+    currentStable: function () {
         return kissyPieVersion;
     }
 });
@@ -90,7 +90,11 @@ app.locals({
 http.createServer(app).listen(app.get('port'), function () {
     console.log("Express server listening on port " + app.get('port'));
 });
+
+
 var checkVersionUrl = 'http://a.tbcdn.cn/mods/front-build/current-kissy-pie-version.js?t=' + (new Date().getTime());
+
+
 http.get(checkVersionUrl,function (res) {
     res.setEncoding('utf8');
     res.on('data', function (d) {
@@ -105,5 +109,5 @@ http.get(checkVersionUrl,function (res) {
     });
 
 }).on('error', function (err) {
-        kissyPieVersion = 'error';
-    });
+    kissyPieVersion = 'error';
+});

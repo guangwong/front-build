@@ -669,7 +669,7 @@ KISSY.add('page/index',function (S, PageBuilder, Calendar, LocalCache, Reporter,
     function init (config) {
 
         S.ready(function () {
-            var pageCache = new LocalCache('page-cache:' + config.rootDir + '/' +  config.pageVersion);
+            var pageCache = new LocalCache('page-cache:' + config.rootDir +  '/' +  config.pageVersion);
             var reporter = new Reporter('#reports');
 
             initBuilder(config, pageCache, reporter);

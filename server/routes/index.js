@@ -15,9 +15,9 @@ exports.index = function (req, res) {
             name: 'fbindex',
             version: '1.0',
             timestamp: '20120722',
-            tag: '20120722',
+            tag: '20121119',
             ksDebug: ('ks-debug' in req.query)
-        },
+        }
     });
 };
 
@@ -42,7 +42,7 @@ exports.app = function (req, res, next) {
                 version: '1.0',
                 timestamp: '20120722',
                 ksDebug: ('ks-debug' in req.query),
-                tag: '20120722',
+                tag: '20121119'
             },
             title: path.basename(app.rootDir),
             app: app,
@@ -76,7 +76,7 @@ exports.page = function (req, res, next) {
                 version: '1.0',
                 timestamp: '20120722',
                 ksDebug: ('ks-debug' in req.query),
-                tag: '20120722'
+                tag: '20121119'
             },
             page: fbpage,
             app: fbapp,
