@@ -13,6 +13,8 @@ block content
               .buildto-block
                 span.status 
                 a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
+                | &nbsp;
+                input#watch-common(type='checkbox')
 
     .row-fluid.fb-pages
       .span8
@@ -59,6 +61,6 @@ block content
   script.
     KISSY.use('page/index', function (S, Page) {
       Page.init({
-        rootDir: '#{app.rootDir.replace(/\\/g, '\\\\')}'
+        rootDir: '#{escapePath(app.rootDir)}'
       });
     });

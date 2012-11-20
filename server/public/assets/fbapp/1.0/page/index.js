@@ -27,7 +27,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
             rootDir: config.rootDir
         });
         var $timestamp = $('#batch-build-timestamp');
-        var $status = $('#batch-build-status')
+        var $status = $('#batch-build-status');
         var $btn = $('#batch-build');
         $btn
             .on('click', function (ev) {
@@ -83,6 +83,16 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
 
             restoreConfig(appCache);
         });
+
+        var socket = io.connect('http://localhost');
+
+        socket.on('connected', function (data) {
+            $('#watch-common').on('click', function (ev) {
+                socket.emit('watch_common', config);
+            });
+        });
+
+
     }
 
 

@@ -7,9 +7,12 @@ var express = require('express')
     , http = require('http')
     , App = require('../lib/app')
     , Page = require('../lib/page')
+    , app = express()
+    , server = http.createServer(app)
+    , io = require('socket.io').listen(server)
     , kissyPieVersion = '...';
 
-var app = express();
+require('./io').init(io);
 
 app.configure(function () {
     app.set('port', process.env.PORT || 8765);
@@ -80,13 +83,17 @@ app.locals({
             pathname:path
         });
     },
+
+    escapePath: function (filename) {
+        return filename.replace(/\\/g, '\\\\');
+    },
     version:require('../package.json').version,
-    currentStable: function () {
+    currentStable:function () {
         return kissyPieVersion;
     }
 });
 
-http.createServer(app).listen(app.get('port'), function () {
+server.listen(app.get('port'), function () {
     console.log("Express server listening on port " + app.get('port'));
 });
 
@@ -94,19 +101,21 @@ http.createServer(app).listen(app.get('port'), function () {
 var checkVersionUrl = 'http://a.tbcdn.cn/mods/front-build/current-kissy-pie-version.js?t=' + (new Date().getTime());
 
 
-http.get(checkVersionUrl,function (res) {
-    res.setEncoding('utf8');
-    res.on('data', function (d) {
-        var match = d.match(/\/\*\*ver (.*) ?\*\*\//);
+http
+    .get(checkVersionUrl, function (res) {
+        res.setEncoding('utf8');
+        res.on('data', function (d) {
+            var match = d.match(/\/\*\*ver (.*) ?\*\*\//);
 
-        if (match) {
-            kissyPieVersion = match[1].trim();
-        }
+            if (match) {
+                kissyPieVersion = match[1].trim();
+            }
 
-        console.log('current installed:', require('../package.json').version);
-        console.log('latest stable:', kissyPieVersion);
+            console.log('current installed:', require('../package.json').version);
+            console.log('latest stable:', kissyPieVersion);
+        });
+
+    })
+    .on('error', function (err) {
+        kissyPieVersion = 'error';
     });
-
-}).on('error', function (err) {
-    kissyPieVersion = 'error';
-});
