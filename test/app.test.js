@@ -8,6 +8,7 @@ var Page = require('../lib/page');
 
 describe('app init', function () {
     var rootDir = 'tmp_project_dir';
+    var reps;
 
     before(function (done){
         if(fs.existsSync(rootDir)) {
@@ -18,7 +19,14 @@ describe('app init', function () {
             if(err) {
                 return done(err);
             }
-            App.init(rootDir, done);
+            App.init(rootDir, function (err, repoters) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                reps = repoters;
+                done();
+            });
         });
 
     });
@@ -75,6 +83,17 @@ describe('app init', function () {
             done();
         });
     });
+
+    it('should give a reporter object to callback function', function () {
+        reps.dirs.length.should.eql(4);
+        reps.files.length.should.eql(5);
+        reps.files.forEach(function(file){
+            file.should.have.keys('status', 'filename', 'src');
+        });
+        reps.dirs.forEach(function(file){
+            file.should.have.keys('status', 'filename');
+        });
+    })
 });
 
 describe("App Config", function () {
@@ -280,18 +299,23 @@ describe('app#update test', function() {
     });
 
     it('should create the missing tools directory', function (done) {
+
         fs.exists(path.join(rootDir, 'tools'), function (exist) {
             exist.should.be.true;
             done();
         });
+
     });
+
     it('should create the missing tools files', function (done) {
         var file = path.join(rootDir, 'tools', 'web-client.sh');
         fs.stat(file, function (err, stat) {
             if (err) {
                 return done(err);
             }
+
             stat.isFile().should.be.true;
+
             fs.readFile(file, function (err, content) {
                 if (err) {
                     return done(err);
@@ -454,4 +478,13 @@ describe('test App build Common', function () {
             done();
         })
     });
+
+    it('should generate kissy template file', function() {
+        fs.existsSync(path.join(commonDir, 'template/xxx-xtpl.html')).should.be.ok;
+    });
+
+    it('should generate XTemplate file', function() {
+        fs.existsSync(path.join(commonDir, 'template/xxx-xtpl.html')).should.be.ok;
+    });
+
 });
