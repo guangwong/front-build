@@ -7,25 +7,51 @@ var apps = {};
 
 exports.init = function (io) {
     io.sockets.on('connection', function (socket) {
+        var app;
+
         function onError(err) {
             socket.emit('error', err);
         }
 
         socket.emit('connected', { hello: 'world' });
 
-        socket.on('watch_common', function (data) {
-            var app = apps[data.rootDir];
+        socket.on('init', function (data, callback) {
             if(!app) {
-                app = App.getApp(data.rootDir, function (err, app) {
+                App.getApp(data.rootDir, function (err, fbapp) {
                     if (err) {
-                        onError(err);
+                        callback(err);
                         return;
                     }
-                    apps[data.rootDir] = app;
+                    app = fbapp;
+                    callback(null);
                 });
-                return;
             }
-
         });
+
+
+
+
+        socket.on('watch_common', function () {
+            console.log('auto build common');
+            app.autoBuildCommon();
+
+            app.on('common_build_success', function (data) {
+                console.log('common_build_success');
+                socket.emit('common_build_success', data);
+            });
+
+            app.on('common_build_error', function (data) {
+                console.log('common_build_error');
+                socket.emit('common_build_error', data);
+            });
+        });
+
+        socket.on('disconnect', function () {
+            if (app) {
+                console.log('stop auto build common');
+                app.stopAutoBuildCommon();
+            }
+        });
+
     });
 };
