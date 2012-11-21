@@ -431,8 +431,9 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
             rootDir: config.rootDir
         });
         var $timestamp = $('#batch-build-timestamp');
-        var $status = $('#batch-build-status')
+        var $status = $('#batch-build-status');
         var $btn = $('#batch-build');
+
         $btn
             .on('click', function (ev) {
                 ev.preventDefault();
@@ -443,6 +444,7 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
                         pages.push($input.val());
                     }
                 });
+                $status.html('building...').show();
                 pageBuilder.build(pages, timestamp);
             });
 
@@ -487,6 +489,16 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
 
             restoreConfig(appCache);
         });
+
+        var socket = io.connect('http://localhost');
+
+        socket.on('connected', function (data) {
+            $('#watch-common').on('click', function (ev) {
+                socket.emit('watch_common', config);
+            });
+        });
+
+
     }
 
 

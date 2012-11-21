@@ -1,6 +1,5 @@
 (function () {
     var S = KISSY;
-
     window.FB = window.FB || {
         /**
          * Config Kissy 1.2 packages
@@ -10,7 +9,7 @@
          *  @param version  version of you app
          *  @param pub      timestamp of published directory
          *  @param path     url of you fbapp root
-         *  @param charset 
+         *  @param charset  charset of app
          *  @param tag      timestamp appended
          */
         config: function (config) {

@@ -29,6 +29,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
         var $timestamp = $('#batch-build-timestamp');
         var $status = $('#batch-build-status');
         var $btn = $('#batch-build');
+
         $btn
             .on('click', function (ev) {
                 ev.preventDefault();
@@ -39,6 +40,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
                         pages.push($input.val());
                     }
                 });
+                $status.html('building...').show();
                 pageBuilder.build(pages, timestamp);
             });
 
@@ -86,11 +88,24 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
 
         var socket = io.connect('http://localhost');
 
-        socket.on('connected', function (data) {
+        socket.on('connected', function () {
+            socket.emit('init', config, onInit);
+        });
+
+        function onInit (data) {
             $('#watch-common').on('click', function (ev) {
                 socket.emit('watch_common', config);
             });
-        });
+            socket.on('common_build_success', function (data) {
+                console.log('common build success', data);
+            });
+
+            socket.on('common_build_error', function (data) {
+                console.log('common_build_error', data);
+            });
+        }
+
+
 
 
     }
