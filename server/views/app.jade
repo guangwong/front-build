@@ -36,8 +36,10 @@ block content
             span.add-on
               i.icon-calendar
             input#batch-build-timestamp.input-small.timestamp-input(type='text')
-            button#batch-build.btn
-              |Build
+            button#batch-build.btn Build
+            span.add-on
+              input#watch-batch-build(type='checkbox')
+              | &nbsp;auto
           div#batch-build-status.status
           - if (app.config.groups)
             h3 groups

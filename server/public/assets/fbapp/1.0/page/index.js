@@ -16,6 +16,23 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
         }
     }
 
+    function getBuildTargets() {
+        var $timestamp = $('#batch-build-timestamp');
+        var timestamp = $timestamp.val();
+        var pages = [];
+
+        $('input.j-version-checkbox').each(function ($input) {
+            if ($input.prop('checked') && $input.val()) {
+                pages.push($input.val());
+            }
+        });
+
+        return {
+            pages: pages,
+            timestamp: timestamp
+        };
+    }
+
     /**
      * init the builder
      * @param config
@@ -26,22 +43,16 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
         var pageBuilder = new PageBuilder({
             rootDir: config.rootDir
         });
-        var $timestamp = $('#batch-build-timestamp');
+
         var $status = $('#batch-build-status');
         var $btn = $('#batch-build');
 
         $btn
             .on('click', function (ev) {
                 ev.preventDefault();
-                var timestamp = $timestamp.val();
-                var pages = [];
-                $('input.j-version-checkbox').each(function ($input) {
-                    if ($input.prop('checked') && $input.val()) {
-                        pages.push($input.val());
-                    }
-                });
+                var target = getBuildTargets();
                 $status.html('building...').show();
-                pageBuilder.build(pages, timestamp);
+                pageBuilder.build(target.pages, target.timestamp);
             });
 
         pageBuilder
@@ -65,6 +76,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
             });
         return pageBuilder;
     }
+
     /**
      * app page init
      * @param config
@@ -93,9 +105,36 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
         });
 
         function onInit (data) {
-            $('#watch-common').on('click', function (ev) {
-                socket.emit('watch_common', config);
+            var $common_checker = $('#watch-common');
+            $common_checker.on('click', function (ev) {
+                    if ($common_checker.prop('checked')) {
+                        socket.emit('start_watch_common');
+                    } else {
+                        socket.emit('stop_watch_common');
+                    }
+
+                });
+            var $auto_batch_build = $('#watch-batch-build');
+
+            $auto_batch_build.on('click', function (ev) {
+                var target = getBuildTargets();
+                S.each(target.pages, function (page) {
+                    socket.emit('start_auto_build_page', {
+                        page: page,
+                        timestamp: target.timestamp
+                    });
+                });
+
             });
+
+            socket.on('page_build_success', function (data) {
+                console.log('build_success');
+            });
+
+            socket.on('page_build_fail', function (data) {
+                console.log('build_fail');
+            });
+
             socket.on('common_build_success', function (data) {
                 console.log('common build success', data);
             });
