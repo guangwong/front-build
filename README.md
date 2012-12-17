@@ -23,7 +23,7 @@ KissyPie 是面向前端的自动化开发环境。
 ## 安装 Kissy Pie
 
 ### 方式一： 通过 npm 安装
-1. 首先安装或升级 Node.js ( 不小于 0.8.x) http://nodejs.org/
+1. 首先安装或升级 Node.js ( >= 0.8.x) http://nodejs.org/
 2. 命令行执行 `npm install kissy-pie -g`　安装
 3. done!
 
@@ -69,7 +69,7 @@ KissyPie 是面向前端的自动化开发环境。
 - iconv-lite https://github.com/ashtuchkin/iconv-lite
 - tbuild https://github.com/czy88840616/tbuild
 - less.js http://lesscss.org
-- cssmin 
+- clean-css
 - uglifyjs https://github.com/mishoo/UglifyJS
 - csslint http://csslint.net
 - expressjs http://expressjs.org
