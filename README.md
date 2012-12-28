@@ -56,7 +56,7 @@ KissyPie 是面向前端的自动化开发环境。
 ## 帮助文档
 
 - [KissyPie 命令列表](https://github.com/maxbbn/front-build/wiki/Command)
-- [在VM模版中使用 KissyPie 详解](https://github.com/maxbbn/front-build/wiki/Command)
+- [在VM模版中使用 KissyPie 详解](https://github.com/maxbbn/front-build/wiki/Use-Kissy-Pie-with-VM)
 - [一个基于KissyPie的应用样例] (https://github.com/maxbbn/front-build/tree/kissy-pie-m/server/public/assets/)
 
 ## 相关资料
