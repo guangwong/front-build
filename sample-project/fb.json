@@ -1,11 +1,6 @@
 {
     "charset": "gbk",
     "fbversion": "0.4.9",
-    "packages": {
-        "common-lib": {
-            "path": "~/lab/common-lib"
-        }
-    },
     "groups": {
         "all": [
             "page1/1.0",
@@ -17,5 +12,21 @@
             "page_with_timestamp/2.0"
         ]
     },
-    "lineEnd": "\n"
+    "plugins": {
+        "uglifyjs": {
+            "ast_squeeze": {
+                "make_seqs": false
+            }
+        },
+        "module-compiler": {
+            "packages": [
+                {
+                    "name": "package1",
+                    "path": "./package1",
+                    "charset": "gbk"
+                }
+            ]
+        }
+    },
+    "packages": {}
 }
