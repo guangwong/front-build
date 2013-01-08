@@ -45,8 +45,7 @@ KISSY.add('utils/app-history',function (S) {
         },
         
         get: function () {
-            var list = getList();
-            return list;
+            return getList();
         },
         
         rm: function (path) {
@@ -66,8 +65,8 @@ KISSY.add('page/template/app-history-tpl',function(){
     return {"html":"<h3>历史记录：</h3>\n{{#each his as item index}}\n<div class=\"his-item\">\n    <a class=\"his-title\" href=\"/app?root={{item}}\">{{item}}\t</a>\n    <a class=\"his-delete\" title=\"delete\" data-index=\"{{index}}\" href=\"#\">&times;</a>\n</div>\n{{/each}}\n"};
 });
 
-KISSY.add('page/index',function (S, Template, appHistory, app_history_tpl) {
-    var $ = S.all;
+KISSY.add('page/index',function (S, Node, Template, appHistory, app_history_tpl) {
+    var $ = Node.all;
     if (appHistory) {
         S.ready(function () {
             var his = appHistory.get(),
@@ -91,5 +90,5 @@ KISSY.add('page/index',function (S, Template, appHistory, app_history_tpl) {
         });
     }
 }, {
-    requires: ['template', 'utils/app-history', './template/app-history-tpl']
+    requires: ['node', 'template', 'utils/app-history', './template/app-history-tpl']
 });

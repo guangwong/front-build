@@ -1,5 +1,5 @@
-KISSY.add(function (S, Calendar, Overlay) {
-    var $ = S.all;
+KISSY.add(function (S, Node,  Calendar, Overlay) {
+    var $ = Node.all;
     return {
         init: function (config) {
 
@@ -30,7 +30,7 @@ KISSY.add(function (S, Calendar, Overlay) {
                 })
                 .on('show', function () {
                     $(document.body).on('click', bodyOnClick);
-                })
+                });
 
 
 
@@ -55,7 +55,6 @@ KISSY.add(function (S, Calendar, Overlay) {
                     var val = $et.val();
                     if (val) {
                         var m = val.match(/^(\d{2,4})(\d\d)(\d\d)$/);
-                        console.log(m);
                         var selectedDate = S.Date.parse(m.slice(1).join('-'));
                         cal.render({
                             date: selectedDate,
@@ -67,5 +66,5 @@ KISSY.add(function (S, Calendar, Overlay) {
         }
     }
 }, {
-    requires: ['calendar', 'overlay', 'calendar/assets/base.css']
+    requires: ['node', 'calendar', 'overlay']
 });

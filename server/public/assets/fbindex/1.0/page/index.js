@@ -1,5 +1,5 @@
-KISSY.add(function (S, Template, appHistory, app_history_tpl) {
-    var $ = S.all;
+KISSY.add(function (S, Node, Template, appHistory, app_history_tpl) {
+    var $ = Node.all;
     if (appHistory) {
         S.ready(function () {
             var his = appHistory.get(),
@@ -23,5 +23,5 @@ KISSY.add(function (S, Template, appHistory, app_history_tpl) {
         });
     }
 }, {
-    requires: ['template', 'utils/app-history', './template/app-history-tpl']
+    requires: ['node', 'template', 'utils/app-history', './template/app-history-tpl']
 });

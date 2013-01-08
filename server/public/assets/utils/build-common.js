@@ -1,5 +1,5 @@
-KISSY.add(function (S) {
-    var $ = S.all;
+KISSY.add(function (S, Node) {
+    var $ = Node.all;
 
     return {
         init: function () {
@@ -31,4 +31,6 @@ KISSY.add(function (S) {
             
         }
     };
+}, {
+    requires: ['node']
 });

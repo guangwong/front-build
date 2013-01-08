@@ -20,21 +20,23 @@ page/template/page-analyze-tpl
 page/index
 
 */
-KISSY.add('utils/build-page',function (S) {
-    var $ = S.all;
+
+//noinspection JSValidateTypes
+KISSY.add('utils/build-page',function (S, IO, Base) {
 
     function PageBuilder () {
         var self = this;
         PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base, /**@lends PageBuilder.prototype */{
+    S.extend(PageBuilder, Base, /**@lends PageBuilder.prototype */{
         /**
          * build pages to a timestamp
-         * @param pages {Array|String} pages to build
-         * @param timestamp {String} timestamp build to
+         * @param {Array|String} pages to build
+         * @param {String} timestamp build to
+         * @param {Function} callback
          */
-        build: function(pages, timestamp) {
+        build: function(pages, timestamp, callback) {
             var self = this;
             if (!pages || !pages.length) {
                 self.fire(PageBuilder.EV.ERROR, {
@@ -59,7 +61,7 @@ KISSY.add('utils/build-page',function (S) {
                 timestamp: timestamp
             });
 
-            S.ajax({
+            IO({
                 url: self.get('url'),
                 data: {
                     timestamp: timestamp,
@@ -69,25 +71,37 @@ KISSY.add('utils/build-page',function (S) {
                 cache: false,
                 dataType: 'json',
                 success: function (data) {
+                    if (!callback) {
+                        if (data.err) {
+                            self.fire(PageBuilder.EV.ERROR, {
+                                fromBuild: true,
+                                error: data.err
+                            });
+                            return;
+                        }
 
-                    if (data.err) {
-                        self.fire(PageBuilder.EV.ERROR, {
-                            fromBuild: true,
-                            error: data.err
+                        self.fire(PageBuilder.EV.SUCCESS, {
+                            pages: pages,
+                            timestamp: timestamp
                         });
+
+                        if (data.reports) {
+                            self.fire(PageBuilder.EV.REPORT, {
+                                reports: data.reports
+                            });
+                        }
                         return;
                     }
 
-                    self.fire(PageBuilder.EV.SUCCESS, {
-                        pages: pages,
-                        timestamp: timestamp
-                    });
-
-                    if (data.reports) {
-                        self.fire(PageBuilder.EV.REPORT, {
-                            reports: data.reports
-                        });
+                    if (data.err) {
+                        callback(data.err);
+                        return;
                     }
+                    callback(null, {
+                        pages: pages,
+                        timestamp: timestamp,
+                        reports: data.reports
+                    });
                 }
             });
 
@@ -112,10 +126,12 @@ KISSY.add('utils/build-page',function (S) {
     });
 
     return PageBuilder;
+}, {
+    requires: ['ajax', 'base']
 });
 
-KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
-    var $ = S.all;
+KISSY.add('utils/calendar-init',function (S, Node,  Calendar, Overlay) {
+    var $ = Node.all;
     return {
         init: function (config) {
 
@@ -146,7 +162,7 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
                 })
                 .on('show', function () {
                     $(document.body).on('click', bodyOnClick);
-                })
+                });
 
 
 
@@ -171,7 +187,6 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
                     var val = $et.val();
                     if (val) {
                         var m = val.match(/^(\d{2,4})(\d\d)(\d\d)$/);
-                        console.log(m);
                         var selectedDate = S.Date.parse(m.slice(1).join('-'));
                         cal.render({
                             date: selectedDate,
@@ -183,60 +198,9 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
         }
     }
 }, {
-    requires: ['calendar', 'overlay', 'calendar/assets/base.css']
+    requires: ['node', 'calendar', 'overlay']
 });
 KISSY.add('utils/local-cache',function (S) {
-    /**
-     * Local Storage
-     * @param key
-     * @constructor
-     */
-    function PageCache (key) {
-        var self = this;
-        self.KEY = key;
-    }
-
-    S.augment(PageCache, {
-        set: function(k, v) {
-            var self = this;
-            var KEY = self.KEY;
-            var obj = self.getAll();
-            obj[k] = v;
-            self.save();
-        },
-
-        save: function() {
-            var self = this;
-            var KEY = self.KEY;
-            var obj = self.getAll();
-            localStorage.setItem(KEY, JSON.stringify(obj));
-        },
-
-        get: function(k) {
-            var self = this;
-            var KEY = self.KEY;
-            var obj = self.getAll();
-            return obj[k];
-        },
-
-        getAll: function() {
-            var self = this;
-            var KEY = self.KEY;
-            if (self._cache) {
-                return self._cache;
-            }
-            var str = localStorage.getItem(KEY);
-            if (!str) {
-                self._cache = {};
-            } else {
-                self._cache = JSON.parse(str) || {};
-            }
-            return self.getAll();
-        }
-    });
-
-    return PageCache;
-});KISSY.add(function (S) {
     /**
      * Local Storage
      * @param key
@@ -499,7 +463,7 @@ KISSY.add('page/template/report-files-tpl',function(){
   Template Module Generated by KissyPie 
  **/
 KISSY.add('page/template/report-concat-tpl',function(){
-    return {"html":"<h4>处理文件列表:</h4>\r\n{{#if !jobs.length}}\r\n    <div>\r\n        没有文件\r\n    </div>\r\n{{#else}}\r\n    <ul >\r\n        {{#each jobs as job}}\r\n            <li>\r\n                <h4><i class=\"icon-file\"></i> {{job.filename}}</h4>\r\n                <ul class=\"plugin-file-list\">\r\n                    {{#each job.files as file}}\r\n                        <li title='{{file.path}}'>{{file.filename}}</li>\r\n                    {{/each}}\r\n                </ul>\r\n            </li>\r\n        {{/each}}\r\n    </ul>\r\n{{/if}}\r\n"};
+    return {"html":"<h4>处理文件列表:</h4>\r\n{{#if !jobs.length}}\r\n    <div>\r\n        没有文件\r\n    </div>\r\n{{#else}}\r\n    <ul >\r\n        {{#each jobs as job}}\r\n            <li>\r\n                <h4><i class=\"icon-file\"></i> {{job.filename}}</h4>\r\n                <ul class=\"plugin-file-list\">\r\n                    {{#each job.files as file}}\r\n                        <li title='{{file.path}}'>{{file.filename}}</li>\r\n                    {{/each}}\r\n                </ul>\r\n            </li>\r\n        {{/each}}\r\n    </ul>\r\n{{/if}}"};
 });
 
 /**

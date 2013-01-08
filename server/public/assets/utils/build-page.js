@@ -1,18 +1,20 @@
-KISSY.add(function (S) {
-    var $ = S.all;
+
+//noinspection JSValidateTypes
+KISSY.add(function (S, IO, Base) {
 
     function PageBuilder () {
         var self = this;
         PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base, /**@lends PageBuilder.prototype */{
+    S.extend(PageBuilder, Base, /**@lends PageBuilder.prototype */{
         /**
          * build pages to a timestamp
-         * @param pages {Array|String} pages to build
-         * @param timestamp {String} timestamp build to
+         * @param {Array|String} pages to build
+         * @param {String} timestamp build to
+         * @param {Function} callback
          */
-        build: function(pages, timestamp) {
+        build: function(pages, timestamp, callback) {
             var self = this;
             if (!pages || !pages.length) {
                 self.fire(PageBuilder.EV.ERROR, {
@@ -37,7 +39,7 @@ KISSY.add(function (S) {
                 timestamp: timestamp
             });
 
-            S.ajax({
+            IO({
                 url: self.get('url'),
                 data: {
                     timestamp: timestamp,
@@ -47,25 +49,37 @@ KISSY.add(function (S) {
                 cache: false,
                 dataType: 'json',
                 success: function (data) {
+                    if (!callback) {
+                        if (data.err) {
+                            self.fire(PageBuilder.EV.ERROR, {
+                                fromBuild: true,
+                                error: data.err
+                            });
+                            return;
+                        }
 
-                    if (data.err) {
-                        self.fire(PageBuilder.EV.ERROR, {
-                            fromBuild: true,
-                            error: data.err
+                        self.fire(PageBuilder.EV.SUCCESS, {
+                            pages: pages,
+                            timestamp: timestamp
                         });
+
+                        if (data.reports) {
+                            self.fire(PageBuilder.EV.REPORT, {
+                                reports: data.reports
+                            });
+                        }
                         return;
                     }
 
-                    self.fire(PageBuilder.EV.SUCCESS, {
-                        pages: pages,
-                        timestamp: timestamp
-                    });
-
-                    if (data.reports) {
-                        self.fire(PageBuilder.EV.REPORT, {
-                            reports: data.reports
-                        });
+                    if (data.err) {
+                        callback(data.err);
+                        return;
                     }
+                    callback(null, {
+                        pages: pages,
+                        timestamp: timestamp,
+                        reports: data.reports
+                    });
                 }
             });
 
@@ -90,4 +104,6 @@ KISSY.add(function (S) {
     });
 
     return PageBuilder;
+}, {
+    requires: ['ajax', 'base']
 });
