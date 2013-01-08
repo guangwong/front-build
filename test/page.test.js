@@ -255,7 +255,7 @@ describe('page build test', function(){
             if (err) {
                 return done(err);
             }
-            cnt.should.include('KISSY.add( function(){');
+            cnt.should.include('KISSY.add(function(){');
             cnt.should.include('文龙');
             done();
         })
