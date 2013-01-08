@@ -197,7 +197,8 @@ describe('page build test', function(){
     it('should create concat files list in fb.page.json', function(done){
         fs.readFile(path.join(pubDir, 'page/concat.js'), 'utf8', function (err, content) {
             if (err) {
-                return done(err);
+                done(err);
+                return;
             }
             content.should.include('mods:mod1.js');
             content.should.include('mods:mod2.js');
@@ -226,7 +227,7 @@ describe('page build test', function(){
             data.should.include('#a.less');
             done();
         });
-        
+
     });
 
     it('should build kissy js file', function(done) {
@@ -243,6 +244,11 @@ describe('page build test', function(){
             data.should.include("KISSY.add('page/mods/submod2',");
             data.should.include("KISSY.add('page/tpl/foo-tpl',");
             data.should.include("KISSY.add('utils/sample/index',");
+
+            //package1
+            data.should.include("KISSY.add('package1/mod1',");
+            data.should.include('外部包模块');
+
             //utils
             data.should.include("utils-sample-index.js");
             done();
