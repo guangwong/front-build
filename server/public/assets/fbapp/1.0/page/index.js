@@ -84,7 +84,19 @@ KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, loc
                         .removeClass('st-building')
                         .addClass('st-queued');
                 });
-                $('#progress').show();
+                $('#progress .bar')
+                    .hide()
+                    .css('width', 0);
+                setTimeout(function(){
+                    $('#progress .bar')
+                        .show();
+                }, 0);
+
+                $('#progress')
+                    .addClass('progress-striped')
+                    .addClass('active')
+                    .removeClass('progress-success');
+
                 startTime = new Date().getTime();
                 execQueue(
                     queue,
@@ -121,10 +133,16 @@ KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, loc
 
                         setTimeout(function () {
 
-                            $('#progress').hide();
-                            $status.html('success').show();
-                            $('#progress .bar').css('width', 0);
+
+                            $('#progress')
+                                .removeClass('active')
+                                .removeClass('progress-striped')
+                                .addClass('progress-success');
+
+
+
                             setTimeout(function () {
+
                                 S.each(queue, function(item){
                                     item.el
                                         .removeClass('st-error')
@@ -132,7 +150,7 @@ KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, loc
                                         .removeClass('st-building')
                                         .removeClass('st-queued');
                                 });
-                            }, 800);
+                            }, 500);
                             setTimeout(function() {
                                 $status.hide();
 

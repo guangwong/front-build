@@ -31,6 +31,8 @@ block content
       .span4
 
         .buildto-block
+          .progress.active#progress
+            .bar(style="width:0")
           .input-prepend.input-append
             span.add-on
               i.icon-calendar
@@ -39,8 +41,7 @@ block content
               |Build
           div#batch-build-status.status
 
-          .progress.progress-striped.active#progress.hide
-            .bar(style="width:0")
+
 
           - if (app.config.groups)
             h3 groups
