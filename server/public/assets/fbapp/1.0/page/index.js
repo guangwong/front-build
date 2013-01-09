@@ -1,9 +1,9 @@
 //noinspection JSValidateTypes
-KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
-    var $ = S.all;
+KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
+    var $ = Node.all,
+        tplQueue;
 
     function restoreConfig(appCache) {
-
         $('#batch-build-timestamp').val(appCache.get('timestamp'));
 
         var pages = appCache.get('pages');
@@ -14,6 +14,43 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
                 })
                 .prop('checked', true);
         }
+    }
+
+
+    /**
+     * Get all checked pages
+     * @return {Array}
+     */
+    function getCheckedPages() {
+        var pages = [];
+        $('input.j-version-checkbox').each(function($input) {
+            if ($input.prop('checked') && $input.val()) {
+                pages.push({
+                    el: $input.parent('.version'),
+                    val: $input.val()
+                });
+            }
+        });
+        return pages;
+    }
+
+    function execQueue(queue, fn, callback) {
+
+        function doit(index) {
+            if (index >= queue.length) {
+                callback();
+                return;
+            }
+
+            fn(queue[index], index, function(err){
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                doit(index + 1);
+            });
+        }
+        doit(0);
     }
 
     /**
@@ -27,40 +64,107 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
             rootDir: config.rootDir
         });
         var $timestamp = $('#batch-build-timestamp');
-        var $status = $('#batch-build-status')
+        var $status = $('#batch-build-status');
         var $btn = $('#batch-build');
+
         $btn
             .on('click', function (ev) {
                 ev.preventDefault();
                 var timestamp = $timestamp.val();
-                var pages = [];
-                $('input.j-version-checkbox').each(function ($input) {
-                    if ($input.prop('checked') && $input.val()) {
-                        pages.push($input.val());
-                    }
-                });
-                pageBuilder.build(pages, timestamp);
-            });
+                var queue = getCheckedPages();
 
-        pageBuilder
-            .on('error', function (ev) {
-                var err = ev.error;
-                $status.html(err.message).show();
-                if (ev.fromBuild) {
-                    S.log(err);
+                if (!queue.length) {
+                    return;
                 }
 
-            })
-            .on('build', function(ev) {
-                appCache.set('timestamp', ev.timestamp);
-                appCache.set('pages', ev.pages);
-            })
-            .on('success', function (ev) {
-                $status.html('success');
-                setTimeout(function () {
-                    $status.hide();
-                }, 1500);
+                S.each(queue, function(item){
+                    item.el
+                        .removeClass('st-error')
+                        .removeClass('st-ok')
+                        .removeClass('st-building')
+                        .addClass('st-queued');
+                });
+                $('#progress .bar')
+                    .hide()
+                    .css('width', 0);
+                setTimeout(function(){
+                    $('#progress .bar')
+                        .show();
+                }, 0);
+
+                $('#progress')
+                    .addClass('progress-striped')
+                    .addClass('active')
+                    .removeClass('progress-success');
+
+                startTime = new Date().getTime();
+                execQueue(
+                    queue,
+                    function(task, index, callback) {
+                        var $el = task.el;
+                        $el.addClass('st-building');
+                        pageBuilder.build(task.val, timestamp, function (err, data) {
+                            $el.removeClass('st-building');
+                            if (err) {
+                                $el.addClass('st-error');
+                                callback(err);
+                                return;
+                            }
+                            $('#progress .bar').css('width', (index+1) / queue.length * 100 + '%');
+                            $el.addClass('st-ok');
+                            callback(null);
+                        });
+                    },
+
+                    function (err) {
+                        if (err) {
+                            $status.html(err.message).show();
+                            if (ev.fromBuild) {
+                                S.log(err);
+                            }
+                        }
+
+                        var usedTime = new Date().getTime() - startTime;
+
+                        analytics.track('Build Pages', {
+                            length: queue.length,
+                            avTime: usedTime/queue.length
+                        });
+
+                        setTimeout(function () {
+
+
+                            $('#progress')
+                                .removeClass('active')
+                                .removeClass('progress-striped')
+                                .addClass('progress-success');
+
+
+
+                            setTimeout(function () {
+
+                                S.each(queue, function(item){
+                                    item.el
+                                        .removeClass('st-error')
+                                        .removeClass('st-ok')
+                                        .removeClass('st-building')
+                                        .removeClass('st-queued');
+                                });
+                            }, 500);
+                            setTimeout(function() {
+                                $status.hide();
+
+                            },2000);
+                        }, 800);
+                    });
+
+
+                appCache.set('timestamp', timestamp);
+                appCache.set('pages', S.map(queue, function (task) {
+                    return task.val;
+                }));
             });
+
         return pageBuilder;
     }
     /**
@@ -75,6 +179,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
             Calendar.init({
                 triggers: 'input.timestamp-input'
             });
+
             buildCommon.init();
 
             initBuilder(config, appCache);
@@ -82,6 +187,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
             appHistory.push(config.rootDir);
 
             restoreConfig(appCache);
+
         });
     }
 
@@ -92,6 +198,7 @@ KISSY.add(function (S, PageBuilder, buildCommon, Calendar, appHistory, localCach
 
 }, {
     requires: [
+        'node',
         'utils/build-page',
         'utils/build-common',
         'utils/calendar-init',

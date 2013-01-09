@@ -2,87 +2,105 @@
 @import "../../../utils/title.less";
 
 .fb-pages {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .fb-common {
-    font-size:16px;
-    background:#d3e9f4;
-    padding:10px;
-    display:block;
-    position: relative;
-    border-bottom:#999 1px solid;
-    .options {
-        position: absolute;
-        padding:5px;
-        top:0;
-        right:0;
-        color:#fff;
-    }
-    .status {
-        color:#333;
-        margin-right:10px;
-    }
-    
+  font-size: 16px;
+  background: #d3e9f4;
+  padding: 10px;
+  display: block;
+  position: relative;
+  border-bottom: #999 1px solid;
+  .options {
+    position: absolute;
+    padding: 5px;
+    top: 0;
+    right: 0;
+    color: #fff;
+  }
+  .status {
+    color: #333;
+    margin-right: 10px;
+  }
+
 }
+
 .form-page-add {
-    border:2px #999 dashed;
-    /*text-align:center;*/
-    padding:10px;
-    margin-top:30px;
+  border: 2px #999 dashed;
+/*text-align:center;*/
+  padding: 10px;
+  margin-top: 30px;
 }
+
 .fb-page {
-    margin:0 0 10px 0;
+  margin: 0 0 10px 0;
 }
+
 .fb-pages {
-    margin-top:40px;
+  margin-top: 40px;
 }
+
 .version {
-    border-bottom:#999 1px solid;
-    // border-radius:0 0 5px 5px;
-    // margin-left: 50px;
-    position: relative;
+  border-bottom: #999 1px solid; // border-radius:0 0 5px 5px;
+// margin-left: 50px;
+  position: relative;
+  .version_no {
+    font-size: 16px;
+    background: #d3e9f4;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    display: block;
+    &:hover {
+      color: #fff;
+      background: #1cacf4;
+    /*background:#f2f2f2;*/
+    }
+  }
+  &.st-queued {
     .version_no {
-        font-size:16px;
-        background:#d3e9f4;
-        height:40px;
-        line-height:40px;
-        padding-left:10px;
-        display:block;
-        &:hover {
-            color:#fff;
-            background:#1cacf4;
-            /*background:#f2f2f2;*/
-        }
+      background: #f2f2f2;
     }
-    .options {
-        position: absolute;
-        top:0;
-        right:0;
-        color:#fff;
+  }
+  &.st-ok {
+    .version_no {
+      background: #34E7CB;
     }
-    .status {
-        margin:0 10px;
-        display:inline-block;
+  }
+  &.st-error {
+    .version_no {
+      border: #ff0000 1px solid;
     }
+  }
+  .options {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+  }
+  .status {
+    margin: 0 10px;
+    display: inline-block;
+  }
 }
 
 .versions {
-    list-style: none;
-    margin:0;
+  list-style: none;
+  margin: 0;
 }
 
 .version-check {
-    height:40px;
-    line-height:40px;
-    padding:0;
-    input.version-checkbox {
-        vertical-align:middle;
-        height:30px;
-        width:30px;
-    }
+  height: 40px;
+  line-height: 40px;
+  padding: 0;
+  input.version-checkbox {
+    vertical-align: middle;
+    height: 30px;
+    width: 30px;
+  }
 }
 
 .groups-item a {
-    background:#fff;
+  background: #fff;
 }

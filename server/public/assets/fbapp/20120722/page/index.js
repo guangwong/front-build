@@ -10,21 +10,23 @@ page/mods/group-select
 page/index
 
 */
-KISSY.add('utils/build-page',function (S) {
-    var $ = S.all;
+
+//noinspection JSValidateTypes
+KISSY.add('utils/build-page',function (S, IO, Base) {
 
     function PageBuilder () {
         var self = this;
         PageBuilder.superclass.constructor.apply(self, arguments);
     }
 
-    S.extend(PageBuilder, S.Base, /**@lends PageBuilder.prototype */{
+    S.extend(PageBuilder, Base, /**@lends PageBuilder.prototype */{
         /**
          * build pages to a timestamp
-         * @param pages {Array|String} pages to build
-         * @param timestamp {String} timestamp build to
+         * @param {Array|String} pages to build
+         * @param {String} timestamp build to
+         * @param {Function} callback
          */
-        build: function(pages, timestamp) {
+        build: function(pages, timestamp, callback) {
             var self = this;
             if (!pages || !pages.length) {
                 self.fire(PageBuilder.EV.ERROR, {
@@ -49,7 +51,7 @@ KISSY.add('utils/build-page',function (S) {
                 timestamp: timestamp
             });
 
-            S.ajax({
+            IO({
                 url: self.get('url'),
                 data: {
                     timestamp: timestamp,
@@ -59,25 +61,37 @@ KISSY.add('utils/build-page',function (S) {
                 cache: false,
                 dataType: 'json',
                 success: function (data) {
+                    if (!callback) {
+                        if (data.err) {
+                            self.fire(PageBuilder.EV.ERROR, {
+                                fromBuild: true,
+                                error: data.err
+                            });
+                            return;
+                        }
 
-                    if (data.err) {
-                        self.fire(PageBuilder.EV.ERROR, {
-                            fromBuild: true,
-                            error: data.err
+                        self.fire(PageBuilder.EV.SUCCESS, {
+                            pages: pages,
+                            timestamp: timestamp
                         });
+
+                        if (data.reports) {
+                            self.fire(PageBuilder.EV.REPORT, {
+                                reports: data.reports
+                            });
+                        }
                         return;
                     }
 
-                    self.fire(PageBuilder.EV.SUCCESS, {
-                        pages: pages,
-                        timestamp: timestamp
-                    });
-
-                    if (data.reports) {
-                        self.fire(PageBuilder.EV.REPORT, {
-                            reports: data.reports
-                        });
+                    if (data.err) {
+                        callback(data.err);
+                        return;
                     }
+                    callback(null, {
+                        pages: pages,
+                        timestamp: timestamp,
+                        reports: data.reports
+                    });
                 }
             });
 
@@ -102,10 +116,12 @@ KISSY.add('utils/build-page',function (S) {
     });
 
     return PageBuilder;
+}, {
+    requires: ['ajax', 'base']
 });
 
-KISSY.add('utils/build-common',function (S) {
-    var $ = S.all;
+KISSY.add('utils/build-common',function (S, Node) {
+    var $ = Node.all;
 
     return {
         init: function () {
@@ -137,9 +153,11 @@ KISSY.add('utils/build-common',function (S) {
             
         }
     };
+}, {
+    requires: ['node']
 });
-KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
-    var $ = S.all;
+KISSY.add('utils/calendar-init',function (S, Node,  Calendar, Overlay) {
+    var $ = Node.all;
     return {
         init: function (config) {
 
@@ -170,7 +188,7 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
                 })
                 .on('show', function () {
                     $(document.body).on('click', bodyOnClick);
-                })
+                });
 
 
 
@@ -195,7 +213,6 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
                     var val = $et.val();
                     if (val) {
                         var m = val.match(/^(\d{2,4})(\d\d)(\d\d)$/);
-                        console.log(m);
                         var selectedDate = S.Date.parse(m.slice(1).join('-'));
                         cal.render({
                             date: selectedDate,
@@ -207,7 +224,7 @@ KISSY.add('utils/calendar-init',function (S, Calendar, Overlay) {
         }
     }
 }, {
-    requires: ['calendar', 'overlay', 'calendar/assets/base.css']
+    requires: ['node', 'calendar', 'overlay']
 });
 KISSY.add('utils/app-history',function (S) {
     if (!window.localStorage) {
@@ -248,8 +265,7 @@ KISSY.add('utils/app-history',function (S) {
         },
         
         get: function () {
-            var list = getList();
-            return list;
+            return getList();
         },
         
         rm: function (path) {
@@ -263,57 +279,6 @@ KISSY.add('utils/app-history',function (S) {
     }
 });
 KISSY.add('utils/local-cache',function (S) {
-    /**
-     * Local Storage
-     * @param key
-     * @constructor
-     */
-    function PageCache (key) {
-        var self = this;
-        self.KEY = key;
-    }
-
-    S.augment(PageCache, {
-        set: function(k, v) {
-            var self = this;
-            var KEY = self.KEY;
-            var obj = self.getAll();
-            obj[k] = v;
-            self.save();
-        },
-
-        save: function() {
-            var self = this;
-            var KEY = self.KEY;
-            var obj = self.getAll();
-            localStorage.setItem(KEY, JSON.stringify(obj));
-        },
-
-        get: function(k) {
-            var self = this;
-            var KEY = self.KEY;
-            var obj = self.getAll();
-            return obj[k];
-        },
-
-        getAll: function() {
-            var self = this;
-            var KEY = self.KEY;
-            if (self._cache) {
-                return self._cache;
-            }
-            var str = localStorage.getItem(KEY);
-            if (!str) {
-                self._cache = {};
-            } else {
-                self._cache = JSON.parse(str) || {};
-            }
-            return self.getAll();
-        }
-    });
-
-    return PageCache;
-});KISSY.add(function (S) {
     /**
      * Local Storage
      * @param key
@@ -403,11 +368,11 @@ KISSY.add('page/mods/group-select',function (S) {
     });
 });
 //noinspection JSValidateTypes
-KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
-    var $ = S.all;
+KISSY.add('page/index',function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
+    var $ = Node.all,
+        tplQueue;
 
     function restoreConfig(appCache) {
-
         $('#batch-build-timestamp').val(appCache.get('timestamp'));
 
         var pages = appCache.get('pages');
@@ -418,6 +383,43 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
                 })
                 .prop('checked', true);
         }
+    }
+
+
+    /**
+     * Get all checked pages
+     * @return {Array}
+     */
+    function getCheckedPages() {
+        var pages = [];
+        $('input.j-version-checkbox').each(function($input) {
+            if ($input.prop('checked') && $input.val()) {
+                pages.push({
+                    el: $input.parent('.version'),
+                    val: $input.val()
+                });
+            }
+        });
+        return pages;
+    }
+
+    function execQueue(queue, fn, callback) {
+
+        function doit(index) {
+            if (index >= queue.length) {
+                callback();
+                return;
+            }
+
+            fn(queue[index], index, function(err){
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                doit(index + 1);
+            });
+        }
+        doit(0);
     }
 
     /**
@@ -431,40 +433,107 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
             rootDir: config.rootDir
         });
         var $timestamp = $('#batch-build-timestamp');
-        var $status = $('#batch-build-status')
+        var $status = $('#batch-build-status');
         var $btn = $('#batch-build');
+
         $btn
             .on('click', function (ev) {
                 ev.preventDefault();
                 var timestamp = $timestamp.val();
-                var pages = [];
-                $('input.j-version-checkbox').each(function ($input) {
-                    if ($input.prop('checked') && $input.val()) {
-                        pages.push($input.val());
-                    }
-                });
-                pageBuilder.build(pages, timestamp);
-            });
+                var queue = getCheckedPages();
 
-        pageBuilder
-            .on('error', function (ev) {
-                var err = ev.error;
-                $status.html(err.message).show();
-                if (ev.fromBuild) {
-                    S.log(err);
+                if (!queue.length) {
+                    return;
                 }
 
-            })
-            .on('build', function(ev) {
-                appCache.set('timestamp', ev.timestamp);
-                appCache.set('pages', ev.pages);
-            })
-            .on('success', function (ev) {
-                $status.html('success');
-                setTimeout(function () {
-                    $status.hide();
-                }, 1500);
+                S.each(queue, function(item){
+                    item.el
+                        .removeClass('st-error')
+                        .removeClass('st-ok')
+                        .removeClass('st-building')
+                        .addClass('st-queued');
+                });
+                $('#progress .bar')
+                    .hide()
+                    .css('width', 0);
+                setTimeout(function(){
+                    $('#progress .bar')
+                        .show();
+                }, 0);
+
+                $('#progress')
+                    .addClass('progress-striped')
+                    .addClass('active')
+                    .removeClass('progress-success');
+
+                startTime = new Date().getTime();
+                execQueue(
+                    queue,
+                    function(task, index, callback) {
+                        var $el = task.el;
+                        $el.addClass('st-building');
+                        pageBuilder.build(task.val, timestamp, function (err, data) {
+                            $el.removeClass('st-building');
+                            if (err) {
+                                $el.addClass('st-error');
+                                callback(err);
+                                return;
+                            }
+                            $('#progress .bar').css('width', (index+1) / queue.length * 100 + '%');
+                            $el.addClass('st-ok');
+                            callback(null);
+                        });
+                    },
+
+                    function (err) {
+                        if (err) {
+                            $status.html(err.message).show();
+                            if (ev.fromBuild) {
+                                S.log(err);
+                            }
+                        }
+
+                        var usedTime = new Date().getTime() - startTime;
+
+                        analytics.track('Build Pages', {
+                            length: queue.length,
+                            avTime: usedTime/queue.length
+                        });
+
+                        setTimeout(function () {
+
+
+                            $('#progress')
+                                .removeClass('active')
+                                .removeClass('progress-striped')
+                                .addClass('progress-success');
+
+
+
+                            setTimeout(function () {
+
+                                S.each(queue, function(item){
+                                    item.el
+                                        .removeClass('st-error')
+                                        .removeClass('st-ok')
+                                        .removeClass('st-building')
+                                        .removeClass('st-queued');
+                                });
+                            }, 500);
+                            setTimeout(function() {
+                                $status.hide();
+
+                            },2000);
+                        }, 800);
+                    });
+
+
+                appCache.set('timestamp', timestamp);
+                appCache.set('pages', S.map(queue, function (task) {
+                    return task.val;
+                }));
             });
+
         return pageBuilder;
     }
     /**
@@ -479,6 +548,7 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
             Calendar.init({
                 triggers: 'input.timestamp-input'
             });
+
             buildCommon.init();
 
             initBuilder(config, appCache);
@@ -486,6 +556,7 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
             appHistory.push(config.rootDir);
 
             restoreConfig(appCache);
+
         });
     }
 
@@ -496,6 +567,7 @@ KISSY.add('page/index',function (S, PageBuilder, buildCommon, Calendar, appHisto
 
 }, {
     requires: [
+        'node',
         'utils/build-page',
         'utils/build-common',
         'utils/calendar-init',

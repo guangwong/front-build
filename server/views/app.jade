@@ -29,7 +29,10 @@ block content
                         input.j-version-checkbox.version-checkbox(type='checkbox',value='#{page.name}/#{page.version}')
 
       .span4
+
         .buildto-block
+          .progress.active#progress
+            .bar(style="width:0")
           .input-prepend.input-append
             span.add-on
               i.icon-calendar
@@ -37,6 +40,9 @@ block content
             button#batch-build.btn
               |Build
           div#batch-build-status.status
+
+
+
           - if (app.config.groups)
             h3 groups
             ul.groups.nav.nav-tabs.nav-stacked
