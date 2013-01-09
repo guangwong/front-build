@@ -245,8 +245,9 @@ describe('page build test', function(){
             data.should.include("KISSY.add('page/tpl/foo-tpl',");
             data.should.include("KISSY.add('utils/sample/index',");
 
-            //package1
+            //外部包
             data.should.include("KISSY.add('package1/mod1',");
+            //外部包编码
             data.should.include('外部包模块');
 
             //utils
