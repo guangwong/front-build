@@ -1,3 +1,4 @@
+//noinspection JSValidateTypes
 KISSY.add(function (S, Node) {
     var $ = Node.all;
 
@@ -10,6 +11,7 @@ KISSY.add(function (S, Node) {
                 var $et = $(ev.target);
                 ev.preventDefault();
                 $elStatus.html('building...');
+                analytics.track('Build Common');
 
                 S.ajax({
                     url: $et.attr('href'),
@@ -18,7 +20,7 @@ KISSY.add(function (S, Node) {
                         if (data.err) {
                             var err = data.err;
                             $elStatus
-                                .html('Error:' + err.message)
+                                .html('Error:' + err.message);
                             return;
                         }
                         $elStatus.html('success!');

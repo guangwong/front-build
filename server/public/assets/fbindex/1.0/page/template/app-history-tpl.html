@@ -2,6 +2,6 @@
 {{#each his as item index}}
 <div class="his-item">
     <a class="his-title" href="/app?root={{item}}">{{item}}	</a>
-    <a class="his-delete" title="delete" data-index="{{index}}" href="#">&times;</a>
+    <a data-track="Delete History" class="his-delete" title="delete" data-index="{{index}}" href="#">&times;</a>
 </div>
 {{/each}}

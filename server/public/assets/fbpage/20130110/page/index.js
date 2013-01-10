@@ -596,6 +596,7 @@ KISSY.add('page/index',function (S, PageBuilder, Calendar, LocalCache, Reporter,
             analyzer.analyze().then(function (data) {
                 reporter.appendReportEl($(data.html));
             });
+            analytics.track('Analyze Modules');
         });
     }
 
@@ -633,6 +634,7 @@ KISSY.add('page/index',function (S, PageBuilder, Calendar, LocalCache, Reporter,
                     $status.html("打包失败！ ").show();
                     return;
                 }
+
                 $status.html("error: " + ev.error.message).show();
 
                 analytics.track('Single Page Error', {

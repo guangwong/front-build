@@ -21,8 +21,8 @@ html
             tag: '#{pageConfig.timestampAppend}'
         });
   body
-    a(href='/',title='切换应用').logo
-        img(src='/images/logo-small.png');
+    a(href='/',title='切换应用',data-track="Click Logo").logo
+        img(src='/images/logo-small.png')
     block content
     div.container
         .row-fluid

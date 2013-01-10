@@ -1,4 +1,5 @@
-KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, Analyzer) {
+//noinspection JSValidateTypes
+KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, Analyzer, Analytics) {
     var $ = S.all;
 
     function initAnalyze(config, reporter) {
@@ -7,6 +8,7 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
             analyzer.analyze().then(function (data) {
                 reporter.appendReportEl($(data.html));
             });
+            analytics.track('Analyze Modules');
         });
     }
 
@@ -25,6 +27,7 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
             ev.preventDefault();
             $status.html('building...');
             pb.build(config.pageVersion, timestamp.val());
+            analytics.track('Build One Page');
         });
 
         pb
@@ -43,7 +46,13 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
                     $status.html("打包失败！ ").show();
                     return;
                 }
+
                 $status.html("error: " + ev.error.message).show();
+
+                analytics.track('Single Page Error', {
+                    message: Message
+                });
+
             })
             .on('report', function (ev) {
 
@@ -69,13 +78,12 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
 
             initBuilder(config, pageCache, reporter);
 
-
             initAnalyze(config, reporter);
 
             Calendar.init({
                 triggers: 'input.timestamp-input'
             });
-
+            Analytics.init();
 
 
         });
@@ -91,5 +99,7 @@ KISSY.add(function (S, PageBuilder, Calendar, LocalCache, Reporter, Timestamp, A
         'utils/local-cache',
         './mods/reporter',
         './mods/timestamp',
-        './mods/analyzer']
+        './mods/analyzer',
+        'utils/analytics'
+    ]
 });

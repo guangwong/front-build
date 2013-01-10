@@ -4,6 +4,7 @@ KISSY.add(function (S) {
     S.ready(function () {
         $('body')
             .delegate('click', '.j-select-group', function (ev) {
+                // 点击一个Group时候，选中相应的Version
                 var $et = $(ev.target);
                 ev.preventDefault();
                 var versions = $et.attr('title');
@@ -19,9 +20,12 @@ KISSY.add(function (S) {
                     } else {
                         el.prop('checked', false);
                     }
-                })
+                });
+
+                analytics.track('Select Group');
             })
             .delegate('click', '.j-version-checkbox', function (ev) {
+                // 确保一次只选中一个Version
                 var $et = $(ev.target);
                 var val = $et.val();
                 var pagename = val.split('/')[0];
@@ -32,6 +36,10 @@ KISSY.add(function (S) {
                         el.prop('checked', false);
                     }
                 });
+
+                analytics.track('Select Version');
+
+
             })
     });
 });

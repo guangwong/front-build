@@ -1,7 +1,6 @@
 //noinspection JSValidateTypes
-KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, localCache) {
-    var $ = Node.all,
-        tplQueue;
+KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, localCache, Analytics) {
+    var $ = Node.all;
 
     function restoreConfig(appCache) {
         $('#batch-build-timestamp').val(appCache.get('timestamp'));
@@ -188,6 +187,8 @@ KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, loc
 
             restoreConfig(appCache);
 
+            Analytics.init();
+
         });
     }
 
@@ -204,6 +205,7 @@ KISSY.add(function (S, Node, PageBuilder, buildCommon, Calendar, appHistory, loc
         'utils/calendar-init',
         'utils/app-history',
         'utils/local-cache',
-        './mods/group-select'
+        './mods/group-select',
+        'utils/analytics'
     ]
 });

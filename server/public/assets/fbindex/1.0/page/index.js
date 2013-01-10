@@ -1,4 +1,4 @@
-KISSY.add(function (S, Node, Template, appHistory, app_history_tpl) {
+KISSY.add(function (S, Node, Template, appHistory, app_history_tpl, Analytics) {
     var $ = Node.all;
     if (appHistory) {
         S.ready(function () {
@@ -20,8 +20,10 @@ KISSY.add(function (S, Node, Template, appHistory, app_history_tpl) {
                     $(ev.target).parent('.his-item').fadeOut(.2);
                 }
             });
+
+            Analytics.init();
         });
     }
 }, {
-    requires: ['node', 'template', 'utils/app-history', './template/app-history-tpl']
+    requires: ['node', 'template', 'utils/app-history', './template/app-history-tpl', 'utils/analytics']
 });
