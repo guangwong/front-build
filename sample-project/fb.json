@@ -14,6 +14,7 @@
     },
     "plugins": {
         "uglifyjs": {
+            "lift_vars": true,
             "ast_squeeze": {
                 "make_seqs": false
             }
