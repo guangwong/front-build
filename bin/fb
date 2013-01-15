@@ -11,8 +11,11 @@ var argv = require('optimist')
     .alias('w', 'watch')
 	.argv;
 
+
 var util = require('util');
-var ErrorHelper = require('../lib/error-helper')
+var ErrorHelper = require('../lib/error-helper');
+
+
 
 var cwd = process.cwd();
 
@@ -34,8 +37,6 @@ function done(err, message) {
 	if (message) {
 		console.log(message);
 	}
-
-	process.exit(0);
 }
 
 //默认显示帮助
