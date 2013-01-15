@@ -37,6 +37,7 @@ function done(err, message) {
 	if (message) {
 		console.log(message);
 	}
+    process.exit(0);
 }
 
 //默认显示帮助

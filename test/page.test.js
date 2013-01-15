@@ -22,6 +22,51 @@ var clearUtilsDir = function () {
     });
 };
 
+describe('Timetamp Test', function(){
+
+    it ('should pass', function () {
+        var src = [
+            '121212',
+            '20121212',
+
+            '121212_dev',
+            '20121212_dev',
+
+            '121212_-_',
+            '20121212_-_',
+
+            'pub_foo',
+
+            'pub__',
+
+            'pub_-'
+
+        ];
+        src.forEach(function(ts){
+            Page.testTimestamp(ts).should.eql(true, ts);
+        });
+    });
+
+    it ('should fail', function () {
+        var src = [
+            '12121',
+
+            '201212121',
+
+            '121212_',
+            '20121212-',
+
+            'pub_',
+            'foo_dev',
+            'pub_/'
+        ];
+
+        src.forEach(function(ts){
+            Page.testTimestamp(ts).should.eql(false, ts);
+        });
+    });
+});
+
 describe('Page parser test', function(){
     var src = [
         {
