@@ -465,18 +465,20 @@ describe('test App build Common', function () {
     });
 
     it('should build files to -min', function(done) {
-        async.map(minFiles, function (file, callback) {
-            fs.stat(path.join(rootDir, 'common', file), callback);
-        }, function (err, stats){
-            if (err) {
-                return done(err);
-            }
-            stats.forEach(function (stat) {
-                stat.isFile().should.be.true;
-            });
+        async.forEach(minFiles, function (file, callback) {
+            var filename = path.join(rootDir, 'common', file);
+            fs.existsSync(filename).should.eql(true, 'file: ' + filename);
+            callback();
+        }, done);
+    });
 
-            done();
-        })
+    it('should build kissy module', function() {
+        var indexMinFile = fs.readFileSync(path.join(commonDir, 'index-min.js'), 'utf8');
+
+        indexMinFile.should.include('KISSY.add("common/index",');
+        indexMinFile.should.include('KISSY.add("common/mods/a",');
+        indexMinFile.should.include('KISSY.add("common/mods/b",');
+        indexMinFile.should.include('GBK\\u7f16\\u7801');
     });
 
     it('should generate kissy template file', function() {
