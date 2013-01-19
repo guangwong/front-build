@@ -1,0 +1,15 @@
+// 通过设置 importPath 可以方便地跨页面公用模块
+@import "utils/mod";
+
+// 引用当前目录模块
+@import "mod";
+
+// 使用Sprite功能
+@import "sprites";
+
+// 输出Debug信息
+@debug "hello!!!";
+
+body {
+  color: red;
+}

@@ -5,3 +5,6 @@ sample-project/common/main-min.css
 
 sample-project/common/style-min.css
 .idea
+*.iml
+*.ipr
+.sass-cache
