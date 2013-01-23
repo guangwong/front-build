@@ -69,7 +69,7 @@ KissyPie 是面向前端的自动化开发环境。
 - iconv-lite https://github.com/ashtuchkin/iconv-lite
 - tbuild https://github.com/czy88840616/tbuild
 - less.js http://lesscss.org
-- clean-css
+- clean-css https://github.com/GoalSmashers/clean-css
 - uglifyjs https://github.com/mishoo/UglifyJS
 - csslint http://csslint.net
 - expressjs http://expressjs.org
