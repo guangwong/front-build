@@ -15,15 +15,17 @@ KissyPie 的打包，包括了：
 
 KissyPie 的打包是基于一套目录结构规范，这个规范是经过实践与讨论总结的。这套目录结构，考虑到调试，部署，协作，代码的模块化与解耦，通用模块。适合于大多数应用场景。
 
-Kissy将应用分成Page， 将Page添加版本的概念。
-
-### 使用
+### 易于使用
 
 KissyPie 支持 Windows， Linux 与 Mac 等平台。 提供了一套命令行工具。比如
 `ki init` 可以初始化一个应用。 `ki build page1/1.0 -t 20130219` 可以打包page1 的 1.0 版本 到时间戳目录 20130219。
 
 同时，KissyPie还有一套Web界面可供使用，提供友好的打包体验。在命令行， 可以通过`ki web` 打开这个界面。下面是界面截图。
-![应用视图](http://i.imgur.com/yyCi2Pe.png)
+
 应用视图
-![Page视图](http://i.imgur.com/oQEGKtf)
+
+![应用视图](http://i.imgur.com/yyCi2Pe.png)
+
 Page视图
+
+![Page视图](http://i.imgur.com/oQEGKtf.png)
