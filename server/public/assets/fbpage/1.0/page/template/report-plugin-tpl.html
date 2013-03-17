@@ -3,17 +3,17 @@
         <h4>{{name}} 
         {{#if typeof report.count === 'number'}}
         <span class='plugin-bdg'>
-            <span class="badge">{{report.count}}</span>
+            <span title='Execed' class="badge">{{report.count}}</span>
         </span>
         {{/if}}
         {{#if typeof report.warningCount === 'number' && report.warningCount > 0}}
         <span class='plugin-bdg'>
-            <span class="badge badge-warning">{{report.warningCount}}</span>
+            <span title='Warning' class="badge badge-warning">{{report.warningCount}}</span>
         </span>
         {{/if}}
         {{#if typeof report.errorCount === 'number' && report.errorCount > 0}}
         <span class='plugin-bdg'>
-            <span class="badge badge-important">{{report.errorCount}}</span>
+            <span title='Error'  class="badge badge-important">{{report.errorCount}}</span>
         </span>
         {{/if}}
         </h4>

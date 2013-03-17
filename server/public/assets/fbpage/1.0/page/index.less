@@ -1,0 +1,51 @@
+@import "../../../utils/app.less";
+@import "../../../utils/title.less";
+@import "../../../utils/reports.less";
+
+.timestamps {
+
+    list-style:none;
+    margin:20px 0;
+
+    li {
+        padding:10px;
+        border-bottom:1px solid #FFF;
+        background:#fff;
+        position:relative;
+        border-top: 1px solid #EEE;
+        &:hover {
+            background:#f2f2f2;
+            
+        }
+        
+    }
+    .build-version {
+        color:#AAA;
+        margin-left: 20px;
+    }
+
+    .build-time {
+        position:absolute;
+        font-size:12px;
+        color:#666;
+        right:10px;
+        top:10px;
+        
+    }
+}
+
+.timestamp {
+    cursor:pointer;
+    &:hover {
+        background:#ffff99;
+    }
+}
+.status-ok {
+    color: #00bb00;
+}
+.status-warning {
+  color:red;
+}
+.analyze-report {
+
+}

@@ -2,16 +2,11 @@ extends layout
 
 block content
   .container
-    .row-fluid
+    .row
       .span12
-        .fb-logo
-          a(href='/')
-            img(src='/images/logo.png')
-        form.ki-modal(action='/app',method='GET')
-          label 本地应用路径：
-          .input-append
-            input.input-xxlarge(type='text',name='root')
-            button.btn(type='submit') Open
+        .ki-modal
+          .help-block
+            p 在命令行进入你的应用， 执行 <code>ki web</code> 可直接打开此应用的管理界面。
           div#app-history.app-history
   script.
     KISSY.use('page/index');

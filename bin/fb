@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 var argv = require('optimist')
 	.string('timestamp')
+	.string('t')
     .string('version')
+    .string('v')
     .string('_')
     .alias('t', 'timestamp')
     .alias('v', 'version')
@@ -9,7 +11,11 @@ var argv = require('optimist')
     .alias('w', 'watch')
 	.argv;
 
+
 var util = require('util');
+var ErrorHelper = require('../lib/error-helper');
+
+
 
 var cwd = process.cwd();
 
@@ -17,18 +23,13 @@ var commands = require('../lib/commands');
 
 function done(err, message) {
 	if(err) {
-		if (argv.debug) {
-			throw err;
-		} else {
-			if (typeof err === 'string') {
-				util.debug('Error: %s', err.message);
-			} else if (err.message) {
-				util.debug(err.stack);
-                // util.debug(util.inspect(err));
-                util.debug(JSON.stringify(err, null, 2));
-			}
-			console.log('fail');
+		if (typeof err === 'string') {
+			util.debug('Error: %s', err.message);
+		} else if (err.message) {
+			ErrorHelper.printError(err);
 		}
+		
+		console.log('fail');
 		process.exit(1);
 		return;
 	}
@@ -36,8 +37,7 @@ function done(err, message) {
 	if (message) {
 		console.log(message);
 	}
-
-	process.exit(0);
+    process.exit(0);
 }
 
 //默认显示帮助
@@ -56,8 +56,7 @@ if (argv._[0]) {
 
 		case 'a':
 		case 'add':
-		case 'addpage':
-			command = 'addpage';
+			command = 'addPage';
 			break;
 
 		case 'v':
@@ -80,7 +79,13 @@ if (argv._[0]) {
 		case 'web':
 			command = 'web';
 			break;
-	};
+        case 'analyze':
+        case 'fenxi':
+        case 'st':
+        case 'fx':
+            command = 'analyze';
+            break;
+	}
 }
 
 if (commands && commands[command]) {

@@ -1,0 +1,46 @@
+<div class="report">
+    <div class="report-hd">
+        模块依赖分析
+    </div>
+    <div class="report-bd">
+        <div class="analyze-report">
+            {{#if modules.length}}
+                <table class='table'>
+                    <thead>
+                    <tr>
+                        <th>入口模块</th>
+                        <th>子模块</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each modules as mod}}
+                    <tr>
+                        <td><a target='hiddenIframe' href="/openfile?path={{mod.file}}">{{mod.name}}</a></td>
+                        <td>
+                            {{#if mod.mods.length}}
+                            <ul>
+                                {{#each mod.mods as submod}}
+                                {{#if submod.status === 'ok'}}
+                                <li class="status-ok"><a target='hiddenIframe' href="/openfile?path={{submod.file}}">{{submod.name}}</a></li>
+                                {{#else}}
+
+                                <li class="status-warning">{{submod.name}} <span class="label label-warning">{{submod.status}}</span></li>
+                                {{/if}}
+
+                                {{/each}}
+                            </ul>
+                            {{#else}}
+                            没有子模块
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+
+                    </tbody>
+                </table>
+            {{#else}}
+                没有找到入口模块
+            {{/if}}
+        </div>
+    </div>
+</div>

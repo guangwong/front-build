@@ -2,7 +2,7 @@
   "author": "maxbbn <qipbbn@gmail.com> (maxbbn.com)",
   "name": "kissy-pie",
   "description": "build front project",
-  "version": "0.4.5",
+  "version": "0.4.26",
   "repository": {
     "type": "git",
     "url": "git://github.com/maxbbn/front-build.git"
@@ -11,7 +11,7 @@
     "ki": "./bin/fb"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/.bin/mocha"
   },
   "main": "./lib/index.js",
   "engines": {
@@ -20,17 +20,20 @@
   "dependencies": {
     "optimist": "~0.3.1",
     "async": "~0.1.18",
-    "tbuild": "~0.3.3",
-    "less": "~1.3.0",
+    "less": ">=1.3.0",
     "uglify-js": "~1.2.6",
     "iconv-lite": "~0.2.1",
     "underscore": "~1.3.3",
     "css-combo": "~0.2.4",
-    "mkdirp": "~0.3.3",
     "jade": "*",
-    "express": "3.0.0beta7"
+    "express": "3.0.6",
+    "mkdirp": ">=0.3.4",
+    "module-compiler": ">=0.0.5",
+    "clean-css": "~0.6.0",
+    "colors": "~0.6.0-1"
   },
   "devDependencies": {
+    "mocha": "~1.4.1",
     "should": "~0.6.3"
   }
 }

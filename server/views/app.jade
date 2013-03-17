@@ -4,45 +4,67 @@ block content
   .container
     .row-fluid
       .span12
-        .fb-logo
-          a(href='/')
-            img(src='/images/logo.png')
         .fb-title
           h1= title
           p.path= app.rootDir
-        .fb-page
-            h3 common
+        .fb-common
+            .title common
             .options
-              span.status 
-              a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
+              .buildto-block
+                span.status 
+                a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
+
+    .row-fluid.fb-pages
+      .span8
         .pages
           - each pages, pageName in groups
             .fb-page
-              h3= pageName
               ul.versions
                 - each page in pages
                   li.version
                     //- input.versionCheck(type='checkbox')
-                    a.version_no(href='/page/#{page.name}@#{page.version}?root=#{app.rootDir}')= page.version
-                    .options.form-inline
-                      .input-prepend
-                        span.status
-                        |&nbsp;
-                        span.add-on
-                          i.icon-calendar
-                        input.timestamp-input(type='text')
-                        |&nbsp;
-                        a.btn.fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
-                          |Build
-        .fb-page
-          .row-fluid
-            .span12
-              form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
-                input(type='hidden', value=app.rootDir, name='root')
-                input.input-small(type='text', name='pagename', placeholder='pagename')
-                |&nbsp;
-                input.input-small(type='text', name='version', placeholder='version')
-                |&nbsp;
-                button.btn(type='submit') ADD
-  script
-    KISSY.use('page/index');
+                    a.version_no(href='/page/#{page.name}@#{page.version}?root=#{app.rootDir}') #{pageName}/#{page.version}
+                    .options
+                      .version-check
+                        input.j-version-checkbox.version-checkbox(type='checkbox',value='#{page.name}/#{page.version}')
+
+      .span4
+
+        .buildto-block
+          .progress.active#progress
+            .bar(style="width:0")
+          .input-prepend.input-append
+            span.add-on
+              i.icon-calendar
+            input#batch-build-timestamp.input-small.timestamp-input(type='text')
+            button#batch-build.btn
+              |Build
+          div#batch-build-status.status
+
+
+
+          - if (app.config.groups)
+            h3 groups
+            ul.groups.nav.nav-tabs.nav-stacked
+              li.groups-item
+                a.j-select-group(href='#', title='') none
+              - each group, groupname in app.config.groups
+                li.groups-item
+                  a.j-select-group(href='#', title=group.join(","))= groupname
+    .row-fluid
+      .span8
+        form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
+          fieldset
+            input(type='hidden', value=app.rootDir, name='root')
+            input.input-medium(type='text', name='pagename', title='Your Pagename')
+            |&nbsp; / &nbsp;
+            input.input-small(type='text', name='version', value='1.0', title='version (eg. 1.0)')
+            |&nbsp;&nbsp;
+            button.j-group-build.btn(type='submit') Add Page
+    #reporter.fixed-reporter
+  script.
+    KISSY.use('page/index', function (S, Page) {
+      Page.init({
+        rootDir: '#{app.rootDir.replace(/\\/g, '\\\\')}'
+      });
+    });

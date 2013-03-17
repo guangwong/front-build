@@ -1,4 +1,10 @@
 KISSY.add(function(){
     var a = 'mods:mod1.js';
 }, {
-    requires: ['../mods/submod1.js', 'utils/sample/index']});
+    requires: [
+        './submod1',
+        'page/mods/submod2',
+        'page/tpl/foo-tpl',
+        'utils/sample/index'
+    ]
+});

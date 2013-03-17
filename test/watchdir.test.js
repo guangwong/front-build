@@ -1,115 +1,76 @@
 var fs = require('fs');
 var path = require('path');
-var watchDir = require('../lib/watchdir');
+var WatchDir = require('../lib/watchdir');
 var fu = require('../lib/fileutil');
 var should = require('should');
 
-describe('watchDir', function () {
+describe('WatchDir', function () {
 	var rootDir = path.resolve('watch_dir_test');
-	var filePath = path.resolve(rootDir, 'a.js');
+	var rootFile = path.resolve(rootDir, 'a.js');
 	var subDir = path.resolve(rootDir, 'subDir');
 	var subFile = path.resolve(subDir, 'subFile.js');
 	var watcher;
-	var config = {
-			exludes: [
-				'.svn',
-				'.git'
-			],
-			includes: [
-				'*.js',
-				'*.css',
-				'*.less'
-			]
-		};
 
 	before(function (done) {
 		fs.mkdir(rootDir, function (err) {
 			if (err) {
 				return done(err);
 			}
-			watcher = watchDir(rootDir);
-			watcher.once('init', done);
-		// 	watcher.on('rename', function (file) {
-		// 		console.log('rename: %s', file.filename);
-		// 	});
+			watcher = new WatchDir(rootDir);
 
-		// 	wather.on('update', function () {
-		// 		console.log('update: %s', file.filename);
-		// 	});
+			watcher.once('init', done);
 		});
 
 	});
 
-	after(function (done){
+	after(function (done) {
 		watcher.stop();
 		fu.rmTree(rootDir, done);
 	});
 
-	it('should emit rename when file added', function (done) {
-		// console.log('----add  file filePath');
-		watcher.on('rename', function (file) {
-			// console.log('rename: %s', file.filename);
-			if (rootDir === file.filename) {
-				watcher.removeAllListeners('rename');
-				done();
-			}
+	it('should emit change when file added', function (done) {
+		// expectedEvent.push(['rename'])
+		watcher.once('change', function () {
+			setTimeout(done, 100);
 		});
-
-
-		fs.writeFile(filePath, 'hello');
+		fs.writeFile(rootFile, 'hello');
 
 	});
 
 	it('should emit change when file updated', function (done) {
-		// console.log('----update file filePath');
-		watcher.on('change', function (file) {
-			// console.log('change: %s', file.filename);
-			if (file.filename === filePath) {
-				watcher.removeAllListeners('change');
-				done();
-			}
+		watcher.once('change', function () {
+			setTimeout(done, 100);
 		});
-		fs.writeFile(filePath, 'hello2');
+		fs.writeFile(rootFile, 'hello2');
 
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		// console.log('----add subDir');
-		watcher.on('rename', function (file) {
-			// console.log('reanme: %s', file.filename);
-			if (file.filename === rootDir) {
-				watcher.removeAllListeners('rename');
-				done();
-			}
+		watcher.once('change', function () {
+			setTimeout(done, 100);
 		});
 		fs.mkdir(subDir);
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		// console.log('----add subFile.js');
-		watcher.on('rename', function (file) {
-			// console.log('reanme: %s', file.filename);
-			if (file.filename === subDir) {
-				watcher.removeAllListeners('rename');
-				done();
-			}
+		watcher.once('change', function () {
+			setTimeout(done, 100);
 		});
-
 		fs.writeFile(subFile, 'subFile.js');
 	});
 
 	it('should emit events when direcotory added or file added to subDire', function (done) {
-		// console.log('----update subFile.js');
-
-		watcher.on('change', function (file) {
-			// console.log('change: %s', file.filename);
-			if (file.filename === subFile) {
-				watcher.removeAllListeners('change');
-				done();
-			}
+		watcher.once('change', function () {
+			setTimeout(done, 100);
 		});
+		fs.writeFile(subFile, 'subFile.js update');
+	});
 
-		fs.writeFile(subFile, 'subFile.js' + 'update');
+	it('should emit events when subfile removed', function (done) {
+		watcher.once('change', function () {
+			setTimeout(done, 100);
+		});
+		fs.unlink(subFile);
 	});
 
 });

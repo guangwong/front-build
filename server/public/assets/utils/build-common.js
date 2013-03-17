@@ -1,5 +1,6 @@
-KISSY.add(function (S) {
-    var $ = S.all;
+//noinspection JSValidateTypes
+KISSY.add(function (S, Node) {
+    var $ = Node.all;
 
     return {
         init: function () {
@@ -10,6 +11,7 @@ KISSY.add(function (S) {
                 var $et = $(ev.target);
                 ev.preventDefault();
                 $elStatus.html('building...');
+                analytics.track('Build Common');
 
                 S.ajax({
                     url: $et.attr('href'),
@@ -18,7 +20,7 @@ KISSY.add(function (S) {
                         if (data.err) {
                             var err = data.err;
                             $elStatus
-                                .html('Error:' + err.message)
+                                .html('Error:' + err.message);
                             return;
                         }
                         $elStatus.html('success!');
@@ -31,4 +33,6 @@ KISSY.add(function (S) {
             
         }
     };
+}, {
+    requires: ['node']
 });

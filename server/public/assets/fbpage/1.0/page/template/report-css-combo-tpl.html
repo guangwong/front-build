@@ -4,10 +4,10 @@
         没有文件
     </div>
 {{#else}}
-    <ul >
+    <ul class="plugin-file-list">
         {{#each jobs as job}}
             <li>
-                <h4><i class="icon-file"></i> {{job.filename}} </h4>
+                <h5><i class="icon-file"></i> {{job.filename}} </h5>
                 <ul class="plugin-file-list">
                     {{#each job.imports as file}}
                         <li>

@@ -3,6 +3,7 @@ var App = require('../../lib/app.js');
 var path = require('path');
 var _ = require('underscore');
 var util = require('util');
+var async = require('async');
 /*
  * GET home page.
  */
@@ -14,7 +15,8 @@ exports.index = function (req, res) {
             name: 'fbindex',
             version: '1.0',
             timestamp: '20120722',
-            tag: '20120722'
+            tag: '20121119',
+            ksDebug: ('ks-debug' in req.query)
         }
     });
 };
@@ -39,7 +41,8 @@ exports.app = function (req, res, next) {
                 name: 'fbapp',
                 version: '1.0',
                 timestamp: '20120722',
-                tag: '20120722',
+                ksDebug: ('ks-debug' in req.query),
+                tag: '20121119'
             },
             title: path.basename(app.rootDir),
             app: app,
@@ -72,7 +75,8 @@ exports.page = function (req, res, next) {
                 name: 'fbpage',
                 version: '1.0',
                 timestamp: '20120722',
-                tag: '20120722'
+                ksDebug: ('ks-debug' in req.query),
+                tag: '20121119'
             },
             page: fbpage,
             app: fbapp,
@@ -83,34 +87,64 @@ exports.page = function (req, res, next) {
 
 };
 
+exports.buildPages = function (req, res, next) {
 
-
-exports.buildPage = function (req, res, next) {
-    var fbapp = req.fbapp;
-    if (!fbapp) {
-        return next(new Error('no app'));
-    }
-    var fbpage = req.fbpage;
-
-    if (!fbpage) {
-        return next(new Error('no page'));
-    }
-
+    var pages = req.param('pages');
     var timestamp = req.param('timestamp');
 
-    fbpage.build(timestamp, function (err, reports) {
+    if (!pages) {
+        res.send({
+            err: {
+                message: 'no page to build'
+            }
+        });
+        return;
+    }
+
+    pages = pages.split(',');
+
+    async.map(pages, function (page, callback) {
+        var fbapp = req.fbapp;
+
+        if (!fbapp) {
+            return callback(new Error('no app'));
+        }
+
+        var p = Page.parsePageVersion(page);
+
+        if (!p) {
+            return callback(new Errow('pageVersion is not valid'));
+        }
+
+        var fbpage = fbapp.getPage(p.name, p.version);
+
+        fbpage.build(timestamp, function (err, reports) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, reports);
+        });
+
+    }, function (err, reports) {
+
         if (err) {
+            var stack = err.stack;
+
+            err.stack = null;
+            delete err.stack;
             res.send({
                 err: {
                     message: err.message,
                     text: JSON.stringify(err, null, 2),
-                    stack: err.stack
+                    stack: stack
                 }
             });
             return;
         }
         res.send({
-            reports: reports
+            err: null,
+            reports: reports,
+            pages: pages
         });
     });
 
@@ -133,5 +167,29 @@ exports.addPage = function (req, res, next) {
             return next(err);
         }
         res.redirect('back');
+    });
+};
+
+exports.analyzePage = function (req, res, next) {
+    var app = req.fbapp;
+    var page = req.fbpage;
+    page.analyze(function (err, report) {
+        if (err) {
+            return next(err);
+        }
+        res.send(report);
+    });
+};
+
+exports.openFile = function(req, res, next) {
+    var p = req.query.path;
+    var commandOpen = require('../../lib/command-open');
+
+    commandOpen(p, function(err) {
+        if (err) {
+            res.end('can not open');
+            return;
+        }
+        res.end('open success!');
     });
 };

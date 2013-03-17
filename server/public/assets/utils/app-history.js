@@ -37,8 +37,7 @@ KISSY.add(function (S) {
         },
         
         get: function () {
-            var list = getList();
-            return list;
+            return getList();
         },
         
         rm: function (path) {
@@ -47,6 +46,7 @@ KISSY.add(function (S) {
                 return item != path
             });
             saveList(list);
+            return true;
         }
     }
 });

@@ -1,0 +1,11 @@
+{
+    "charset": "utf8",
+    "fbversion": "0.4.23",
+    "plugins": {
+        "compass": {
+            "enable": true
+        }
+    },
+    "packages": [],
+    "groups": {}
+}

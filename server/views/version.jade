@@ -4,29 +4,28 @@ block content
   .container
     .row-fluid
       .span12
-        .fb-logo
-          a(href='/')
-            img(src='/images/logo.png')
         .fb-title
-          h1 
+          h1
             a(href='/app?root=#{app.rootDir}')= app.name
-            |/ 
+            |/
             span= page.name
             |/
             sapn= page.version
           p.path= page.rootDir
 
-          .buildto.form-inline.buildto-version
-            .input-prepend
-              |&nbsp;
-              span.status
+          .buildto.form-inline.buildto-version.buildto-block
+            button.btn#analyze-modules
+              i.icon-search
+              | 分析
+            |&nbsp;
+            .input-prepend.input-append
               span.add-on
                 i.icon-calendar
-              input.timestamp-input(type='text')
+              input#fb-build-timestamp.input-small.timestamp-input(type='text')
               |&nbsp;
-              a.btn.fb-build-page(href='/build-page/#{page.name}@#{page.version}?root=#{app.rootDir}')
-                |Build            
-
+              a.btn#fb-build-page(href=getUrl('/build-page/#{page.name}@#{page.version}', {root: app.rootDir}))
+                |Build
+            span.status#fb-build-status
         #reports
         ul.timestamps
           - each ts in timestamps
@@ -34,8 +33,16 @@ block content
               span.build-timestamp.timestamp #{ts.timestamp}
               - if(ts.build)
                 span.build-version from #{ts.build.build_version}
+                span.build (#{ts.build.build_start_time})
                 span.build-time
-                  i.icon-time
+                  i.icon-time(title='用时')
+                  | &nbsp;
                   | #{ts.build.build_used_time}ms
+  iframe#hiddenIframe(name='hiddenIframe',src='about:blank', style='width:0;height:0;position:absolute;left:0;top:0;');
   script
-    KISSY.use('page/index');
+    KISSY.use('page/index', function (S, Page) {
+      Page.init({
+        pageVersion: '#{page.name}@#{page.version}',
+        rootDir: '#{app.rootDir.replace(/\\/g, '\\\\')}'
+      });
+    });

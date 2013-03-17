@@ -1,4 +1,14 @@
-KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, csslint_tpl, files_tpl, concat_tpl, css_combo_tpl) {
+//noinspection JSValidateTypes
+KISSY.add(function (S, Template,
+    fb_tpl,
+    wrap_tpl,
+    error_wrap_tpl,
+    plugin_tpl,
+    csslint_tpl, 
+    files_tpl, 
+    concat_tpl, 
+    css_combo_tpl,
+    module_compiler_tpl) {
     var $ = S.all;
 
     var Reporter = function (container) {
@@ -23,16 +33,13 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
                 if (bd) {
                     bd.toggle();
                 }
-            })
+            });
         },
 
-        addError: function (error) {
+        addError: function (err) {
             var self = this;
-            var html = Reporter.error_wrap_tpl.render(error);
-            
+            var html = Reporter.error_wrap_tpl.render(err);
             self.appendReportEl($(html));
-
-
         },
 
         addReport: function (reports) {
@@ -51,8 +58,9 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
         },
 
         appendReportEl: function (el) {
+            el.hide();
             var self = this;
-            var reports = self.$el.all('.report');
+            var reports = self.$el.children();
 
             if (reports.length > 0) {
                 el.insertBefore(reports[0]);
@@ -70,11 +78,13 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
             'cssmin': 'files_tpl',
             'concat': 'concat_tpl',
             'lesscss': 'files_tpl',
-            'css-combo': 'css_combo_tpl'
+            'css-combo': 'css_combo_tpl',
+            'module-compiler': 'module_compiler_tpl',
+            'xtemplate': 'files_tpl'
         },
 
         parserPluginReports: function (reports) {
-
+            console.log(reports);
             return S.map(reports, function (report) {
                 switch (report.name) {
                     case 'csslint': 
@@ -87,7 +97,9 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
                     case 'cssmin':
                     case 'uglifyjs':
                     case 'kissy-template':
+                    case 'xtemplate':
                     case 'lesscss':
+                    case 'module-compiler':
                         report.count = report.files.length;
                         break;
                 }
@@ -132,20 +144,22 @@ KISSY.add(function (S, Template, fb_tpl, wrap_tpl, error_wrap_tpl, plugin_tpl, c
         'csslint_tpl': Template(csslint_tpl.html),
         'files_tpl': Template(files_tpl.html),
         'concat_tpl': Template(concat_tpl.html),
-        'css_combo_tpl': Template(css_combo_tpl.html)
+        'css_combo_tpl': Template(css_combo_tpl.html),
+        'module_compiler_tpl': Template(module_compiler_tpl.html)
     });
     return Reporter;
 }, {
     requires: [
         'template',
-        'page/template/report-fb-tpl',
-        'page/template/report-wrap-tpl',
-        'page/template/report-error-wrap-tpl',
-        'page/template/report-plugin-tpl',
-        'page/template/report-csslint-tpl',
-        'page/template/report-files-tpl',
-        'page/template/report-concat-tpl',
-        'page/template/report-css-combo-tpl'
+        '../template/report-fb-tpl',
+        '../template/report-wrap-tpl',
+        '../template/report-error-wrap-tpl',
+        '../template/report-plugin-tpl',
+        '../template/report-csslint-tpl',
+        '../template/report-files-tpl',
+        '../template/report-concat-tpl',
+        '../template/report-css-combo-tpl',
+        '../template/report-module-compiler-tpl'
 
     ]
 });
