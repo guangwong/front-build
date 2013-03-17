@@ -1,35 +1,47 @@
 .version-add {
-    float:left;
+  float: left;
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 .buildto {
-    .status {
-        display:inline-block;
-        margin:0 10px;
-    }
+  .status {
+    display: inline-block;
+    margin: 0 10px;
+  }
 
 }
+
 .ks-popup,
 .ks-overlay {
-    position:absolute;
-    left: -9999px;
+  position: absolute;
+  left: -9999px;
 }
-    
+
 .footer {
-    text-align:center;
-    margin-top:30px;
-    a {
-        color: black;
-    }
+  text-align: center;
+  margin-top: 30px;
+  a {
+    color: black;
+  }
 }
 
 .logo {
-    position:absolute;
-    top:-14px;
-    right:20px;
-    box-shadow:#333 1px 1px 6px;
-    &:hover {
-        top:0;
-    }
+  position: absolute;
+  top: -14px;
+  right: 20px;
+  box-shadow: #333 1px 1px 6px;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  -ms-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    top: 0;
+  }
 }
+
 @import 'calendar.less';

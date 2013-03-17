@@ -481,18 +481,8 @@ KISSY.add('page/index',function (S, Node, PageBuilder, buildCommon, Calendar, ap
                         .removeClass('st-building')
                         .addClass('st-queued');
                 });
-                $('#progress .bar')
-                    .hide()
-                    .css('width', 0);
-                setTimeout(function(){
-                    $('#progress .bar')
-                        .show();
-                }, 0);
 
-                $('#progress')
-                    .addClass('progress-striped')
-                    .addClass('active')
-                    .removeClass('progress-success');
+
 
                 startTime = new Date().getTime();
                 execQueue(
@@ -507,7 +497,6 @@ KISSY.add('page/index',function (S, Node, PageBuilder, buildCommon, Calendar, ap
                                 callback(err);
                                 return;
                             }
-                            $('#progress .bar').css('width', (index+1) / queue.length * 100 + '%');
                             $el.addClass('st-ok');
                             callback(null);
                         });
@@ -529,30 +518,18 @@ KISSY.add('page/index',function (S, Node, PageBuilder, buildCommon, Calendar, ap
                         });
 
                         setTimeout(function () {
-
-
-                            $('#progress')
-                                .removeClass('active')
-                                .removeClass('progress-striped')
-                                .addClass('progress-success');
-
-
-
-                            setTimeout(function () {
-
-                                S.each(queue, function(item){
-                                    item.el
-                                        .removeClass('st-error')
-                                        .removeClass('st-ok')
-                                        .removeClass('st-building')
-                                        .removeClass('st-queued');
-                                });
-                            }, 500);
-                            setTimeout(function() {
-                                $status.hide();
-
-                            },2000);
-                        }, 800);
+                            S.each(queue, function(item){
+                                item.el
+                                    .removeClass('st-error')
+                                    .removeClass('st-ok')
+                                    .removeClass('st-building')
+                                    .removeClass('st-queued');
+                            });
+                        }, 100);
+                        
+                        setTimeout(function() {
+                            $status.hide();
+                        },2000);
                     });
 
 
