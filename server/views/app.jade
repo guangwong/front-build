@@ -7,12 +7,23 @@ block content
         .fb-title
           h1= title
           p.path= app.rootDir
+    .row-fluid.common-block
+      .span12
         .fb-common
             .title common
             .options
               .buildto-block
-                span.status 
+                span.status
                 a#fb-build-common.build-btn.btn(href='/build-common?root=#{app.rootDir}') Build
+    .row-fluid
+      .span12
+        - if (app.config.groups)
+          ul.groups.nav.nav-pills
+            li.groups-item
+              a.j-select-group(href='#', title='') none
+            - each group, groupname in app.config.groups
+              li.groups-item
+                a.j-select-group(href='#', title=group.join(","))= groupname
 
     .row-fluid.fb-pages
       .span8
@@ -31,32 +42,25 @@ block content
       .span4
 
         .buildto-block
-          .progress.active#progress
-            .bar(style="width:0")
           .input-prepend.input-append
             span.add-on
               i.icon-calendar
             input#batch-build-timestamp.input-small.timestamp-input(type='text')
             button#batch-build.btn
               |Build
+
           div#batch-build-status.status
 
 
 
-          - if (app.config.groups)
-            h3 groups
-            ul.groups.nav.nav-tabs.nav-stacked
-              li.groups-item
-                a.j-select-group(href='#', title='') none
-              - each group, groupname in app.config.groups
-                li.groups-item
-                  a.j-select-group(href='#', title=group.join(","))= groupname
+
     .row-fluid
       .span8
+
         form.form-inline.form-page-add(method='post', action=getUrl('/add-page'))
           fieldset
             input(type='hidden', value=app.rootDir, name='root')
-            input.input-medium(type='text', name='pagename', title='Your Pagename')
+            input.input-medium(type='text', name='pagename', title='Name of Your Page')
             |&nbsp; / &nbsp;
             input.input-small(type='text', name='version', value='1.0', title='version (eg. 1.0)')
             |&nbsp;&nbsp;
