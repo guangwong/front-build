@@ -1,9 +1,4 @@
 node_modules/
-sample-project/common/index-min.js
-
-sample-project/common/main-min.css
-
-sample-project/common/style-min.css
 .idea
 *.iml
 *.ipr
