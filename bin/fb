@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 var argv = require('optimist')
-	.string('timestamp')
-	.string('t')
-    .string('version')
-    .string('v')
-    .string('_')
     .alias('t', 'timestamp')
-    .alias('v', 'version')
+    .string('t')
+    .string('timestamp')
+
+    .alias('T', 'type')
+    .string('type')
+
+    .string('_')
+
     .alias('d', 'debug')
     .alias('w', 'watch')
 	.argv;
-
 
 var util = require('util');
 var ErrorHelper = require('../lib/error-helper');
@@ -94,5 +95,3 @@ if (commands && commands[command]) {
 		cwd: cwd
 	}, done);
 }
-
-
