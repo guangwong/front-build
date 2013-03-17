@@ -1,4 +1,3 @@
-[![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
 # Kissy Pie (ki)
 
 [![build status](https://secure.travis-ci.org/maxbbn/front-build.png)](http://travis-ci.org/maxbbn/front-build)
