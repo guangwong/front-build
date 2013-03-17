@@ -18,7 +18,7 @@ describe('fileutil writeJSONSync and readJSON readJSONSync test', function() {
     var json_file_name = 'test_json_file';
 
     before(function (){
-        if (path.existsSync(json_file_name)) {
+        if (fs.existsSync(json_file_name)) {
             fs.unlinkSync(json_file_name);
         }
         fu.writeJSONSync(json_file_name, obj);
@@ -129,12 +129,12 @@ describe('rmTreeSync Test', function () {
 
     it('should rm all files created', function(){
         paths.forEach(function (p) {
-            path.existsSync(p).should.be.true;
+            fs.existsSync(p).should.be.true;
         });
 
         fu.rmTreeSync(root_name);
 
-        path.existsSync(root_name).should.be.false;
+        fs.existsSync(root_name).should.be.false;
     });
 });
 
@@ -320,14 +320,14 @@ describe('test fileutil.iconv', function(){
     });
 
     it('should conv files from gbk to utf8', function () {
-        path.existsSync(path.resolve(dst, 'this_is_gbk')).should.be.false;
+        fs.existsSync(path.resolve(dst, 'this_is_gbk')).should.be.false;
         var file2 = fs.readFileSync(path.resolve(dst, 'sub1/iconv.gbk.txt'), 'utf8');
         file2.should.include('中文 2');
     });
 
     it('should not conv files that match excludes tests', function(){
         var p = path.resolve(dst, 'sub1/iconv.gbk-min.txt');
-        path.existsSync(p).should.be.false;
+        fs.existsSync(p).should.be.false;
     });
 });
 

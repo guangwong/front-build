@@ -386,13 +386,15 @@ describe("build multi pages", function () {
     });
 
     it('should build multipage with no error', function (done) {
-        app.buildPages(pages, timestamp, function (err) {
+
+        app.buildPages(pages, {timestamp: timestamp}, function (err) {
             should.not.exist(err);
             async.forEach(pubs, function (pub, callback) {
                 fs.existsSync(path.join(rootDir, pub)).should.be.true;
             });
             done();
         });
+
     });
 });
 
