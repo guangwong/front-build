@@ -12,14 +12,17 @@ describe('WatchDir', function () {
 	var watcher;
 
 	before(function (done) {
-		fs.mkdir(rootDir, function (err) {
-			if (err) {
-				return done(err);
-			}
-			watcher = new WatchDir(rootDir);
+        fu.rmTree(rootDir, function(){
+            fs.mkdir(rootDir, function (err) {
+                if (err) {
+                    return done(err);
+                }
+                watcher = new WatchDir(rootDir);
 
-			watcher.once('init', done);
-		});
+                watcher.once('init', done);
+            });
+        });
+
 
 	});
 
