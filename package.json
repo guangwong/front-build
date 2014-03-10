@@ -1,8 +1,8 @@
 {
-  "author": "maxbbn <qipbbn@gmail.com> (maxbbn.com)",
+  "author": "Allen <guangwong@gmail.com>",
   "name": "kissy-pp",
   "description": "build front project",
-  "version": "0.4.29",
+  "version": "0.4.30",
   "repository": {
     "type": "git",
     "url": "https://github.com/guangwong/front-build"
@@ -30,7 +30,8 @@
     "mkdirp": ">=0.3.4",
     "module-compiler": ">=0.0.5",
     "clean-css": "~0.6.0",
-    "colors": "~0.6.0-1"
+    "colors": "~0.6.0-1",
+    "kissy": "^1.4.2-1"
   },
   "devDependencies": {
     "mocha": "~1.4.1",
